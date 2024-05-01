@@ -1,4 +1,4 @@
-package app.persitence;
+package app.persistence;
 
 public class UserMapper {
 }
