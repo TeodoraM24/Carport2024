@@ -21,13 +21,14 @@ body, html{
 }
 
 .header-right{
-    margin-top: 20px;
+    margin-top: 25px;
     margin-right: 30px;
     display: flex;
     order: 3;
 }
 
 .dropdown {
+    margin-top: 5px;
     position: relative;
     display: inline-block;
     text-align: center;
