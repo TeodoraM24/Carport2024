@@ -82,14 +82,12 @@ class Controllers{
 Customer *-- Invoice
 Customer o-- Carport
 Customer o-- Controllers
-Customer o-- Controllers
 Invoice o-- Carport
 Invoice o-- Controllers
 Admin o-- Invoice
 Admin o-- Controllers
 Admin o-- CustomerRequest
 Controllers o-- Materials
-Materials o-- Controllers
 Customer *-- CustomerRequest
 Carport "Extends   " <|-- MakeYourOwnCarport
 Carport "Extends " <|-- StandardCarport

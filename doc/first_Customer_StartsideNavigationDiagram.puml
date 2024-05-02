@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+scale 350 width
+
+state LogIn {
+[*] --> IndtastLogin
+[*] --> SigUp
+}
+state SigUp {
+IndtastOplysninger --> Opret
+}
+
+IndtastLogin --> Startside
+SigUp --> Startside
+
+state Startside{
+StandartCarport --> SeUdvalget
+Designcarport --> IndtastMål
+FogKonto --> Brugeroplysninger
+Menu --> BrugeInfo
+Menu --> LogOut
+LogOut -->[*]
+Menu --> Kontakt
+}
+
+
+
+@enduml
