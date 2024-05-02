@@ -89,13 +89,16 @@ body, html{
     display: flex;
     flex-direction: row;
     flex-grow: 1;
-    margin: 0 127px 127px;
+    margin: 127px;
 }
 
 .standard-carport, .design-carport {
     width: calc((100% - 50px) / 2);
     height: 800px;
     display: flex;
+}
+
+.standard-carport{
     margin-right: 50px;
 }
 
@@ -116,14 +119,28 @@ body, html{
 
 .standard-carport-button-side, .design-carport-button-side {
     display: flex;
+    flex-direction: column;
     background-color: #336699;
     align-items: center;
     justify-content: center;
     width: 50%;
     font-family: Arial;
     color: white;
-    font-size: 52px;
+    font-size: 42px;
 }
 
+.carport-button{
+    font-family: Arial;
+    color: white;
+    font-size: 32px;
+    background-color: rgba(35, 47, 156);
+    border-radius: 8px;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+}
+.carport-button:hover{
+    background-color: rgb(47, 75, 184);
+}
 
 
