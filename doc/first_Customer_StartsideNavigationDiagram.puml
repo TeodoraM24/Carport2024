@@ -5,20 +5,29 @@ scale 350 width
 
 state LogIn {
 [*] --> IndtastLogin
-[*] --> SigUp
+[*] --> OpretEnBruger
 }
+OpretEnBruger--> SigUp
 state SigUp {
 IndtastOplysninger --> Opret
 }
 
 IndtastLogin --> Startside
+state IndtastLogin{
+LogPå:
+}
 SigUp --> Startside
 
 state Startside{
-StandartCarport --> SeUdvalget
-Designcarport --> IndtastMål
-FogKonto --> Brugeroplysninger
-Menu --> BrugeInfo
+
+state StandartCarport {
+SeUdvalget:
+}
+state Designcarport {
+IndtastMål:
+}
+FogKonto --> Kontooplysninger
+Menu --> BrugerInfoForside
 Menu --> LogOut
 LogOut -->[*]
 Menu --> Kontakt

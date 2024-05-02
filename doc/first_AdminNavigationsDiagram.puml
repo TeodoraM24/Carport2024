@@ -12,9 +12,12 @@ IndtastLogin --> AdminForside
 state AdminForside {
  FogKonto --> Brugeroplysninger
  Logout --> [*]
- Forespørgsler : Se Forespørgsler
- Forespørgsler --> DisplayForespørgsler
- DisplayForespørgsler --> BehandlingAfForespørgsler : Tryk behandle
+ Forespørgsler :
+ state Forespørgsler {
+ Behandle:
+ }
+
+ Behandle --> BehandlingAfForespørgsler
  AfventerKunde : Se status
  Afsluttede : Se status
 

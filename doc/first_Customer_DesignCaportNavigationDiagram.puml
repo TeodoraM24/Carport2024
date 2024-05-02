@@ -6,23 +6,21 @@ scale 350 width
 
 state Startside{
 [*] --> Designcarport
-FogKonto --> Brugeroplysninger
-Menu --> BrugeInfo
+FogKonto --> Kontooplysninger
+Menu --> BrugerInfoForside
 
 Menu --> LogOut
 LogOut -->[*]
 Menu --> Kontakt
 state Designcarport{
-Designcarport --> IndtastMål : TrykPåKnappen
-
-IndtastMål --> CarportMedFladtTag
-
-CarportMedFladtTag --> BestilTilbud: udfyldmål
+CarportMedFladtTag --> BestilTilbud: Bredde og Længde
+CarportMedFladtTag : udfyldmål
 }
 BestilTilbud --> TakForDinBestilling
-
-
-TakForDinBestilling --> Startside : Gå tilbage til Startside
+state TakForDinBestilling {
+GåTilbageTilForside:
+}
+TakForDinBestilling --> Startside
 
 
 
