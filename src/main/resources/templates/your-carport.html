@@ -4,7 +4,7 @@
 <title>Startside</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/startside.css" th:href="@{/css/starside.css}" rel="stylesheet"/>
+<link href="../public/css/your-carport.css" th:href="@{/css/your-carport.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="main-header">
@@ -34,36 +34,43 @@
     </div>
 
 
+
 </div>
 
 <div class="body-background">
     <div class="body">
-        <div class="standard-carport">
+        <div class="body-text">
+            <h1>Bestil Quick-byg tilbud - carport med fladt tag</h1>
+            <p>Tilbud og skitsetegning fremsendes med post hurtigst muligt<br>Ved bestilling medfølger standbygvejledning.</p>
 
-        <div class="standard-carport-button-side">
-            <span>Standard carport</span>
-            <br>
-            <button class="carport-button" onclick="window.location.href='index.html'">Se udvalget</button>
-        </div>
-            <div class="standard-carport-img-side">
-                <img src="../public/images/standard_carport.PNG" th src="@{/images/standard_carport.png}" alt="Standard Carport">
-            </div>
+            <p>Udfyld formularen omhyggeligt og klik på "Bestil tilbud".<br>Felter markeret med * SKAL udfyldes!</p>
         </div>
 
+        <div class="spacing-5">
 
-        <div class="design-carport">
-
-            <div class="design-carport-button-side">
-                <span>Design din carport</span>
-                <br>
-                <button class="carport-button" onclick="window.location.href='index.html'">Indtast mål</button>
-            </div>
-
-            <div class="design-carport-img-side">
-                <img src="../public/images/design_carport_2.png" th:src="@{/images/design_carport.png}" alt="Design Carport">
-            </div>
         </div>
-</div>
+
+        <div class="body-order">
+            <h2>Carport med fladt tag</h2>
+            <p>Udfyld nedenstående formular og tryk "Bestil tilbud".</p>
+            <p>Så vender vi hurtigst muligt tilbage med et tilbud til dig.</p>
+            <div class="carport-form">
+                <form action="/submit" method="post">
+                    <label for="carport-width">Carport bredde*</label>
+                    <input type="text" class="measurement" id="carport-width" name="carport-width" required>
+
+                    <label for="carport-length">Carport længde*</label>
+                    <input type="text" class="measurement" id="carport-length" name="carport-length" required>
+
+                    <label>Carport tag</label>
+                    <p2 class="placeholder-text">Alle carporte kommer med trapezplader i plast</p2>
+                    <br>
+                    <button type="submit" class="order-offer">Bestil tilbud</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
 </div>
 </body>
 </html>

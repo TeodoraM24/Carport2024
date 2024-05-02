@@ -1,0 +1,136 @@
+body, html{
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header-left{
+    order: 1;
+    height: 100%;
+}
+
+.header-left img{
+    height: 100%;
+}
+
+.header-right{
+    margin-top: 25px;
+    margin-right: 30px;
+    display: flex;
+    order: 3;
+}
+
+.dropdown {
+    margin-top: 5px;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-img {
+    cursor: pointer;
+    width: 55px;
+    display: block;
+    font-family: Arial;
+}
+
+.fog-konto block{
+    display: block;
+    text-align: center;
+}
+
+.fog-konto img{
+    width: 100px;
+    display: block;
+}
+
+.fog-konto span{
+    margin-left: 10px;
+    font-family: Arial;
+}
+
+.body-background{
+    background-color: rgba(218, 238, 253, 1);
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.body-text{
+    font-family: Arial;
+    color: black;
+    text-align: center;
+}
+
+.spacing-5{
+    padding: 5px;
+}
+.body-order{
+    font-family: Arial;
+    color: black;
+    text-align: left;
+    background-color: white;
+    border-radius: 8px;
+    width: 45%;
+    justify-content: left;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 20px;
+}
+
+label{
+    display: block;
+    font-weight: bold;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.measurement{
+    border-radius: 5px;
+    width: 75%;
+}
+
+.order-offer {
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    background-color: rgb(47, 75, 184);
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+
+
