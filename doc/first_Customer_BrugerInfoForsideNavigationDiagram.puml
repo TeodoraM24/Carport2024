@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+scale 350 width
+state Startside{
+[*] --> Menu
+Menu --> BrugerInfoForside
+BrugerInfoForside --> Indbakke
+Indbakke : Se Indbakke
+BrugerInfoForside --> Forespørgsel
+BrugerInfoForside --> KundeHistorik
+KundeHistorik : Se Kundehistorikken
+Forespørgsel --> StatusPåForspørgsel
+StatusPåForspørgsel : Afsluttet, Afventer eller Klar
+state StatusPåForspørgsel {
+Klar:
+}
+StatusPåForspørgsel --> Klar
+
+Klar --> GodkendelseAfTilbuddet
+Klar :
+state GodkendelseAfTilbuddet{
+GodkendTilbud:
+Afvis:
+}
+Afvis --> AnnuleringAfTilbud
+state AnnuleringAfTilbud {
+GåTilbageTilForside2:
+}
+GodkendTilbud --> TakForDinOrder
+state TakForDinOrder {
+GåTilbageTilForside1:
+}
+
+TakForDinOrder --> Startside
+
+AnnuleringAfTilbud --> Startside
+
+
+
+
+Menu --> LogOut
+LogOut -->[*]
+Menu --> Kontakt
+}
+@enduml

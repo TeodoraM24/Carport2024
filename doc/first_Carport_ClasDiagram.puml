@@ -1,0 +1,98 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Customer{
+int customerId
+String email
+String password
+int phoneNumber
+String firstName
+String lastName
+String adresse
+int zip
+String role
+boolean haveRequest
+
+getter ()
+setter ()
+toString ()
+}
+
+class Admin {
+int adminId
+String email
+String password
+String role
+getter ()
+setter ()
+toString ()
+}
+
+abstract class Carport{
+int width
+int height
+int length
+int totalPrice
+getter ()
+setter ()
+toString ()
+}
+
+class MakeYourOwnCarport{
+toString ()
+}
+class StandardCarport{
+toString ()
+}
+class Invoice{
+int invoiceId
+date date
+int carportId
+getter ()
+setter ()
+toString ()
+}
+class Materials{
+int materialsId
+String materialDecription
+int height
+int width
+int length
+getter ()
+setter ()
+toString ()
+}
+class CustomerRequest{
+int customerReqeustId
+int length
+int height
+int width
+String tileType
+date date
+String status
+getter ()
+setter ()
+toString ()
+}
+class Calculator{
+}
+class Controllers{
+}
+
+Customer *-- Invoice
+Customer o-- Carport
+Customer o-- Controllers
+Invoice o-- Carport
+Invoice o-- Controllers
+Admin o-- Invoice
+Admin o-- Controllers
+Admin o-- CustomerRequest
+Controllers o-- Materials
+Customer *-- CustomerRequest
+Carport "Extends   " <|-- MakeYourOwnCarport
+Carport "Extends " <|-- StandardCarport
+Carport o-- Controllers
+CustomerRequest o-- Calculator
+CustomerRequest o-- Controllers
+
+@enduml
