@@ -1,0 +1,129 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header-left {
+    order: 1;
+    height: 100%;
+}
+
+.header-left img {
+    height: 100%;
+}
+
+.header-right {
+    margin-top: 25px;
+    margin-right: 30px;
+    display: flex;
+    order: 3;
+}
+
+.dropdown {
+    margin-top: 5px;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-img {
+    cursor: pointer;
+    width: 55px;
+    display: block;
+    font-family: Arial;
+}
+
+.fog-konto block {
+    display: block;
+    text-align: center;
+}
+
+.fog-konto img {
+    width: 100px;
+    display: block;
+}
+
+.fog-konto span {
+    margin-left: 10px;
+    font-family: Arial;
+}
+
+.body-background {
+    background-color: rgba(218, 238, 253, 1);
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh; /* Adjust as needed */
+}
+
+.flexbox {
+    width: 250px; /* Adjust width as needed */
+    height: 190px; /* Adjust height as needed */
+    background-color: #789ecf; /* Adjust background color as needed */
+    margin: 0 40px; /* Adjust margin between flexboxes */
+    border-radius: 5px; /* Adjust border radius for smooth corners */
+}
+
+.top-half {
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottom-half {
+    height: 82%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img.option-images {
+    min-width: 100%;
+    min-height: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+a.reference-format {
+    text-decoration: none;
+    font-family: Helvetica,sans-serif;
+    color: navy;
+}
