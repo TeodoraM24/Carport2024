@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:fragment="common_header(title,links)">
+    <title th:replace="${title}">FOG Carport Hjemmeside</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/headerstyle.css" th:href="@{/css/headerstyle.css}" rel="stylesheet"/>
+    <th:block th:replace="${links}" />
+</head>
+
+<body>
+<div class="main-header">
+        <div class="header-left">
+            <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
+        </div>
+
+    <div class="header-right">
+        <div class="fog-konto">
+            <a href="../createuser.html" th:href="@{/createuser}">
+                <img src="/public/images/fog-konto.png" th:src="@{../images/fog-konto.png}" alt="Fog Konto">
+                <span>Fog Konto</span>
+            </a>
+        </div>
+
+        <div class="dropdown">
+            <div class="dropdown-img">
+                <img src="/public/images/menu-icon.png" th:src="@{../images/menu-icon.png}" alt="Menu Icon">
+                <span>Menu</span>
+            </div>
+            <div class="dropdown-content">
+                <a href="#">Konto</a>
+                <a href="#">Kontakt</a>
+                <a href="#">Log ud</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

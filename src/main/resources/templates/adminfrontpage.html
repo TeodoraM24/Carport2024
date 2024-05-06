@@ -1,40 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
-<title>Admin startside</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/adminfrontpage.css" th:href="@{/css/adminfrontpage.css}" rel="stylesheet"/>
+<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+    <title>Admin startside</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/adminfrontpagestyle.css" th:href="@{/css/adminfrontpagestyle.css}" rel="stylesheet"/>
+    <link href="../public/css/basicstyle.css" th:href="@{/css/basicstyle.css}" rel="stylesheet"/>
 </head>
 <body>
-<div class="main-header">
-
-    <div class="header-left">
-        <img src="../public/images/Fog_logo.PNG" th:src="@{/images/Fog_logo.png}" alt="Fog Logo">
-    </div>
-
-    <div class="header-right">
-
-        <div class="fog-konto">
-            <a href="createuser.html" th:href="@{/createuser}">
-                <img src="../public/images/Fog_konto_uden_tekst.PNG" th:src="@{/images/Fog_konto.png}" alt="Fog Konto">
-                <span>Fog Konto</span>
-            </a>
-        </div>
-
-        <div class="dropdown">
-            <div class="dropdown-img">
-                <img src="../public/images/menu-icon_uden_tekst.PNG" alt="Menu Icon">
-                <span>Menu</span>
-            </div>
-            <div class="dropdown-content">
-                <a href="#">Konto</a>
-                <a href="#">Kontakt</a>
-                <a href="#">Log ud</a>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="fragments/header :: div.main-header"></div>
 
 <div class="body-background">
     <div class="container">

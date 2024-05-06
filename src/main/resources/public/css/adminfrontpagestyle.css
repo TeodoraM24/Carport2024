@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh; /* Adjust as needed */
+}
+
+.flexbox {
+    width: 250px; /* Adjust width as needed */
+    height: 190px; /* Adjust height as needed */
+    background-color: #789ecf; /* Adjust background color as needed */
+    margin: 0 40px; /* Adjust margin between flexboxes */
+    border-radius: 5px; /* Adjust border radius for smooth corners */
+}
+
+.top-half {
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottom-half {
+    height: 82%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img.option-images {
+    min-width: 100%;
+    min-height: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+a.reference-format {
+    text-decoration: none;
+    font-family: Helvetica,sans-serif;
+    color: navy;
+}
