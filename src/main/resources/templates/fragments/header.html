@@ -5,7 +5,7 @@
     <title th:replace="${title}">FOG Carport Hjemmeside</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../../public/css/headerstyle.css" th:href="@{/css/headerstyle.css}" rel="stylesheet"/>
+    <link href="../../public/css/header-style.css" th:href="@{/css/header-style.css}" rel="stylesheet"/>
     <th:block th:replace="${links}" />
 </head>
 
@@ -17,7 +17,7 @@
 
     <div class="header-right">
         <div class="fog-konto">
-            <a href="../createuser.html" th:href="@{/createuser}">
+            <a href="../create-user-page.html" th:href="@{/createuser}">
                 <img src="/public/images/fog-konto.png" th:src="@{../images/fog-konto.png}" alt="Fog Konto">
                 <span>Fog Konto</span>
             </a>

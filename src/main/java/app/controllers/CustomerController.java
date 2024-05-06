@@ -12,7 +12,7 @@ public class CustomerController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         /*app.post("login", ctx -> logInd(ctx, connectionPool));
         app.get("logout", ctx -> logout(ctx));
-        app.get("createuser", ctx -> ctx.render("createuser.html"));
+        app.get("createuser", ctx -> ctx.render("create-user-page.html"));
         app.post("createuser", ctx -> createCustomer(ctx, connectionPool)); */
     }
 
@@ -51,7 +51,7 @@ public class CustomerController {
 
         if (!email.equals(email2)) {
             ctx.attribute("message", "Dine e-mails matcher ikke! Prøv igen.");
-            ctx.render("createuser.html");
+            ctx.render("create-user-page.html");
             return;
         }
 
@@ -66,7 +66,7 @@ public class CustomerController {
             }
         } else {
             ctx.attribute("message", "Dine to adgangskoder matcher ikke! Prøv igen");
-            ctx.render("createuser.html");
+            ctx.render("create-user-page.html");
         }
     }
 
