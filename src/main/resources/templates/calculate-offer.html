@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+    <meta charset="UTF-8">
+    <title>Beregn Tilbud</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/customer-request-style.css" th:href="@{/css/customer-request-style.css}" rel="stylesheet"/>
+    <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: div.main-header}"></div>
+<div class="body-background">
+    <h1 class="customer-request-title">Forespørgsel: <span class="customer-name">Kunde Navn</span></h1>
+    <form action="/sendOffer" method="post">
+    <div class="container">
+        <div class="materials-table-container">
+            <table>
+                <thead>
+                <tr class="header">
+                    <th id="material-id">Vare Nummer</th>
+                    <th id="material-desc">Vare Beskrivelse</th>
+                    <th id="additional-text">Hjælpe Tekst</th>
+                    <th class="material-size">Længde</th>
+                    <th class="material-size">Bredde</th>
+                    <th class="material-size">Højde</th>
+                    <th id="amount">Antal</th>
+                    <th id="total-price">Total Pris</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>140</td>
+                    <td><label>
+                        <textarea>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+                    </label></td>
+                    <td><label>
+                        <textarea>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</textarea>
+                    </label></td>
+                    <td>
+                        <select class="select-size">
+                            <option th:each="i : ${#numbers.sequence(240, 600, 30)}" th:value="${i}" th:text="${i + ' cm'}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="select-size">
+                            <option th:each="i : ${#numbers.sequence(240, 780, 30)}" th:value="${i}" th:text="${i + ' cm'}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="select-size">
+                            <option th:each="i : ${#numbers.sequence(180, 300, 30)}" th:value="${i}" th:text="${i + ' cm'}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="input-amount-size">
+                        <span>Stk.</span>
+                    </td>
+                    <td>
+                        <input type="number" class="input-price-size">
+                        <span>kr.</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td><label>
+                        <textarea>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+                    </label></td>
+                    <td><label>
+                        <textarea>sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+                    </label></td>
+                    <td>Rerum?</td>
+                    <td>Iusto?</td>
+                </tr>
+                <tr>
+                    <td>345</td>
+                    <td>Fugiat?</td>
+                    <td>Alias.</td>
+                    <td>Doloribus.</td>
+                    <td>Veritatis.</td>
+                </tr>
+                <tr>
+                    <td>399990</td>
+                    <td>Fugiat?</td>
+                    <td>Alias.</td>
+                    <td>Doloribus.</td>
+                    <td>Veritatis.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="price-container">
+            <div class="display-price-container">
+                <div class="display-coverage">
+                    <h2 class="display-title">Dækningsgrad efter prisforslag</h2>
+                    <h3 class="display-green-title">Ialt uden moms: <span>17.000,40</span> kr.</h3>
+                    <h4 class="display-purchase-price">Samlet kostpris: <span>10.800,80</span> kr.</h4>
+                    <h1 class="display-coverage-amount">Dækningsgrad: <span>39</span> %</h1>
+                </div>
+                <div class="display-price-offer">
+                    <h2 class="display-title">Pris & Prisforslag</h2>
+                    <h4 class="display-price" style="border-bottom-style: double">Pris uden moms: <span>17.000,40</span> kr.</h4>
+                    <h4 class="display-price">Pris med moms: <span>20.500,40</span> kr.</h4>
+                    <h3 class="display-green-title" style="margin-top: 10px">Prisforslag ved salg:</h3>
+                    <input class="input-new-price" type="number"> kr.
+                    <h4 class="display-price" style="color: red; margin-top: 3px">Prisændring: <span>3000</span> kr.</h4>
+                </div>
+            </div>
+            <div class="display-buttons-container">
+                <button type="submit" formaction="/saveOfferChanges" class="save-button" name="save-changes" value="Save" style="margin-right: 0">Gem ændringer</button>
+                <button type="submit" formaction="/showDescription" class="blue-button" name="show-description" value="Description" style="margin-right: 0">Se beskrivelse</button>
+                <button type="submit" formaction="/showDrawing" class="blue-button" name="show-drawing" value="Drawing" style="margin-right: 0">Se tegning</button>
+                <button type="submit" class="cautious-button" name="send-offer" value="Offer" style="margin-right: 0">Send tilbud</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+</body>
+</html>
