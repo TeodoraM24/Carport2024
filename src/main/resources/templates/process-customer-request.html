@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+    <title>Kunde Forespørgsel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/process-customer-request-style.css" th:href="@{/css/process-customer-request-style.css}" rel="stylesheet"/>
+    <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: div.main-header}"></div>
+
+<div class="body-background">
+    <h1 class="customer-request-title">Forespørgsel: <span class="customer-name">Kunde Navn</span></h1>
+    <div class="container">
+        <div class="flexbox">
+            <h2 class="carport-title">Carport med fladt tag</h2>
+            <form action="/calculateRequest" method="post">
+                <div class="measurement-container">
+                    <h2 id="length-title"><label for="length">Længde:</label></h2>
+                    <select id="length" name="length">
+                        <option th:each="i : ${#numbers.sequence(240, 600, 30)}" th:value="${i}" th:text="${i + ' cm'}"></option>
+                    </select>
+                </div>
+                <div class="measurement-container">
+                    <h2 id="width-title"><label for="width">Bredde:</label></h2>
+                    <select id="width" name="width">
+                        <option th:each="i : ${#numbers.sequence(240, 780, 30)}" th:value="${i}" th:text="${i + ' cm'}"></option>
+                    </select>
+                </div>
+                <div class="measurement-container">
+                    <h2 id="height-title"><label for="height">Højde:</label></h2>
+                    <select id="height" name="height">
+                        <option th:each="i : ${#numbers.sequence(180, 300, 30)}" th:value="${i}" th:text="${i + ' cm'}"></option>
+                    </select>
+                </div>
+                <div class="roof-container">
+                    <h2>Tag: <span class="roof-title">Plasttrapezplader</span></h2>
+                </div>
+                <div class="button-container">
+                    <button type="submit" formaction="/returnToAllRequests" class="return-button" name="customer-request" value="Return">Gå tilbage</button>
+                    <button type="submit" formaction="/saveRequestChanges" class="save-button" name="customer-request" value="Save">Gem ændringer</button>
+                    <button type="submit" class="calculate-button" name="customer-request" value="Calculate">Beregn tilbud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
