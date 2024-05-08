@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class CustomerMapper {
     public static Customer logInd(String email, String password, ConnectionPool connectionPool) throws DatabaseException
     {
-        String sql = "select * from public.\"users\" where email=? and password=?"; //NAVN ÆNDRINGER
+        String sql = "SELECT * FROM public.\"customer\" WHERE email=? AND password=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -24,19 +24,18 @@ public class CustomerMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next())
             {
-                int id = rs.getInt("customerId");
+                int id = rs.getInt("customer_id");
                 String role = rs.getString("role");
-                String firstName = rs.getString("firstName");
-                String lastName = rs.getString("lastName");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
                 String address = rs.getString("address");
                 int zip = rs.getInt("zip");
-                boolean haveRequest = rs.getBoolean("haveRequest");
-                int phoneNumber=rs.getInt("phoneNumber");
+                int phoneNumber=rs.getInt("phonenumber");
 
 
-                return new Customer(id, email, password, phoneNumber, firstName, lastName, address, zip, role, haveRequest);
-            } else
-            {
+
+                return new Customer(id, email, password, phoneNumber, firstName, lastName, address, zip, role);
+            } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
         }
@@ -46,8 +45,8 @@ public class CustomerMapper {
         }
     }
 
-    public static void createUser(String email, String password, String firstName, String lastName, int zip, int phoneNumber, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO users (email, password, firstName, lastName, zip, phoneNumber) VALUES (?, ?, ?, ?, ?, ?)"; //DER SKAL ÆNDRES NAVNE
+    public static void createUser(String email, String password, String firstName, String lastName, int zip, String address, int phoneNumber, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO customer (email, password, first_name, last_name, zip, address, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -58,7 +57,8 @@ public class CustomerMapper {
             ps.setString(3, firstName);
             ps.setString(4, lastName);
             ps.setInt(5, zip);
-            ps.setInt(6, phoneNumber);
+            ps.setString(6, address);
+            ps.setInt(7, phoneNumber);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
@@ -72,6 +72,5 @@ public class CustomerMapper {
             throw new DatabaseException(msg, e.getMessage());
         }
     }
-
 
 }
