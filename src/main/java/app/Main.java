@@ -2,6 +2,8 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controllers.MaterialController;
+import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
@@ -18,7 +20,8 @@ public class Main {
         }).start(7070);
 
         // Routing
+        MaterialController.addRoutes(app, ConnectionPool.getInstance());
 
-        app.get("/", ctx ->  ctx.render("index.html"));
+        app.get("/", ctx ->  ctx.render("admin-frontpage.html"));
     }
 }
