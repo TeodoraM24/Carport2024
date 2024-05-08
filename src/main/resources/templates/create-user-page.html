@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Frontpage</title>
+    <title>CreateUser</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/css/create-customer-style.css" rel="stylesheet" />
+    <link th:href="@{/css/create-customer-style.css}" rel="stylesheet"/>
 </head>
-
 <body>
 <div class="flex-container">
     <div class="page">
         <header class="header">
             <div class="header-content">
                 <h2>Oplysninger</h2>
-                <img alt="logo" src="../public/images/fog-logo.png" />
+                <img alt="logo" th:src="@{/images/fog-logo.PNG}" />
             </div>
         </header>
         <h4>Indtast dine oplysninger her</h4>
@@ -60,5 +58,4 @@
     </div>
 </div>
 </body>
-
 </html>
