@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: common_header('Kunde-info forside', '')"></head>
+
     <meta charset="UTF-8">
     <title>Kunde-info forside</title>
     <meta charset="UTF-8">
-    <meta name ="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../public/css/customer-info-style.css" th:href="@{/css/customer-info-style.css}" rel="stylesheet"/>
 </head>
 <body>

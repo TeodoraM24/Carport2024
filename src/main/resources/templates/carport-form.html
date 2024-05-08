@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/carport-index.css" th:href="@{/css/carport-form.css}" rel="stylesheet"/>
+    <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div th:replace="fragments/header :: div.main-header"></div>
+
+
+<div class="body">
+
+    <div class="body-text">
+        <h1>Bestil Quick-byg tilbud - carport med fladt tag</h1>
+
+        <form action="/carport-offer-sent" method="post">
+            <p>Udfyld formularen omhyggeligt og klik på "Bestil tilbud".<br>Felter markeret med * SKAL udfyldes!</p>
+
+            <label for="carport-width">Carport bredde*</label>
+            <input type="text" class="measurement" id="carport-width" name="carport-width" required>
+
+            <label for="carport-length">Carport længde*</label>
+            <input type="text" class="measurement" id="carport-length" name="carport-length" required>
+
+            <label for="carport-height">Carport højde*</label>
+            <input type="text" class="measurement" id="carport-height" name="carport-height" required>
+
+
+            <button type="submit" class="order-offer">Bestil tilbud</button>
+        </form>
+    </div>
+</div>
+</div>
+</body>
+</html>
