@@ -12,44 +12,50 @@
 
 <div class="body-background">
     <th:block th:object="${chosenCustomerRequest}">
-    <h1 class="customer-request-title">Forespørgsel: <span class="customer-name" th:text="${customerName}">Kunde Navn</span></h1>
+    <h1 class="customer-request-title">Forespørgsel: <span class="customer-name" th:text="${customerName}"></span></h1>
     <div class="container">
         <div class="flexbox">
             <h2 class="carport-title">Carport med fladt tag</h2>
-            <form action="/calculateRequest" method="post">
+            <form th:action="@{/calculateRequest}" method="post" onsubmit="savedSuccess()">
                 <div class="measurement-container">
                     <h2 id="length-title">
                         <label for="length">Længde:</label>
-                        <input id="length" name="length" type="number" class="input-measurement" th:value="${customerRequestLength}" th:text="${customerRequestLength}">
+                        <input id="length" name="length" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestLength}" min="240" max="600" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 240-600 cm.')">
                         <span>cm.</span>
                     </h2>
                 </div>
                 <div class="measurement-container">
                     <h2 id="width-title">
                         <label for="width">Bredde:</label>
-                        <input id="width" name="width" type="number" class="input-measurement" th:value="${customerRequestWidth}" th:text="${customerRequestWidth}">
+                        <input id="width" name="width" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestWidth}" min="240" max="780" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 240-780 cm.')">
                         <span>cm.</span>
                     </h2>
                 </div>
                 <div class="measurement-container">
                     <h2 id="height-title">
                         <label for="height">Højde:</label>
-                        <input id="height" name="height" type="number" class="input-measurement" th:value="${customerRequestHeight}" th:text="${customerRequestHeight}">
+                        <input id="height" name="height" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestHeight}" min="180" max="300" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 180-300 cm.')">
                         <span>cm.</span>
                     </h2>
                 </div>
                 <div class="roof-container">
-                    <h2>Tag: <span class="roof-title" th:value="${customerRequestTileType}" th:text="${customerRequestTileType}">Plasttrapezplader</span></h2>
+                    <h2>Tag: <span class="roof-title" th:text="${chosenCustomerRequest.requestTileType}"></span></h2>
                 </div>
                 <div class="button-container">
-                    <button type="submit" formaction="/returnToAllRequests" class="return-button" name="customer-request" value="Return">Gå tilbage</button>
-                    <button type="submit" formaction="/saveRequestChanges" class="save-button" name="customer-request" value="Save">Gem ændringer</button>
-                    <button type="submit" class="calculate-button" name="customer-request" value="Calculate">Beregn tilbud</button>
+                    <a th:href="@{/returnToAllRequests}" class="return-button">Gå tilbage</a>
+                    <button type="submit" th:formaction="${'/saveRequestChanges'}" class="save-button" name="customer-request-id" th:value="${chosenCustomerRequest.customerRequestId}">Gem ændringer</button>
+                    <button type="submit" class="calculate-button" name="customer-request-id" th:value="${chosenCustomerRequest.customerRequestId}">Beregn tilbud</button>
                 </div>
             </form>
         </div>
     </div>
     </th:block>
 </div>
+
+<script>
+    function savedSuccess() {
+        alert("Dine ændringer er blevet gemt!");
+    }
+</script>
 </body>
 </html>
