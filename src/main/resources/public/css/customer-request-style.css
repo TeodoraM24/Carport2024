@@ -57,11 +57,12 @@
     font-weight: 450;
 }
 
-select {
-    font-size: 20px;
-    margin-left: 1em;
-    width: 200px;
-    height: 30px;
+.input-measurement {
+    font-size: 30px;
+    margin-left: 10px;
+    width: 100px;
+    height: 25px;
+   text-align: right;
 }
 
 .roof-title {
@@ -165,11 +166,12 @@ textarea {
     text-align: center;
 }
 
-.select-size:focus, .input-amount-size:focus, textarea:focus, .input-price-size:focus, .input-new-price:focus  {
+.select-size:focus, .input-amount-size:focus, textarea:focus, .input-price-size:focus, .input-new-price:focus,
+.input-measurement-size {
     background-color: white;
 }
 
-.input-amount-size, .input-price-size {
+.input-amount-size, .input-price-size, .input-measurement-size {
     padding: 0;
     margin: 0;
     height: 100%;
@@ -182,6 +184,11 @@ textarea {
 .input-amount-size {
     width: 50%;
 }
+
+.input-measurement-size {
+    width: 70%;
+}
+
 
 .input-price-size {
     width: 70%;

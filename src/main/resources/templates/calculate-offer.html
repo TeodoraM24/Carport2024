@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
     <meta charset="UTF-8">
     <title>Beregn Tilbud</title>
     <meta charset="UTF-8">
@@ -38,19 +38,16 @@
                         <textarea>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</textarea>
                     </label></td>
                     <td>
-                        <select class="select-size">
-                            <option th:each="i : ${#numbers.sequence(240, 600, 30)}" th:value="${i}" th:text="${i + ' cm'}"></option>
-                        </select>
+                        <input type="number" class="input-measurement-size">
+                        <span>cm</span>
                     </td>
                     <td>
-                        <select class="select-size">
-                            <option th:each="i : ${#numbers.sequence(240, 780, 30)}" th:value="${i}" th:text="${i + ' cm'}"></option>
-                        </select>
+                        <input type="number" class="input-measurement-size">
+                        <span>cm</span>
                     </td>
                     <td>
-                        <select class="select-size">
-                            <option th:each="i : ${#numbers.sequence(180, 300, 30)}" th:value="${i}" th:text="${i + ' cm'}"></option>
-                        </select>
+                        <input type="number" class="input-measurement-size">
+                        <span>cm</span>
                     </td>
                     <td>
                         <input type="number" class="input-amount-size">
