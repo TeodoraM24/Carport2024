@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+    <title>Admin startside</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/customer-own-order-style.css" th:href="@{/css/customer-own-order-style.css}"
+          rel="stylesheet"/>
+    <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="fragments/header :: div.main-header"></div>
+<div class="body-background">
+    <div class="container">
+        <div class="flexbox">
+            <form method="POST">
+                <h2>Ordre Historik</h2>
+                <div th:if="${#ctx.session.currentCustomer.role == 'customer' && listOfInvoices != null && not #lists.isEmpty(listOfInvoices)}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Ordrenummer</th>
+                            <th>Dato</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="invoice : ${listOfInvoices}">
+                            <td th:text="${invoice.invoiceId}"></td>
+                            <td th:text="${invoice.date}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:unless="${#ctx.session.currentCustomer.role == 'customer' && listOfInvoices != null && not #lists.isEmpty(listOfInvoices)}">
+                    <p>Ingen kvittering blev fundet</p>
+                </div>
+                <span th:each="invoice : ${listOfInvoices}">
+                <button class="button" style="margin-top: 30px"
+                        onclick="window.location.href = 'customer-specefic-order-page.html';">
+                    Læs mere</button></span>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

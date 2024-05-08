@@ -2,6 +2,8 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controllers.InvoiceController;
+import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
@@ -18,7 +20,6 @@ public class Main {
         }).start(7070);
 
         // Routing
-
-        app.get("/", ctx ->  ctx.render("index.html"));
+        InvoiceController.addRoutes(app, ConnectionPool.getInstance());
     }
 }
