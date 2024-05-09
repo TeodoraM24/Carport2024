@@ -4,7 +4,7 @@
     <title>Admin startside</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/css/customer-own-order-style.css" th:href="@{/css/customer-own-order-style.css}"
+    <link href="../public/css/customer-own-order-frontpage-style.css" th:href="@{/css/customer-own-order-frontpage-style.css}"
           rel="stylesheet"/>
     <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
 </head>
@@ -15,7 +15,7 @@
         <div class="flexbox">
             <form method="POST">
                 <h2>Ordre Historik</h2>
-                <div th:if="${#ctx.session.currentCustomer.role == 'customer' && listOfInvoices != null && not #lists.isEmpty(listOfInvoices)}">
+                <div>
                     <table>
                         <thead>
                         <tr>
@@ -31,12 +31,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div th:unless="${#ctx.session.currentCustomer.role == 'customer' && listOfInvoices != null && not #lists.isEmpty(listOfInvoices)}">
+                <div>
                     <p>Ingen kvittering blev fundet</p>
                 </div>
                 <span th:each="invoice : ${listOfInvoices}">
-                <button class="button" style="margin-top: 30px"
-                        onclick="window.location.href = 'customer-specefic-order-page.html';">
+                <button class="button"
+                        onclick="window.location.href = 'customer-own-order-page.html';">
                     Læs mere</button></span>
             </form>
         </div>

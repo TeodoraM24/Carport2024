@@ -2,6 +2,7 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controllers.InvoiceController;
 import app.controllers.MaterialController;
 import app.controllers.CustomerController;
 import app.persistence.ConnectionPool;
@@ -22,10 +23,11 @@ public class Main {
         }).start(7070);
 
         // Routing
-        MaterialController.addRoutes(app, ConnectionPool.getInstance());
-        CustomerController.addRoutes(app, ConnectionPool.getInstance());
+        //MaterialController.addRoutes(app, ConnectionPool.getInstance());
+        //CustomerController.addRoutes(app, ConnectionPool.getInstance());
+        //InvoiceController.addRoutes(app, ConnectionPool.getInstance());
 
-        // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
+        app.get("/", ctx ->  ctx.render("customer-own-order-page.html")); // uncomment this if want to try materials
         // app.get("/", ctx ->  ctx.render("login-page.html")); // uncomment this is want to try login/createuser
     }
 }

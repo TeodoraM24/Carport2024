@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+    <title>Admin startside</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/customer-own-order-style.css" th:href="@{/css/customer-own-order-style.css}"
+          rel="stylesheet"/>
+    <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<div th:replace="fragments/header :: div.main-header"></div>
+<div class="body-background">
+    <div class="container">
+        <div class="flexbox">
+            <form method="POST">
+                <div>
+                     <h2>Værebro</h2>
+                    <div> <h1>Carport</h1></div>
+                    <div> <h2>Husk at kontrollere materiale listen inden du går i gang.</h2></div>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>Materiale beskrivelse</td>
+                            <td>Længde</td>
+                            <td>Antal</td>
+                            <td>Enhed</td>
+                            <td>Beskrivelse</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div> <p style="text-align: left">Træ og tagplader</p></div>
+                    <table>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    <div> <p style="text-align: left">Beslag & Skruer</p></div>
+                    <table>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <span>
+                <button class="button" style="margin-top: 30px"
+                        onclick="window.location.href = 'customer-own-order-frontpage.html.html';">
+                    Gå tilbage</button></span>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
