@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class CustomerMapper {
     public static Customer logInd(String email, String password, ConnectionPool connectionPool) throws DatabaseException
     {
-        String sql = "select * from public.\"users\" where email=? and password=?"; //NAVN ÆNDRINGER
+        String sql = "select * from public.\"customer\" where email=? and password=?"; //NAVN ÆNDRINGER
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -24,15 +24,14 @@ public class CustomerMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next())
             {
-                int id = rs.getInt("customerId");
+                int id = rs.getInt("customer_id");
                 String role = rs.getString("role");
-                String firstName = rs.getString("firstName");
-                String lastName = rs.getString("lastName");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
                 String address = rs.getString("address");
                 int zip = rs.getInt("zip");
                 boolean haveRequest = rs.getBoolean("haveRequest");
                 int phoneNumber=rs.getInt("phoneNumber");
-
 
                 return new Customer(id, email, password, phoneNumber, firstName, lastName, address, zip, role, haveRequest);
             } else

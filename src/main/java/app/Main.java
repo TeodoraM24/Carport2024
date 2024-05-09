@@ -20,6 +20,9 @@ public class Main {
         }).start(7070);
 
         // Routing
+
         InvoiceController.addRoutes(app, ConnectionPool.getInstance());
+        //app.get("/", ctx ->  ctx.render("customer-info-frontpage.html"));
+
     }
 }

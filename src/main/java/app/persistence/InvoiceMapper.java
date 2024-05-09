@@ -28,6 +28,7 @@ public class InvoiceMapper {
                 "JOIN parts_list p ON cpl.parts_list_id = p.parts_list_id\n" +
                 "JOIN invoice i ON p.parts_list_id = i.parts_list_id;" +
                 "WHERE c.customer_id =?";
+
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
