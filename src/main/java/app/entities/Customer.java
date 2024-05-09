@@ -1,5 +1,7 @@
 package app.entities;
 
+import java.util.Objects;
+
 public class Customer {
     private int customerId;
     private String email;
@@ -11,8 +13,10 @@ public class Customer {
     private int zip;
     private String role;
     private boolean haveRequest;
+    private int customer_request_id;
+    private int offer_id;
 
-    public Customer(int customerId, String email, String password, int phoneNumber, String firstName, String lastName, String address, int zip, String role, boolean haveRequest) {
+    public Customer(int customerId, String email, String password, int phoneNumber, String firstName, String lastName, String address, int zip, String role) {
         this.customerId = customerId;
         this.email = email;
         this.password = password;
@@ -22,7 +26,6 @@ public class Customer {
         this.address = address;
         this.zip = zip;
         this.role = role;
-        this.haveRequest = haveRequest;
     }
 
     public int getCustomerId() {
@@ -105,6 +108,22 @@ public class Customer {
         this.haveRequest = haveRequest;
     }
 
+    public int getCustomer_request_id() {
+        return customer_request_id;
+    }
+
+    public void setCustomer_request_id(int customer_request_id) {
+        this.customer_request_id = customer_request_id;
+    }
+
+    public int getOffer_id() {
+        return offer_id;
+    }
+
+    public void setOffer_id(int offer_id) {
+        this.offer_id = offer_id;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -120,4 +139,6 @@ public class Customer {
                 ", haveRequest=" + haveRequest +
                 '}';
     }
+
 }
+
