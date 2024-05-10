@@ -33,10 +33,10 @@ public class CustomerRequestMapperTest {
                     stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', 1, false)");
 
                     // Insert rows
-                    stmt.execute("INSERT INTO customer_request (length, height, width, tile_type, date, status) VALUES " +
-                            "(5, 3, 3, 'plastik trapez', CURRENT_DATE, 'Afventer')");
-                    stmt.execute("INSERT INTO customer_request (length, height, width, tile_type, date, status) VALUES " +
-                            "(7, 3, 5, 'plastik trapez', CURRENT_DATE, 'Klar')");
+                    stmt.execute("INSERT INTO customer_request (length, height, width, date) VALUES " +
+                            "(5, 3, 3, CURRENT_DATE)");
+                    stmt.execute("INSERT INTO customer_request (length, height, width, date) VALUES " +
+                            "(7, 3, 5, CURRENT_DATE)");
 
                     // Set sequence to continue from the largest member_id
                     stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', COALESCE((SELECT MAX(customer_request_id)+1 FROM public.customer_request), 1), false)");
@@ -62,15 +62,15 @@ public class CustomerRequestMapperTest {
         assertEquals(5, customerRequests.get(0).getLength());
         assertEquals(3, customerRequests.get(0).getHeight());
         assertEquals(3, customerRequests.get(0).getWidth());
-        assertEquals("plastik trapez", customerRequests.get(0).getTileType());
+        assertEquals("Plasttrapezplader", customerRequests.get(0).getTileType());
         assertEquals("Afventer", customerRequests.get(0).getStatus());
         assertEquals(localDate, customerRequests.get(0).getDate());
 
         assertEquals(7, customerRequests.get(1).getLength());
         assertEquals(3, customerRequests.get(1).getHeight());
         assertEquals(5, customerRequests.get(1).getWidth());
-        assertEquals("plastik trapez", customerRequests.get(1).getTileType());
-        assertEquals("Klar", customerRequests.get(1).getStatus());
+        assertEquals("Plasttrapezplader", customerRequests.get(1).getTileType());
+        assertEquals("Afventer", customerRequests.get(1).getStatus());
         assertEquals(localDate, customerRequests.get(1).getDate());
     }
 
@@ -81,7 +81,7 @@ public class CustomerRequestMapperTest {
         int firstCustomerRequestId = allRequests.get(0).getCustomerRequestId();
 
         LocalDate localDate = LocalDate.now();
-        CustomerRequest expected = new CustomerRequest(1, 5, 3, 3, "plastik trapez", "Afventer", localDate);
+        CustomerRequest expected = new CustomerRequest(1, 5, 3, 3, localDate, "Afsluttet");
         CustomerRequest actual = new CustomerRequestMapper().getCustomerRequestById(firstCustomerRequestId, connectionPool);
 
         assertEquals(expected.getLength(), actual.getLength());
@@ -90,6 +90,7 @@ public class CustomerRequestMapperTest {
         assertEquals(expected.getTileType(), actual.getTileType());
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getDate(), actual.getDate());
+        assertEquals(expected.getStatus(), actual.getStatus());
     }
 
 
@@ -102,19 +103,19 @@ public class CustomerRequestMapperTest {
     @Test
     void makeCustomerRequest() throws DatabaseException {
         LocalDate localDate = LocalDate.now();
-        CustomerRequestMapper.makeCustomerRequest(8, 3, 3, localDate, connectionPool);
+        CustomerRequestMapper.makeCustomerRequest(8, 3, 3, localDate, "Afventer", connectionPool);
         assertEquals(3, new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size());
     }
 
     @Test
     void updateCustomerRequest() throws DatabaseException {
         LocalDate localDate = LocalDate.now();
-        CustomerRequestMapper.updateCustomerRequest(1, 4, 3, 3, localDate, "Klar", connectionPool);
+        CustomerRequestMapper.updateCustomerRequest(1, 4, 3, localDate, "Klar", connectionPool);
         List<CustomerRequest> customerRequests = new CustomerRequestMapper().getAllCustomerRequest(connectionPool);
 
         assertEquals(4, customerRequests.get(0).getLength());
-        assertEquals(3, customerRequests.get(0).getHeight()); // Corrected assertion
-        assertEquals(3, customerRequests.get(0).getWidth()); // Corrected assertion
+        assertEquals(3, customerRequests.get(0).getHeight());
+        assertEquals(3, customerRequests.get(0).getWidth());
         assertEquals(localDate, customerRequests.get(0).getDate());
         assertEquals("Klar", customerRequests.get(0).getStatus());
     }

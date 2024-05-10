@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CustomerRequestMapper {
 
-    public List<CustomerRequest> getAllCustomerRequest(ConnectionPool connectionPool) throws DatabaseException {
+    public static List<CustomerRequest> getAllCustomerRequest(ConnectionPool connectionPool) throws DatabaseException {
         List<CustomerRequest> customerRequests = new ArrayList<>();
         String sql = "SELECT * FROM customer_request";
 
@@ -26,11 +26,10 @@ public class CustomerRequestMapper {
                     int length = rs.getInt("length");
                     int width = rs.getInt("width");
                     int height = rs.getInt("height");
-                    String tileType = rs.getString("tile_type");
                     LocalDate date = rs.getDate("date").toLocalDate();
                     String status = rs.getString("status");
 
-                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, status, date);
+                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, date, status);
                     customerRequests.add(customerRequest);
                 }
             }
@@ -55,11 +54,10 @@ public class CustomerRequestMapper {
                     int length = rs.getInt("length");
                     int width = rs.getInt("width");
                     int height = rs.getInt("height");
-                    String tileType = rs.getString("tile_type");
                     LocalDate date = rs.getDate("date").toLocalDate();
                     String status = rs.getString("status");
 
-                    customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, status, date);
+                    customerRequest = new CustomerRequest(customerRequestId, length, width, height, date, status);
                 }
             }
         } catch (SQLException e) {
@@ -69,9 +67,8 @@ public class CustomerRequestMapper {
         return customerRequest;
     }
 
-    public static void makeCustomerRequest(int length, int width, int height, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO customer_request (length, width, height, tile_type, date) VALUES (?, ?, ?, ?, ?)";
-        String tile_type = "plastik trapez";
+    public static void makeCustomerRequest(int length, int width, int height, LocalDate date, String status, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO customer_request (length, width, height, date, status) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -79,8 +76,9 @@ public class CustomerRequestMapper {
             preparedStatement.setInt(1, length);
             preparedStatement.setInt(2, width);
             preparedStatement.setInt(3, height);
-            preparedStatement.setString(4, tile_type);
-            preparedStatement.setDate(5, java.sql.Date.valueOf(date));
+            preparedStatement.setDate(4, java.sql.Date.valueOf(date));
+            preparedStatement.setString(5, status);
+
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected != 1) {
@@ -91,6 +89,7 @@ public class CustomerRequestMapper {
             throw new DatabaseException(msg, e.getMessage());
         }
     }
+
 
     public static void deleteCustomerRequest(int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "DELETE FROM customer_request WHERE customer_request_id = ?";
@@ -109,9 +108,9 @@ public class CustomerRequestMapper {
         }
     }
 
-    public static void updateCustomerRequest(int customerRequestId, int length, int width, int height, LocalDate date, String status, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE customer_request SET length=?, width=?, height=?, tile_type=?, date=?, status=? WHERE customer_request_id=?";
-        String tile_type = "plastik trapez";
+    public static void updateCustomerRequest(int length, int width, int height, LocalDate date, String status, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE customer_request SET length=?, width=?, height=?, date=?, status=? WHERE customer_request_id=?";
+        String tile_type = "Plasttrapezplader";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -121,7 +120,6 @@ public class CustomerRequestMapper {
             preparedStatement.setString(4, tile_type);
             preparedStatement.setDate(5, java.sql.Date.valueOf(date));
             preparedStatement.setString(6, status);
-            preparedStatement.setInt(7, customerRequestId);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
@@ -129,7 +127,7 @@ public class CustomerRequestMapper {
                 throw new DatabaseException("Fejl ved oprettelse af forspørgelse");
             }
         } catch (SQLException e) {
-            String msg = "Der er sket en fejl. Prøv igen";
+            String msg = "Der er sket en fejl. Prøv igen (updateCustomerRequest)";
             throw new DatabaseException(msg, e.getMessage());
         }
     }

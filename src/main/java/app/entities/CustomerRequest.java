@@ -12,14 +12,13 @@ public class CustomerRequest {
     String status;
     LocalDate date;
 
-    public CustomerRequest(int customerRequestId, int length, int height, int width, String tileType, String status, LocalDate date) {
+    public CustomerRequest(int customerRequestId, int length, int height, int width, LocalDate date, String status) {
         this.customerRequestId = customerRequestId;
         this.length = length;
         this.height = height;
         this.width = width;
-        this.tileType = tileType;
-        this.status = status;
         this.date = date;
+        this.status = status;
     }
 
     public int getCustomerRequestId() {
