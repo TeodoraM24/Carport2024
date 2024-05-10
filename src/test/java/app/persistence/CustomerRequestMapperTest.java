@@ -84,4 +84,21 @@ public class CustomerRequestMapperTest {
         //Assert
         assertEquals(expectedCustomerRequest.hashCode(),actualCustomerRequest.hashCode());
     }
+
+    @Test
+    void  testUpdateCustomerRequest() throws DatabaseException {
+        //Act
+        int customerRequestId = 1;
+        int length = 500;
+        int width = 400;
+        int height = 250;
+        CustomerRequest expectedCustomerRequest = new CustomerRequest(customerRequestId, length, width, height, "Plasttrapezplader", LocalDate.of(2024, 8, 5), "Afventer");
+
+        //Arrange
+        CustomerRequestMapper.updateCustomerRequest(customerRequestId, length, width, height, connectionPool);
+        CustomerRequest actualCustomerRequest = CustomerRequestMapper.getCustomerRequest(customerRequestId, connectionPool);
+
+        //Assert
+        assertEquals(expectedCustomerRequest.hashCode(), actualCustomerRequest.hashCode());
+    }
 }
