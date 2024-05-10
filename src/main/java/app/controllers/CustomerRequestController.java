@@ -16,7 +16,7 @@ public class CustomerRequestController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
 
     }
-    private static void addCustomerRequest(Context ctx, ConnectionPool connectionPool) {
+  /*  private static void addCustomerRequest(Context ctx, ConnectionPool connectionPool) {
         int length = Integer.parseInt(ctx.formParam("length"));
         int width = Integer.parseInt(ctx.formParam("width"));
         int height = Integer.parseInt(ctx.formParam("height"));
@@ -32,5 +32,5 @@ public class CustomerRequestController {
             ctx.render("carport-form.html");
         }
     }
-
+*/
 }

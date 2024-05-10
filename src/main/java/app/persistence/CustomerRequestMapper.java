@@ -15,11 +15,10 @@ public class CustomerRequestMapper {
 
     public List<CustomerRequest> getAllCustomerRequest(ConnectionPool connectionPool) throws DatabaseException {
         List<CustomerRequest> customerRequests = new ArrayList<>();
-        String sql = "SELECT * FROM customer_request WHERE customer_request_id = ?";
+        String sql = "SELECT * FROM customer_request";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
@@ -36,11 +35,12 @@ public class CustomerRequestMapper {
                 }
             }
         } catch (SQLException e) {
-            String msg = "Der er sket en fejl. Prøv igen";
+            String msg = "Fejl i getAllCustomerRequest()!";
             throw new DatabaseException(msg, e.getMessage());
         }
         return customerRequests;
     }
+
 
     public CustomerRequest getCustomerRequestById(int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM customer_request WHERE customer_request_id = ?";
@@ -63,7 +63,7 @@ public class CustomerRequestMapper {
                 }
             }
         } catch (SQLException e) {
-            String msg = "Der er sket en fejl. Prøv igen";
+            String msg = "Fejl ved getCustomerRequestById. Prøv igen";
             throw new DatabaseException(msg, e.getMessage());
         }
         return customerRequest;
@@ -87,7 +87,7 @@ public class CustomerRequestMapper {
                 throw new DatabaseException("Fejl ved oprettelse af forspørgelse");
             }
         } catch (SQLException e) {
-            String msg = "Der er sket en fejl. Prøv igen";
+            String msg = "Fejl ved makeCustomerRequest. Prøv igen";
             throw new DatabaseException(msg, e.getMessage());
         }
     }
