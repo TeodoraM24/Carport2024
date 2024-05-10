@@ -14,6 +14,7 @@ import java.util.List;
 public class InvoiceController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("invoice", ctx -> displayCurrentCustomersOrderHistory(ctx, connectionPool));
         app.post("invoice", ctx -> displayCurrentCustomersOrderHistory(ctx, connectionPool));
 
     }
