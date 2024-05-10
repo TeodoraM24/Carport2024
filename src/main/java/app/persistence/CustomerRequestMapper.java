@@ -67,8 +67,8 @@ public class CustomerRequestMapper {
         return customerRequest;
     }
 
-    public static void makeCustomerRequest(int length, int width, int height, LocalDate date, String status, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO customer_request (length, width, height, date, status) VALUES (?, ?, ?, ?)";
+    public static void makeCustomerRequest(int length, int width, int height, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO customer_request (length, width, height, date) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -77,7 +77,6 @@ public class CustomerRequestMapper {
             preparedStatement.setInt(2, width);
             preparedStatement.setInt(3, height);
             preparedStatement.setDate(4, java.sql.Date.valueOf(date));
-            preparedStatement.setString(5, status);
 
 
             int rowsAffected = preparedStatement.executeUpdate();
@@ -108,28 +107,28 @@ public class CustomerRequestMapper {
         }
     }
 
-    public static void updateCustomerRequest(int length, int width, int height, LocalDate date, String status, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE customer_request SET length=?, width=?, height=?, date=?, status=? WHERE customer_request_id=?";
-        String tile_type = "Plasttrapezplader";
+    public static void updateCustomerRequest(int customerId, int length, int width, int height, LocalDate date, String status, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE customer_request SET length=?, width=?, height=?, date=?, status=? WHERE customer_request_id = ?";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, length);
             preparedStatement.setInt(2, width);
             preparedStatement.setInt(3, height);
-            preparedStatement.setString(4, tile_type);
-            preparedStatement.setDate(5, java.sql.Date.valueOf(date));
-            preparedStatement.setString(6, status);
+            preparedStatement.setDate(4, java.sql.Date.valueOf(date));
+            preparedStatement.setString(5, status);
+            preparedStatement.setInt(6, customerId);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl ved oprettelse af forspørgelse");
+                throw new DatabaseException("Fejl ved opdatering af kundeforespørgsel");
             }
         } catch (SQLException e) {
             String msg = "Der er sket en fejl. Prøv igen (updateCustomerRequest)";
             throw new DatabaseException(msg, e.getMessage());
         }
     }
+
 
 }

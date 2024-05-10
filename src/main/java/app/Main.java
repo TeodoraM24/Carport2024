@@ -2,6 +2,7 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controllers.CustomerRequestController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -23,9 +24,6 @@ public class Main {
 
         // Routing
         app.get("/", ctx -> ctx.render("carport-index.html"));
-        app.get("/carport-form", ctx -> ctx.render("carport-form.html"));
-        app.get("/customer-info-page", ctx -> ctx.render("customer-info-page.html"));
-
-        app.post("/carport-offer-sent", ctx -> ctx.render("carport-offer-sent.html"));
+        CustomerRequestController.addRoutes(app, connectionPool);
     }
 }
