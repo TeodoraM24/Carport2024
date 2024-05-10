@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: common_header(~{::title},~{::link})">
-    <title>Admin startside</title>
+    <title>Se valgte ordre</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/css/customer-own-order-style.css" th:href="@{/css/customer-own-order-style.css}"
-          rel="stylesheet"/>
+    <link href="../public/css/customer-own-order-style.css" th:href="@{/css/customer-own-order-style.css}" rel="stylesheet"/>
     <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
 </head>
 <body>
 <div th:replace="fragments/header :: div.main-header"></div>
+<a href="/templates/customer-own-order-page.html" th:href="@{/customerInvoice}">
 <div class="body-background">
     <div class="container">
         <div class="flexbox">
-            <form method="POST">
+            <form th:action="@{/materialInstruction}" method="POST">
                 <div>
                      <h2>Værebro</h2>
                     <div> <h1>Carport</h1></div>
@@ -28,24 +28,17 @@
                             <td>Beskrivelse</td>
                         </tr>
                         </tbody>
-                    </table>
-                    <div> <p style="text-align: left">Træ og tagplader</p></div>
-                    <table>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                    <div> <p style="text-align: left">Beslag & Skruer</p></div>
-                    <table>
-                        <tbody>
-
-                        </tbody>
+                        <tr th:each="partlist :${listOfPartlists}">
+                            <td th:text="${partlist.material_description}"></td>
+                            <td th:text="${partlist.length}"></td>
+                            <td th:text="${partlist.amount}"></td>
+                            <td th:text="${partlist.unit_nam}"></td>
+                            <td th:text="${partlist.instruction_description}"></td>
+                        </tr>
                     </table>
                 </div>
                 <span>
-                <button class="button" style="margin-top: 30px"
-                        onclick="window.location.href = 'customer-own-order-frontpage.html.html';">
-                    Gå tilbage</button></span>
+                <button class="button" style="margin-top: 30px" formaction="customer-own-order-frontpage">Tilbage til kunde </button></span>
             </form>
         </div>
     </div>

@@ -46,8 +46,8 @@ public class InvoiceMapper {
             ps.setInt(1, customerId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int invoiceId = rs.getInt("order_id");
                 LocalDate date = rs.getDate("invoice_date").toLocalDate();
+                int invoiceId = rs.getInt("order_id");
                 Invoice invoice = new Invoice(customerId, invoiceId, date);
                 listOfCustomersInvoices.add(invoice);
             }

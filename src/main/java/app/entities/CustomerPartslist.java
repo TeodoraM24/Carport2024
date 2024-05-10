@@ -8,13 +8,13 @@ public class CustomerPartslist {
     private String description;
     private int customerId;
 
-    public CustomerPartslist(String materialDescription, int length, int amount, String unitName, String description, int customerId) {
+    public CustomerPartslist(String materialDescription, int length, int amount, String unitName, String description, int  customerId) {
         this.materialDescription = materialDescription;
         this.length = length;
         this.amount = amount;
         this.unitName = unitName;
         this.description = description;
-        this.customerId = customerId;
+        this.customerId =  customerId;
     }
 
     public String getMaterialDescription() {
@@ -55,5 +55,13 @@ public class CustomerPartslist {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 }

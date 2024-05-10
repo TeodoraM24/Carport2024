@@ -4,21 +4,22 @@
     <title>Admin startside</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/css/customer-own-order-frontpage-style.css"
-          th:href="@{/css/customer-own-order-frontpage-style.css}"
-          rel="stylesheet"/>
+    <link href="../public/css/customer-own-order-frontpage-style.css" th:href="@{/css/customer-own-order-frontpage-style.css}" rel="stylesheet"/>
     <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
 </head>
+
 <body>
 <div th:replace="fragments/header :: div.main-header"></div>
+<a href="/templates/customer-own-order-frontpage.html" th:href="@{/orderoverview}">
 <div class="body-background">
     <div class="container">
         <div class="flexbox">
-            <form method="POST">
+            <form th:action="@{/vieworder}" method="POST">
                 <div>
                     <h2>Ordre Historik</h2>
                     <table>
                         <tbody>
+
                         <tr>
                             <td> Dato</td>
                             <td> Ordrenummer</td>
@@ -26,22 +27,19 @@
                         </tbody>
                         <tbody>
                         <tr th:each="invoice : ${listOfInvoices}">
-                            <td th:text="${invoice.date}"></td>
-                            <td th:text="${invoice.invoiceId}"></td>
+                            <td th:text="${invoice.invoice_dat}"></td>
+                            <td th:text="${invoice.order_id}"></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <span th:each="invoice : ${listOfInvoices}">
-                <button class="button"
-                        onclick="window.location.href = 'customer-own-order-page.html';">
-                    Læs mere</button></span>
+                <button type="submit" class="button" formaction="custoner-own order-page.html">Læs mere</button></span>
                 <div th:if="${#lists.isEmpty(listOfInvoices)}">
                     <p>Ingen kvittering blev fundet</p>
-                    <button class="button" onclick="window.location.href = 'customer-own-order-page.html';">
-                        Tilbage til Kunde info
-                    </button>
+                    <button type="submit" class="button" formaction="customer-info-frontpage.html'">Tilbage til Kunde info</button>
+
                 </div>
             </form>
         </div>
