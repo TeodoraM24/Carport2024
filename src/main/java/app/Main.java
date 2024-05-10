@@ -24,8 +24,8 @@ public class Main {
 
         // Routing
         CustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
-        MaterialController.addRoutes(app, ConnectionPool.getInstance());
-        CustomerController.addRoutes(app, ConnectionPool.getInstance());
+        //MaterialController.addRoutes(app, ConnectionPool.getInstance());
+        //CustomerController.addRoutes(app, ConnectionPool.getInstance());
 
         // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
         // app.get("/", ctx ->  ctx.render("login-page.html")); // uncomment this is want to try login/createuser

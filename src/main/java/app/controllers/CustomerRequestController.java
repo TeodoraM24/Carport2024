@@ -24,6 +24,8 @@ public class CustomerRequestController {
             ctx.redirect("/"); //change
         });
 
+        app.get("/cancelRequestChanges", ctx -> ctx.redirect("/")); //change
+
         app.post("/calculateRequest", ctx -> {
             calculateOfferForChosenCustomer(ctx, connectionPool);
             displayCalculateOfferPage(ctx);

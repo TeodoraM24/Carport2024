@@ -29,7 +29,7 @@
     height: 100px;
 }
 
-.return-button, .save-button, .calculate-button, .cautious-button, .blue-button {
+.return-button, .save-button, .cancel-button, .calculate-button, .cautious-button, .blue-button {
     display: block;
     margin: 0 auto;
     border-radius: 8px;
@@ -44,7 +44,7 @@
     background-color: rgb(47, 75, 184);
 }
 
-.save-button {
+.save-button, .cancel-button {
     background-color: grey;
 }
 
@@ -279,6 +279,10 @@ textarea {
 
 a {
     text-decoration: none;
+}
+
+#save, #cancel {
+    visibility: hidden;
 }
 
 
