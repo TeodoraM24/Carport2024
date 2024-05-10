@@ -4,15 +4,15 @@ import java.util.Objects;
 
 public class Material {
 
-    private int MaterialId;
+    private int materialId;
     private String description;
     private int height;
     private int width;
     private int length;
     private int price;
 
-    public Material(int MaterialId, String description, int height, int width, int length, int price) {
-        this.MaterialId = MaterialId;
+    public Material(int materialId, String description, int height, int width, int length, int price) {
+        this.materialId = materialId;
         this.description = description;
         this.height = height;
         this.width = width;
@@ -21,11 +21,11 @@ public class Material {
     }
 
     public int getMaterialId() {
-        return MaterialId;
+        return materialId;
     }
 
     public void setMaterialId(int materialId) {
-        this.MaterialId = materialId;
+        this.materialId = materialId;
     }
 
     public String getDescription() {
@@ -71,7 +71,7 @@ public class Material {
     @Override
     public String toString() {
         return "Material{" +
-                "id=" + MaterialId +
+                "id=" + materialId +
                 ", description='" + description + '\'' +
                 ", height=" + height +
                 ", width=" + width +

@@ -95,7 +95,7 @@ public class CustomerRequest {
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerRequestId, requestLength, requestWidth, requestHeight, requestTileType, date, status);
+        return Objects.hash(getCustomerRequestId(), getRequestLength(), getRequestWidth(), getRequestHeight(), getRequestTileType(), getDate(), getStatus());
     }
 
     @Override

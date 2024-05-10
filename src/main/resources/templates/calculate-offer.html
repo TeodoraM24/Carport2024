@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../public/css/customer-request-style.css" th:href="@{/css/customer-request-style.css}" rel="stylesheet"/>
     <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 </head>
 <body>
 <div th:replace="~{fragments/header :: div.main-header}"></div>
@@ -18,6 +19,7 @@
             <table>
                 <thead>
                 <tr class="header">
+                    <th id="delete-material"></th>
                     <th id="material-id">Vare Nummer</th>
                     <th id="material-desc">Vare Beskrivelse</th>
                     <th id="additional-text">Hjælpe Tekst</th>
@@ -29,7 +31,9 @@
                 </tr>
                 </thead>
                 <tbody>
+                <th:block th:each="">
                 <tr>
+                    <td><button type="submit" class="remove-button"><i class="fa fa-trash"></i></button></td>
                     <td>140</td>
                     <td><label>
                         <textarea>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
@@ -58,6 +62,8 @@
                         <span>kr.</span>
                     </td>
                 </tr>
+                </th:block>
+                <!--
                 <tr>
                     <td>11</td>
                     <td><label>
@@ -83,6 +89,7 @@
                     <td>Doloribus.</td>
                     <td>Veritatis.</td>
                 </tr>
+                -->
                 </tbody>
             </table>
         </div>

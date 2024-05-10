@@ -57,7 +57,7 @@ public class CustomerRequestMapperTest {
     @Test
     void testGetChosenCustomerRequestId() throws DatabaseException {
         //Arrange
-        Customer chosenCustomer = new Customer(1, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer", true);
+        Customer chosenCustomer = new Customer(1, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
         int chosenCustomerId = chosenCustomer.getCustomerId();
         int expectedCustomerRequestId = 1;
 
@@ -71,7 +71,7 @@ public class CustomerRequestMapperTest {
     @Test
     void testGetChosenCustomerRequest() throws DatabaseException {
         //Arrange
-        Customer chosenCustomer = new Customer(1, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer", true);
+        Customer chosenCustomer = new Customer(1, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
         int chosenCustomerId = chosenCustomer.getCustomerId();
 
         LocalDate date = LocalDate.of(2024, 8, 5);

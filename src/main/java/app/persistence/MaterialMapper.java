@@ -172,4 +172,29 @@ public class MaterialMapper {
             throw new DatabaseException("Error updating material: " + e.getMessage());
         }
     }
+
+    public static int getMaterialIdByData(String description, int height, int width, int length, int price, ConnectionPool connectionPool) throws DatabaseException{
+        String sql = "SELECT material_id FROM material WHERE material_description = ? " +
+                "AND height = ? AND width = ? AND length = ? AND price = ?;";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ){
+            ps.setString(1, description);
+            ps.setInt(2, height);
+            ps.setInt(3, width);
+            ps.setInt(4, length);
+            ps.setInt(5, price);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("material_id");
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB: SQL SELECT error in getMaterialIdByData", e.getMessage());
+        }
+    }
 }

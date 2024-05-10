@@ -87,4 +87,32 @@ public class MaterialMapperTest {
         assertEquals(620, materials.get(3).getLength());
         assertEquals(240, materials.get(3).getPrice());
     }
+
+    @Test
+    void testGetMaterialIdByDataInvalid() throws DatabaseException {
+        int expectedId = -1;
+        int height = 300;
+        int totalPrice = (height / 100) * 35;
+        int postLengthMM = 97;
+        int postWidthMM = 97;
+        String postDesc = postLengthMM + "x" + postWidthMM + " mm. trykimp. Stolpe";
+
+        int actualMaterial = MaterialMapper.getMaterialIdByData(postDesc, height, postWidthMM, postLengthMM, totalPrice, connectionPool);
+
+        assertEquals(expectedId, actualMaterial);
+    }
+
+    @Test
+    void testGetMaterialIdByDataValid() throws DatabaseException {
+        int expectedId = 5;
+        int height = 300;
+        int totalPrice = (height / 100) * 35;
+        int postLengthMM = 97;
+        int postWidthMM = 97;
+        String postDesc = postLengthMM + "x" + postWidthMM + " mm. trykimp. Stolpe";
+
+        MaterialMapper.addMaterial(postDesc, height, postWidthMM, postLengthMM, totalPrice, connectionPool);
+        int actualMaterial = MaterialMapper.getMaterialIdByData(postDesc, height, postWidthMM, postLengthMM, totalPrice, connectionPool);
+        assertEquals(expectedId, actualMaterial);
+    }
 }

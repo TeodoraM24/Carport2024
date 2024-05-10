@@ -121,6 +121,10 @@ th {
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 }
 
+#delete-material {
+    width: 50px;
+}
+
 #material-id {
     width: 70px;
 }
@@ -143,6 +147,16 @@ th {
 
 th, td {
     border: 1px solid white;
+}
+
+.remove-button {
+    width: 100%;
+    background-color: white;
+    font-size: 2em
+}
+
+.remove-button:hover {
+    background-color: red;
 }
 
 textarea {

@@ -1,11 +1,18 @@
 package app.controllers;
 
 import app.entities.CustomerRequest;
+import app.entities.Material;
+import app.entities.PartsList;
+import app.entities.PartsListItem;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.CustomerRequestMapper;
+import app.services.MaterialsCalculator;
+import app.services.PriceCalculator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
+import java.util.List;
 
 public class CustomerRequestController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
@@ -40,9 +47,22 @@ public class CustomerRequestController {
         CustomerRequest customerRequest = getCustomerRequest(customerRequestId, connectionPool);
 
         //calculate materials from request based on length, width, height
-
+        MaterialsCalculator materialsCalculator = new MaterialsCalculator(customerRequest.getRequestLength(), customerRequest.getRequestWidth(), customerRequest.getRequestHeight(), connectionPool);
+        materialsCalculator.calcCarport();
+        List<PartsListItem> partsListItems = materialsCalculator.getPartsListItems();
 
         //calculate the prices from request
+        int totalPrice = 0;
+        for (PartsListItem p : partsListItems) {
+            Material m = p.getMaterial();
+            totalPrice += m.getPrice();
+        }
+
+        PriceCalculator priceCalculator = new PriceCalculator();
+        //calculate here
+
+        //Create Parts list
+
     }
 
     private static void displayCalculateOfferPage(Context ctx) {
