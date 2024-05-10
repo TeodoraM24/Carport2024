@@ -33,7 +33,7 @@ public class CustomerController {
         catch (DatabaseException e)
         {
             ctx.attribute("message", e.getMessage() );
-            ctx.render("login-page.html"); //same here
+            ctx.render("login-page.html");
         }
 
     }

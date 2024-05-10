@@ -9,8 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CustomerMapper {
-    public static Customer logInd(String email, String password, ConnectionPool connectionPool) throws DatabaseException
-    {
+    public static Customer logInd(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM public.\"customer\" WHERE email=? AND password=?";
 
         try (

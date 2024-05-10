@@ -62,7 +62,7 @@ public class CustomerMapperTest {
             fail("Unexpected exception: " + e.getMessage());
         }
     }
-    //'Jon', 'Andersen', 'jon@blabla.com', '1234', 12455, 'Campusvej', 2770
+
     @Test
     void testLogInValidCredentials() {
         String email = "jon@blabla.com";
