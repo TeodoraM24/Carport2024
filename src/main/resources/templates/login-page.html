@@ -1,34 +1,32 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
-<title>LogIn</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/login-style.css" th:href="@{/css/login-style.css}" rel="stylesheet"/>
+<head>
+    <title>LogIn</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/login-style.css" th:href="@{/css/login-style.css}" rel="stylesheet"/>
 </head>
 
 <body>
 <div class="login-container">
     <div class="logo-container">
-        <img alt="logo" src="../public/images/fog-logo.PNG" th:src="@{/images/fog-logo.PNG}" />
+        <img alt="logo" src="../public/images/fog-logo.png" th:src="@{/images/fog-logo.png}" />
     </div>
     <h2>Log på</h2>
     <h4>Log på med din mailadresse</h4>
     <form action="/login" method="post">
         <div class="form-group">
             <input type="email" name="email" placeholder="Mailadresse*"/>
-
         </div>
         <div class="form-group">
-            <input type="password" name="email" placeholder="Adgangskode*"/>
+            <input type="password" name="password" placeholder="Adgangskode*"/>
         </div>
         <div class="form-group">
-
             <input type="submit" value="Log på">
         </div>
     </form>
     <div>
-        <a href="create-user-page.html" th:href="@{/createuser}">Opret en bruger</a>
+        <a href="/createuser">Opret en bruger</a>
     </div>
 </div>
 </body>
