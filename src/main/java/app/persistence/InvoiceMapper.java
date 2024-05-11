@@ -24,20 +24,14 @@ public class InvoiceMapper {
      */
     public static List<Invoice> getACustomersInvoice(int customerId, ConnectionPool connectionPool) throws DatabaseException {
         List<Invoice> listOfCustomersInvoices = new ArrayList<>();
-        String sql = "SELECT " +
-                "c.customer_id," +
-                "p.parts_list_id," +
-                "p.amount," +
-                "p.unit_id," +
-                "p.instruction_description," +
-                "i.invoice_id," +
-                "i.date AS invoice_date" +
-                "FROM customer c" +
-                "JOIN customer_carport cc ON c.customer_id = cc.customer_id\n" +
-                "JOIN carport_parts_list cpl ON cc.carport_id = cpl.carport_id\n" +
-                "JOIN parts_list p ON cpl.parts_list_id = p.parts_list_id\n" +
-                "JOIN invoice i ON p.parts_list_id = i.parts_list_id;" +
-                "WHERE c.customer_id =?";
+        String sql = "SELECT customer.customer_id,invoice.date AS invoice_date, invoice.invoice_id\n" +
+                "FROM customer\n" +
+                "INNER JOIN customer_invoice ON customer.customer_id = customer_invoice.customer_id \n" +
+                "INNER JOIN invoice ON customer_invoice.invoice_id = invoice.invoice_id \n" +
+                "INNER JOIN customer_carport ON customer.customer_id = customer_carport.customer_id\n" +
+                "INNER JOIN carport_parts_list ON customer_carport.carport_id = carport_parts_list.carport_id \n" +
+                "INNER JOIN parts_list ON carport_parts_list.parts_list_id = parts_list.parts_list_id \n" +
+                "WHERE customer.customer_id = ?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -47,7 +41,7 @@ public class InvoiceMapper {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 LocalDate date = rs.getDate("invoice_date").toLocalDate();
-                int invoiceId = rs.getInt("order_id");
+                int invoiceId = rs.getInt("invoice_id");
                 Invoice invoice = new Invoice(customerId, invoiceId, date);
                 listOfCustomersInvoices.add(invoice);
             }
@@ -69,17 +63,15 @@ public class InvoiceMapper {
      * @throws DatabaseException If an error occurs while retrieving the parts list, displays "Fejl under indhentelse af materialer" followed by the system message
      */
 
-    public static List<CustomerPartslist> getACustomersPartlist(int customerId, ConnectionPool connectionPool) throws DatabaseException {
+    public static List<CustomerPartslist> getACustomersPartslist(int customerId, ConnectionPool connectionPool) throws DatabaseException {
         List<CustomerPartslist> listOfCustomerPartlist = new ArrayList<>();
-        String sql = "SELECT m.material_description, m.length, pl.amount, u.unit_name, pl.instruction_description\n" +
-                "FROM customer AS c\n" +
-                "INNER JOIN customer_invoice AS ci ON c.customer_id = ci.customer_id\n" +
-                "INNER JOIN invoice AS i ON ci.invoice_id = i.invoice_id\n" +
-                "INNER JOIN parts_list AS pl ON i.parts_list_id = pl.parts_list_id\n" +
-                "LEFT JOIN parts_list_material AS plm ON pl.parts_list_id = plm.parts_list_id\n" +
-                "LEFT JOIN material AS m ON plm.material_id = m.material_id\n" +
-                "LEFT JOIN unit AS u ON pl.unit_id = u.unit_id\n" +
-                "WHERE c.customer_id = ? AND i.invoice_id = ?;";
+        String sql = "SELECT customer.customer_id,material.material_description, material.length, parts_list.amount,unit.unit_name, parts_list.instruction_description\n" +
+                "FROM customer\n" +
+                "INNER JOIN customer_parts_list ON customer.customer_id = customer_parts_list.customer_id\n" +
+                "INNER JOIN  parts_list ON customer_parts_list.parts_list_id = parts_list.parts_list_id\n" +
+                "INNER JOIN material ON parts_list.parts_list_id = material.material_id\n" +
+                "INNER JOIN unit ON parts_list.unit_id = unit.unit_id\n" +
+                "WHERE customer.customer_id = ?";
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)

@@ -38,15 +38,15 @@ public class InvoiceController {
 
         ctx.render("customer-own-order-frontpage.html");
     }
-   /* private static void displayPartlist(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static void displayPartlist(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Customer customer2 = new Customer(1, "rebecca@yes.dk", "yes", 1, "Rebecca", "Sørensen", "Østerbro", 2100, "customer");
         customer2 = ctx.sessionAttribute("currentCustomerId");
         List<CustomerPartslist> listOfPartlists = null;
-        listOfPartlists = InvoiceMapper.getACustomersPartlist(customer2.getCustomerId(), connectionPool);
+        listOfPartlists = InvoiceMapper.getACustomersPartslist(customer2.getCustomerId(), connectionPool);
         ctx.attribute("listOfPartlists", listOfPartlists);
 
         ctx.render("customer-own-order-page.html");
 
     }
-    */
+
 }
