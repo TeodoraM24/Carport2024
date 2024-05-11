@@ -17,6 +17,13 @@ public class PartsListItem {
         this.instruction = instruction;
     }
 
+    public PartsListItem(Material material, int amount, String unit, String instruction) {
+        this.material = material;
+        this.amount = amount;
+        this.unit = unit;
+        this.instruction = instruction;
+    }
+
     public int getPartsListItemId() {
         return partsListItemId;
     }
@@ -69,6 +76,7 @@ public class PartsListItem {
                 && partsListItem.getUnit().equals(this.getUnit())
                 && partsListItem.getInstruction().equals(this.getInstruction());
     }
+
 
     @Override
     public int hashCode() {

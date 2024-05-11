@@ -1,13 +1,12 @@
 package app.controllers;
 
 import app.entities.CustomerRequest;
-import app.entities.Material;
-import app.entities.PartsList;
 import app.entities.PartsListItem;
+import app.entities.Price;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.CustomerRequestMapper;
-import app.services.MaterialsCalculator;
+import app.services.PartsListCalculator;
 import app.services.PriceCalculator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -34,12 +33,13 @@ public class CustomerRequestController {
         app.get("/cancelRequestChanges", ctx -> ctx.redirect("/")); //change
 
         app.post("/calculateRequest", ctx -> {
-            calculateOfferForChosenCustomer(ctx, connectionPool);
-            displayCalculateOfferPage(ctx);
+            List<PartsListItem> partsListItems = calculatePartsListForChosenCustomer(ctx, connectionPool);
+            Price priceOffer = calculatePriceOfferForChosenCustomer(partsListItems);
+            displayCalculateOfferPage(ctx, partsListItems, priceOffer);
         });
     }
 
-    private static void calculateOfferForChosenCustomer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static List<PartsListItem> calculatePartsListForChosenCustomer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         //get the customer request id
         int customerRequestId = Integer.parseInt(ctx.formParam("customer-request-id"));
 
@@ -47,27 +47,20 @@ public class CustomerRequestController {
         CustomerRequest customerRequest = getCustomerRequest(customerRequestId, connectionPool);
 
         //calculate materials from request based on length, width, height
-        MaterialsCalculator materialsCalculator = new MaterialsCalculator(customerRequest.getRequestLength(), customerRequest.getRequestWidth(), customerRequest.getRequestHeight(), connectionPool);
-        materialsCalculator.calcCarport();
-        List<PartsListItem> partsListItems = materialsCalculator.getPartsListItems();
-
-        //calculate the prices from request
-        int totalPrice = 0;
-        for (PartsListItem p : partsListItems) {
-            Material m = p.getMaterial();
-            totalPrice += m.getPrice();
-        }
-
-        PriceCalculator priceCalculator = new PriceCalculator();
-        //calculate here
-
-        //Create Parts list
-
+        PartsListCalculator partsListCalculator = new PartsListCalculator(customerRequest.getRequestLength(), customerRequest.getRequestWidth(), customerRequest.getRequestHeight());
+        partsListCalculator.calcCarport();
+        return partsListCalculator.getPartsListItems();
     }
 
-    private static void displayCalculateOfferPage(Context ctx) {
-        //ctx.attributte on all materials in parts list
-        //ctx.attributte on prices
+    private static Price calculatePriceOfferForChosenCustomer(List<PartsListItem> partsListItems) {
+        PriceCalculator priceCalculator = new PriceCalculator(partsListItems);
+        return new Price(priceCalculator.calcPurchasePrice(), priceCalculator.getSalesPrice(), priceCalculator.calcPriceWithoutTax(), priceCalculator.calcCoverage());
+    }
+
+    private static void displayCalculateOfferPage(Context ctx, List<PartsListItem> partsListItems, Price priceOffer) {
+        ctx.attribute("customerName", "Jon Andersen"); //Change
+        ctx.attribute("partsListItems", partsListItems);
+        ctx.attribute("priceOffer", priceOffer);
         ctx.render("calculate-offer.html");
     }
 

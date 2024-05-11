@@ -9,10 +9,6 @@ function showButton() {
     document.getElementById('calculate').style.visibility='hidden';
 }
 
-function savedSuccess() {
-    alert("Dine ændringer er blevet gemt!");
-}
-
 function cancelSuccess() {
     alert("Du har fortrudt dine ændringer.");
 }

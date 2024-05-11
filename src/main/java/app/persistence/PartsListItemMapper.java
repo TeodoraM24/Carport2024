@@ -75,9 +75,6 @@ public class PartsListItemMapper {
         } catch (SQLException e) {
             throw new DatabaseException("DB: SQL SELECT error in getAllPartsListItems", e.getMessage());
         }
-        for (PartsListItem p: partsListItems) {
-            System.out.println(p.toString());
-        }
         return partsListItems;
     }
 }

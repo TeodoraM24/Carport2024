@@ -12,7 +12,7 @@
 <body>
 <div th:replace="~{fragments/header :: div.main-header}"></div>
 <div class="body-background">
-    <h1 class="customer-request-title">Forespørgsel: <span class="customer-name">Kunde Navn</span></h1>
+    <h1 class="customer-request-title">Forespørgsel: <span class="customer-name" th:text="${customerName}"></span></h1>
     <form action="/sendOffer" method="post">
     <div class="container">
         <div class="materials-table-container">
@@ -31,83 +31,57 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="">
+                <th:block th:each="item, i: ${partsListItems}">
                 <tr>
                     <td><button type="submit" class="remove-button"><i class="fa fa-trash"></i></button></td>
-                    <td>140</td>
+                    <td th:text="${i.index+1}"></td>
                     <td><label>
-                        <textarea>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+                        <textarea required th:text="${item.material.description}"></textarea>
                     </label></td>
                     <td><label>
-                        <textarea>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</textarea>
+                        <textarea required th:text="${item.instruction}"></textarea>
                     </label></td>
                     <td>
-                        <input type="number" class="input-measurement-size">
-                        <span>cm</span>
+                        <div class="measurement-number"><span th:text="${item.material.length}"></span> cm</div>
                     </td>
                     <td>
-                        <input type="number" class="input-measurement-size">
-                        <span>cm</span>
+                        <div class="measurement-number"><span th:text="${item.material.width}"></span> mm</div>
                     </td>
                     <td>
-                        <input type="number" class="input-measurement-size">
-                        <span>cm</span>
+                        <div class="measurement-number"><span th:text="${item.material.height}"></span> mm</div>
                     </td>
                     <td>
-                        <input type="number" class="input-amount-size">
-                        <span>Stk.</span>
+                        <div class="measurement-number"><span th:text="${item.amount}"></span><span th:text="${' ' + item.unit}"></span></div>
                     </td>
                     <td>
-                        <input type="number" class="input-price-size">
+                        <div class="measurement-number">
+                        <label>
+                            <input type="number" class="input-price-size" required th:value="${item.amount * item.material.price}">
+                        </label>
                         <span>kr.</span>
+                        </div>
                     </td>
                 </tr>
                 </th:block>
-                <!--
-                <tr>
-                    <td>11</td>
-                    <td><label>
-                        <textarea>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
-                    </label></td>
-                    <td><label>
-                        <textarea>sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
-                    </label></td>
-                    <td>Rerum?</td>
-                    <td>Iusto?</td>
-                </tr>
-                <tr>
-                    <td>345</td>
-                    <td>Fugiat?</td>
-                    <td>Alias.</td>
-                    <td>Doloribus.</td>
-                    <td>Veritatis.</td>
-                </tr>
-                <tr>
-                    <td>399990</td>
-                    <td>Fugiat?</td>
-                    <td>Alias.</td>
-                    <td>Doloribus.</td>
-                    <td>Veritatis.</td>
-                </tr>
-                -->
                 </tbody>
             </table>
         </div>
         <div class="price-container">
+            <th:block th:object="${priceOffer}">
             <div class="display-price-container">
                 <div class="display-coverage">
                     <h2 class="display-title">Dækningsgrad efter prisforslag</h2>
-                    <h3 class="display-green-title">Ialt uden moms: <span>17.000,40</span> kr.</h3>
-                    <h4 class="display-purchase-price">Samlet kostpris: <span>10.800,80</span> kr.</h4>
-                    <h1 class="display-coverage-amount">Dækningsgrad: <span>39</span> %</h1>
+                    <h3 class="display-green-title">Ialt uden moms: <span th:text="${priceOffer.priceWithoutTax}"></span> kr.</h3>
+                    <h4 class="display-purchase-price">Samlet kostpris: <span th:text="${priceOffer.purchasePrice}"></span> kr.</h4>
+                    <h1 class="display-coverage-amount">Dækningsgrad: <span th:text="${priceOffer.coverage}"></span> %</h1>
                 </div>
                 <div class="display-price-offer">
                     <h2 class="display-title">Pris & Prisforslag</h2>
-                    <h4 class="display-price" style="border-bottom-style: double">Pris uden moms: <span>17.000,40</span> kr.</h4>
-                    <h4 class="display-price">Pris med moms: <span>20.500,40</span> kr.</h4>
+                    <h4 class="display-price" style="border-bottom-style: double">Pris uden moms: <span th:text="${priceOffer.priceWithoutTax}"></span> kr.</h4>
+                    <h4 class="display-price">Pris med moms: <span th:text="${priceOffer.salesPrice}"></span> kr.</h4>
                     <h3 class="display-green-title" style="margin-top: 10px">Prisforslag ved salg:</h3>
                     <input class="input-new-price" type="number"> kr.
-                    <h4 class="display-price" style="color: red; margin-top: 3px">Prisændring: <span>3000</span> kr.</h4>
+                    <h4 class="display-price" style="color: red; margin-top: 3px">Prisændring: <span>0</span> kr.</h4>
                 </div>
             </div>
             <div class="display-buttons-container">
@@ -116,6 +90,7 @@
                 <button type="submit" formaction="/showDrawing" class="blue-button" name="show-drawing" value="Drawing" style="margin-right: 0">Se tegning</button>
                 <button type="submit" class="cautious-button" name="send-offer" value="Offer" style="margin-right: 0">Send tilbud</button>
             </div>
+            </th:block>
         </div>
     </div>
     </form>

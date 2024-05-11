@@ -149,6 +149,10 @@ th, td {
     border: 1px solid white;
 }
 
+td {
+    font-size: 1em;
+}
+
 .remove-button {
     width: 100%;
     background-color: white;
@@ -299,6 +303,10 @@ a {
     visibility: hidden;
 }
 
+.measurement-number {
+    width: 100%;
+    text-align: right;
+}
 
 
 

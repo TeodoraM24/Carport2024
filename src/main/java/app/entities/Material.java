@@ -20,6 +20,14 @@ public class Material {
         this.price = price;
     }
 
+    public Material(String description, int height, int width, int length, int price) {
+        this.description = description;
+        this.height = height;
+        this.width = width;
+        this.length = length;
+        this.price = price;
+    }
+
     public int getMaterialId() {
         return materialId;
     }
