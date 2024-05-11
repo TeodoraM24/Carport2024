@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.entities.Customer;
 import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
@@ -17,18 +18,34 @@ public class CustomerRequestController {
         app.get("/carport-index", ctx -> ctx.render("carport-index.html"));
         app.get("/carport-form", ctx -> ctx.render("carport-form.html"));
         app.get("/customer-info-page", ctx -> ctx.render("customer-info-page.html"));
+        app.get("/login-page", ctx -> ctx.render("login-page.html"));
         app.post("/carport-offer-sent", ctx -> ctx.render("carport-offer-sent.html"));
+        app.post("/make-customer-request", ctx -> makeCustomerRequest(ctx, connectionPool));
     }
 
     public static void makeCustomerRequest(Context ctx, ConnectionPool connectionPool) {
-        LocalDate date = LocalDate.now();
+        Customer currentUser = ctx.sessionAttribute("currentUser");
+        if (currentUser == null) {
+            ctx.render("/login-page.html");
+            ctx.attribute("message", "Du skal logge ind før du kan bestille en forespørgsel");
+            return;
+        }
 
-        int height = Integer.parseInt(ctx.formParam("height"));
-        int width = Integer.parseInt(ctx.formParam("width"));
-        int length = Integer.parseInt(ctx.formParam("length"));
+        if (currentUser.isHaveRequest()){
+            ctx.redirect("/customer-info-page.html");
+            ctx.attribute("message", "Du har allerede bestilt en forespørgsel, vent venligst på vi vender tilbage");
+            return;
+        }
+
+        LocalDate date = LocalDate.now();
+        int height = Integer.parseInt(ctx.formParam("carport-height"));
+        int width = Integer.parseInt(ctx.formParam("carport-width"));
+        int length = Integer.parseInt(ctx.formParam("carport-length"));
 
         try {
             CustomerRequestMapper.makeCustomerRequest(length, width, height, date, connectionPool);
+            currentUser.setHaveRequest(true);
+            ctx.redirect("carport-offer-sent.html");
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("carport-form.html");
