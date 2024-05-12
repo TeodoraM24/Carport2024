@@ -21,6 +21,8 @@ public class CustomerRequestController {
         try {
 
             Customer currentUser = ctx.sessionAttribute("currentUser");
+            currentUser.getCustomerId();
+
 
             List<CustomerRequest> customerRequests = CustomerRequestMapper.getAllCustomerRequests(currentUser.getCustomerId(), connectionPool);
 
