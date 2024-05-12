@@ -9,10 +9,22 @@ import app.persistence.CustomerRequestMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Controller class reponsible for the handling of customer requests
+ */
+
 public class CustomerRequestController {
+
+    /**
+     * Add routes to Javalin
+     *
+     * @param app Instance of the Javalin application
+     * @param connectionPool The connection to the database
+     */
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/carport-index", ctx -> ctx.render("carport-index.html"));
@@ -23,34 +35,45 @@ public class CustomerRequestController {
         app.post("/make-customer-request", ctx -> makeCustomerRequest(ctx, connectionPool));
     }
 
+    /**
+     * Handle the process of making customer request
+     *
+     * @param ctx The Javalin HTTP context
+     * @param connectionPool The connection to the database
+     *
+     * Makes a check if the customer is logged in and if they're checking if they already have a request.
+     */
+
     public static void makeCustomerRequest(Context ctx, ConnectionPool connectionPool) {
         Customer currentUser = ctx.sessionAttribute("currentUser");
         if (currentUser == null) {
-            ctx.render("/login-page.html");
+            ctx.redirect("/login-page.html");
             ctx.attribute("message", "Du skal logge ind før du kan bestille en forespørgsel");
             return;
         }
 
-        if (currentUser.isHaveRequest()){
+        if (currentUser.isHaveRequest()) {
             ctx.redirect("/customer-info-page.html");
             ctx.attribute("message", "Du har allerede bestilt en forespørgsel, vent venligst på vi vender tilbage");
             return;
         }
 
-        LocalDate date = LocalDate.now();
         int height = Integer.parseInt(ctx.formParam("carport-height"));
         int width = Integer.parseInt(ctx.formParam("carport-width"));
         int length = Integer.parseInt(ctx.formParam("carport-length"));
+        LocalDate date = LocalDate.now();
 
         try {
-            CustomerRequestMapper.makeCustomerRequest(length, width, height, date, connectionPool);
+            CustomerRequestMapper.makeCustomerRequest(ctx, connectionPool);
             currentUser.setHaveRequest(true);
-            ctx.redirect("carport-offer-sent.html");
+            ctx.redirect("/carport-offer-sent.html");
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("carport-form.html");
         }
     }
+
+
 /*
     public static void updateCustomerRequest(Context ctx, ConnectionPool connectionPool) {
         try{
@@ -69,6 +92,13 @@ public class CustomerRequestController {
         ctx.render("carport-form.html");
         }
     }*/
+
+    /**
+     * Handle the process of deleting customer request
+     *
+     * @param ctx The Javalin HTTP context
+     * @param connectionPool The connection to the database
+     */
 
     public static void deleteCustomerRequest(Context ctx, ConnectionPool connectionPool) {
         int customerRequestId = Integer.parseInt(ctx.formParam("customerRequestId"));

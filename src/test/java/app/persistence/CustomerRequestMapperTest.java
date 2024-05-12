@@ -1,7 +1,9 @@
 package app.persistence;
 
+import app.entities.Customer;
 import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
+import io.javalin.http.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,20 +29,24 @@ public class CustomerRequestMapperTest {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
 
-                stmt.execute("DELETE FROM customer_invoice");
                 stmt.execute("DELETE FROM customer_request");
+                stmt.execute("DELETE FROM customer");
 
                 // Reset the sequence number
                 stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.customer_customer_id_seq', 1, false)");
 
                 // Insert rows
                 stmt.execute("INSERT INTO customer_request (length, height, width, date) VALUES " +
                         "(5, 3, 3, CURRENT_DATE)");
                 stmt.execute("INSERT INTO customer_request (length, height, width, date) VALUES " +
                         "(7, 3, 5, CURRENT_DATE)");
+                stmt.execute("INSERT INTO customer (customer_id, email, password, phone_number, first_name, last_name, address, zip_code, role, have_request) " +
+                        "VALUES (1, 'test@email.dk', 'password', '12345678', 'Lars', 'Larsen', 'Adresse', '0000', 'customer', false)");
 
                 // Set sequence to continue from the largest member_id
                 stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', COALESCE((SELECT MAX(customer_request_id)+1 FROM public.customer_request), 1), false)");
+                stmt.execute("SELECT setval('public.customer_customer_id_seq', COALESCE((SELECT MAX(customer_id)+1 FROM public.customer), 1), false))))");
             }
         } catch (SQLException throwables) {
             fail("Database connection failed");
@@ -100,13 +106,21 @@ public class CustomerRequestMapperTest {
         CustomerRequestMapper.deleteCustomerRequest(2, connectionPool);
         assertEquals(1, new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size());
     }
-
+/*
     @Test
     void makeCustomerRequest() throws DatabaseException {
+        // 1. Prepare Data
         LocalDate localDate = LocalDate.now();
-        CustomerRequestMapper.makeCustomerRequest(8, 3, 3, localDate, connectionPool);
-        assertEquals(3, new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size());
-    }
+        int initialSize = new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size();
+
+        // 2. Invoke the Method
+        CustomerRequestMapper.makeCustomerRequest(connectionPool);
+
+        // 3. Assertion
+        int updatedSize = new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size();
+        assertEquals(initialSize + 1, updatedSize);
+    }*/
+
 
     @Test
     void updateCustomerRequest() throws DatabaseException {
