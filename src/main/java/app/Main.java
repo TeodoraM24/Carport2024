@@ -25,8 +25,10 @@ public class Main {
         // Routing
         //MaterialController.addRoutes(app, ConnectionPool.getInstance());
         //CustomerController.addRoutes(app, ConnectionPool.getInstance());
-        //InvoiceController.addRoutes(app, ConnectionPool.getInstance());
-        app.get("/", ctx ->  ctx.render("customer-own-order-page.html")); // uncomment this if want to try materials
+        InvoiceController.addRoutes(app, ConnectionPool.getInstance());
+       app.get("/", ctx ->  ctx.render("customer-own-order-frontpage.html")); // uncomment this if want to try materials
+       // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
+
         //app.get("/", ctx ->  ctx.render("materials-page.html")); // uncomment this is want to try login/createuser
     }
 }

@@ -1,5 +1,6 @@
 package app.persistence;
 
+import app.entities.Customer;
 import app.entities.CustomerPartslist;
 import app.entities.Invoice;
 import app.exceptions.DatabaseException;
@@ -62,7 +63,6 @@ public class InvoiceMapper {
      * @return A list of CustomerPartslist objects representing the customer's parts list
      * @throws DatabaseException If an error occurs while retrieving the parts list, displays "Fejl under indhentelse af materialer" followed by the system message
      */
-
     public static List<CustomerPartslist> getACustomersPartslist(int customerId, ConnectionPool connectionPool) throws DatabaseException {
         List<CustomerPartslist> listOfCustomerPartlist = new ArrayList<>();
         String sql = "SELECT customer.customer_id,material.material_description, material.length, parts_list.amount,unit.unit_name, parts_list.instruction_description\n" +
@@ -91,6 +91,37 @@ public class InvoiceMapper {
             throw new DatabaseException("Fejl i SQL!!", e.getMessage());
         }
         return listOfCustomerPartlist;
+    }
+
+    /**
+     * Retrieves a customer from the database based on the provided customer ID.
+     *
+     * @param customerId   the ID of the customer to retrieve
+     * @param connectionPool   the connection pool to use for the database connection
+     * @return   the Customer object representing the retrieved customer
+     * @throws DatabaseException   if there's an issue with the database operation
+     */
+
+    public static Customer getCustomerById(int customerId, ConnectionPool connectionPool) throws DatabaseException {
+        Customer customer = new Customer(1); // Instantiate a new Customer object
+
+        String sql = "SELECT customer_id\n" +
+                "FROM customer\n" +
+                "WHERE customer_id = 1;";
+        //change the SQL when customer_id =!Null..
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, customerId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                customer.setCustomerId(rs.getInt("customer_id"));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl i SQL!!", e.getMessage());
+        }
+        return customer;
     }
 
 

@@ -33,17 +33,20 @@
                         </tbody>
                     </table>
                 </div>
-
+                <span th:if="${#ctx.session.currentCustomer.customerId == 'customer_id'}">
                 <span th:each="invoice : ${listOfInvoices}">
                 <button type="submit" class="button" formaction="custoner-own order-page.html">Læs mere</button></span>
+
                 <div th:if="${#lists.isEmpty(listOfInvoices)}">
                     <p>Ingen kvittering blev fundet</p>
                     <button type="submit" class="button" formaction="customer-info-frontpage.html'">Tilbage til Kunde info</button>
 
                 </div>
+                </span>
             </form>
         </div>
     </div>
-</div>
+
+
 </body>
 </html>
