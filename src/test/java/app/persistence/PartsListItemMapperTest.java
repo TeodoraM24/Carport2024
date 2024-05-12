@@ -16,7 +16,7 @@ public class PartsListItemMapperTest {
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "carport_v2";
+    private static final String DB = "carport_v2_test";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
     @BeforeEach
@@ -33,9 +33,9 @@ public class PartsListItemMapperTest {
 
                 // Insert rows
                 stmt.execute("INSERT INTO material (material_description, height, width, length, price) VALUES " +
-                        "('Rem', '45', '195', '480', 220)");
-                stmt.execute("INSERT INTO parts_list_item (material_id, amount, instruction_description, unit_id) VALUES " +
-                        "(1, 6, 'test', 1)");
+                        "('Rem', '45', '195', '480', 20)");
+                stmt.execute("INSERT INTO parts_list_item (material_id, amount, instruction_description, unit, total_price) VALUES " +
+                        "(1, 6, 'test', 'Stk.', 100)");
 
                 // Set sequence to continue from the largest member_id
                 stmt.execute("SELECT setval('public.parts_list_item_parts_list_item_id_seq', COALESCE((SELECT MAX(parts_list_item_id)+1 FROM public.parts_list_item), 1), false)");
@@ -54,7 +54,7 @@ public class PartsListItemMapperTest {
     @Test
     void testAddPartsListItem() throws DatabaseException {
         int expectedSize = 2;
-        PartsListItemMapper.addPartsListItem(1, 2, "test", 1, connectionPool);
+        PartsListItemMapper.addPartsListItem(1, 2, "test", "Stk.",100, connectionPool);
 
         List<PartsListItem> partsListItems = PartsListItemMapper.getAllPartsListItems(connectionPool);
 
@@ -67,9 +67,9 @@ public class PartsListItemMapperTest {
         int materialId = 1;
         int amount = 6;
         String instruction = "test";
-        int unitId = 1;
+        String unit = "Stk.";
 
-        int actualPartsListItemId = PartsListItemMapper.getPartsListItemIdByData(materialId, amount, instruction, unitId, connectionPool);
+        int actualPartsListItemId = PartsListItemMapper.getPartsListItemIdByData(materialId, amount, instruction, unit, connectionPool);
 
         assertEquals(expectedId, actualPartsListItemId);
     }

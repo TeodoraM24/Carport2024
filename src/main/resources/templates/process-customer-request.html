@@ -20,21 +20,21 @@
                 <div class="measurement-container">
                     <h2 id="length-title">
                         <label for="length">Længde:</label>
-                        <input id="length" name="length" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestLength}" min="240" max="780" onchange="setValidity(this)" required oninvalid="this.setCustomValidity('Skal være imellem 240-780 cm.')">
+                        <input id="length" name="length" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestLength}" min="240" max="780" onchange="setValidityRequest(this)" required oninvalid="this.setCustomValidity('Skal være imellem 240-780 cm.')">
                         <span>cm.</span>
                     </h2>
                 </div>
                 <div class="measurement-container">
                     <h2 id="width-title">
                         <label for="width">Bredde:</label>
-                        <input id="width" name="width" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestWidth}" min="240" max="600" onchange="setValidity(this)" required oninvalid="this.setCustomValidity('Skal være imellem 240-600 cm.')">
+                        <input id="width" name="width" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestWidth}" min="240" max="600" onchange="setValidityRequest(this)" required oninvalid="this.setCustomValidity('Skal være imellem 240-600 cm.')">
                         <span>cm.</span>
                     </h2>
                 </div>
                 <div class="measurement-container">
                     <h2 id="height-title">
                         <label for="height">Højde:</label>
-                        <input id="height" name="height" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestHeight}" min="180" max="300" onchange="setValidity(this)" required oninvalid="this.setCustomValidity('Skal være imellem 180-300 cm.')">
+                        <input id="height" name="height" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestHeight}" min="180" max="300" onchange="setValidityRequest(this)" required oninvalid="this.setCustomValidity('Skal være imellem 180-300 cm.')">
                         <span>cm.</span>
                     </h2>
                 </div>

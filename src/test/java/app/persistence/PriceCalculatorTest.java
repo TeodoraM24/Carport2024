@@ -17,7 +17,7 @@ public class PriceCalculatorTest {
     @BeforeEach
     void setup() {
         List<PartsListItem> partsListItems = new ArrayList<>();
-        partsListItems.add(new PartsListItem(new Material("",0,0,0,7500),1,"",""));
+        partsListItems.add(new PartsListItem(new Material("",0,0,0,7500),1,"","",100));
         priceCalculator = new PriceCalculator(partsListItems);
     }
 

@@ -29,8 +29,8 @@ public class PartsListCalculator {
     private void calcPost() {
         int amount = calcPostQuantity();
         int totalLength = height + 90;
-        int pricePrMeter = 44;
-        int totalPrice = (totalLength / 100) * pricePrMeter; // change price to double?
+        double pricePrMeter = 44;
+        double totalPrice = (totalLength / 100.0) * pricePrMeter; // change price to double?
         int postHeightMM = 97;
         int postWidthMM = 97;
         String postDescr = postHeightMM + "x" + postWidthMM + " mm. trykimp. Stolpe";
@@ -39,9 +39,9 @@ public class PartsListCalculator {
         addToPartsListItems(postDescr, postHeightMM, postWidthMM, totalLength, totalPrice, amount, unitType, instruction);
     }
 
-    private void addToPartsListItems(String description, int heightMM, int widthMM, int length, int price, int amount, String unitType, String instruction) {
+    private void addToPartsListItems(String description, int heightMM, int widthMM, int length, double price, int amount, String unitType, String instruction) {
         Material carportPost = new Material(description, heightMM, widthMM, length, price);
-        partsListItems.add(new PartsListItem(carportPost, amount, unitType, instruction));
+        partsListItems.add(new PartsListItem(carportPost, amount, unitType, instruction, price * amount));
     }
 
     public int calcPostQuantity() {
@@ -76,10 +76,10 @@ public class PartsListCalculator {
             remainingBeamLength = calcRemainingDistance() + 100;
         }
 
-        int pricePrMeter = 38;
-        int beamHeightMM = 45;
-        int beamWidthMM = 195;
-        String beamDescr = beamHeightMM + "x" + beamWidthMM + " mm. spærtræ ubh.";
+        double pricePrMeter = 38;
+        int beamHeightMM = 195;
+        int beamWidthMM = 45;
+        String beamDescr = beamWidthMM + "x" + beamHeightMM + " mm. spærtræ ubh.";
         String instruction = "Remme i sider, sadles ned i stolper.";
         String unitType = "Stk.";
 
@@ -98,11 +98,11 @@ public class PartsListCalculator {
         }
     }
 
-    private void addBeamsToPartsListItems(String beamDescr, int beamHeightMM, int beamWidthMM, int pricePrM, String unitType, int givenLength, int amount, String instruction) {
+    private void addBeamsToPartsListItems(String beamDescr, int beamHeightMM, int beamWidthMM, double pricePrM, String unitType, int givenLength, int amount, String instruction) {
         Arrays.sort(beamsRaftersLengths);
         for (int beamLength: beamsRaftersLengths) {
             if (givenLength <= beamLength) {
-                int price = (beamLength/100) * pricePrM; // change price to double?
+                double price = (beamLength/100.0) * pricePrM; // change price to double?
                 addToPartsListItems(beamDescr, beamHeightMM, beamWidthMM, beamLength, price, amount * 2, unitType, instruction);
                 break;
             }
@@ -111,7 +111,39 @@ public class PartsListCalculator {
 
     //spær
     private void  calcRafters() {
+        int rafterWidthMM = 45;
+        int rafterHeightMM = 195;
+        int amountOfRafters = calcAmountOfRafters(rafterWidthMM);
+        int rafterLength = calcRafterLength();
+        double pricePrMeter = 38;
+        double totalPrice = (rafterLength / 100.0) * pricePrMeter;
+        String rafterDescr = rafterWidthMM + "x" + rafterHeightMM + " mm. spærtræ ubh.";
+        String instruction = "Spær, monteres på rem.";
 
+        if (width != rafterLength) {
+            instruction += " Skæres til " + width + "cm.";
+        }
+
+        String unitType = "Stk.";
+
+        addToPartsListItems(rafterDescr, rafterHeightMM, rafterWidthMM, rafterLength, totalPrice, amountOfRafters, unitType, instruction);
+    }
+
+    public int calcAmountOfRafters(int rafterWidthMM) {
+        int spaceBetweenCM = 55;
+        double rafterWidthCM = rafterWidthMM/10.0;
+        return (int) Math.ceil(length / (spaceBetweenCM + rafterWidthCM));
+    }
+
+    public int calcRafterLength() {
+        int rafterLength = -1;
+        for (int length: beamsRaftersLengths) {
+            if (width <= length) {
+                rafterLength = length;
+                break;
+            }
+        }
+        return rafterLength;
     }
 
     public List<PartsListItem> getPartsListItems() {

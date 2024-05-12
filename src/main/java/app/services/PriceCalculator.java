@@ -14,21 +14,27 @@ public class PriceCalculator {
     public PriceCalculator(List<PartsListItem> partsListItems) {
         this.partsListItems = partsListItems;
         this.purchasePrice = calcPurchasePrice();
-        this.salesPrice = getSalesPrice();
+        this.salesPrice = purchasePrice * 3;
+    }
+
+    public PriceCalculator(List<PartsListItem> partsListItems, double salesPrice) {
+        this.partsListItems = partsListItems;
+        this.purchasePrice = calcPurchasePrice();
+        this.salesPrice = salesPrice;
     }
 
     public double calcPurchasePrice() {
         int purchasePrice = 0;
         for (PartsListItem p : partsListItems) {
-            int price = p.getMaterial().getPrice();
+            double price = p.getMaterial().getPrice();
             int amount = p.getAmount();
-            purchasePrice += price * amount;
+            purchasePrice += (int) (price * amount);
         }
         return purchasePrice;
     }
 
     public double getSalesPrice() {
-        return purchasePrice * 3; // we dont know their markup..
+        return salesPrice; // we dont know their markup..
     }
 
     public double calcPriceWithoutTax() {

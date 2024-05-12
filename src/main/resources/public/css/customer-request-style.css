@@ -282,6 +282,8 @@ textarea {
 }
 
 .input-new-price {
+    font-size: 1.1em;
+    text-align: right;
     height: 25px;
     background-color: lightgray;
 }
@@ -304,6 +306,7 @@ a {
 }
 
 .measurement-number {
+    font-size: 1.2em;
     width: 100%;
     text-align: right;
 }

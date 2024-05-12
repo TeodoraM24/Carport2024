@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MaterialMapperTest {
 
     private static final String USER = "postgres";
-    private static final String PASSWORD = "HigAbt60ig";
-    private static final String URL = "jdbc:postgresql://161.35.195.156/%s?currentSchema=public";
-    private static final String DB = "carport_test";
+    private static final String PASSWORD = "postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
+    private static final String DB = "carport_v2_test";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
     @BeforeEach
@@ -26,6 +26,7 @@ public class MaterialMapperTest {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
                 // Remove all rows from relevant tables
+                stmt.execute("DELETE FROM parts_list_item");
                 stmt.execute("DELETE FROM material");
 
                 // Reset the sequence number

@@ -19,8 +19,7 @@
             <table>
                 <thead>
                 <tr class="header">
-                    <th id="delete-material"></th>
-                    <th id="material-id">Vare Nummer</th>
+                    <th id="material-id">Nr.</th>
                     <th id="material-desc">Vare Beskrivelse</th>
                     <th id="additional-text">Hjælpe Tekst</th>
                     <th class="material-size">Længde</th>
@@ -31,43 +30,48 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="item, i: ${partsListItems}">
-                <tr>
-                    <td><button type="submit" class="remove-button"><i class="fa fa-trash"></i></button></td>
+                <tr th:each="item, i: ${partsListItems}">
                     <td th:text="${i.index+1}"></td>
                     <td><label>
-                        <textarea required th:text="${item.material.description}"></textarea>
+                        <input type="hidden" th:name="|partsListItems[${i.index}].material.description|" th:value="${item.material.description}" th:text="${item.material.description}"></textarea>
                     </label></td>
                     <td><label>
-                        <textarea required th:text="${item.instruction}"></textarea>
+                        <textarea id="instruction" th:name="|partsListItems[${i.index}].instruction|" th:value="${item.instruction}" th:text="${item.instruction}" onchange="setValidityOffer(this)" required oninvalid="this.setCustomValidity('Mangler hjælpe tekst.')"></textarea>
                     </label></td>
                     <td>
-                        <div class="measurement-number"><span th:text="${item.material.length}"></span> cm</div>
+                        <div class="measurement-number">
+                            <input type="hidden" th:name="|partsListItems[${i.index}].material.length|" th:value="${item.material.length}" th:text="${item.material.length}"> cm
+                        </div>
                     </td>
                     <td>
-                        <div class="measurement-number"><span th:text="${item.material.width}"></span> mm</div>
+                        <div class="measurement-number">
+                        <input type="hidden" th:name="|partsListItems[${i.index}].material.width|" th:value="${item.material.width}" th:text="${item.material.width}"> mm
+                        </div>
                     </td>
                     <td>
-                        <div class="measurement-number"><span th:text="${item.material.height}"></span> mm</div>
+                        <div class="measurement-number">
+                        <input type="hidden" th:name="|partsListItems[${i.index}].material.height|" th:value="${item.material.height}" th:text="${item.material.height}"> mm
+                        </div>
                     </td>
-                    <td>
-                        <div class="measurement-number"><span th:text="${item.amount}"></span><span th:text="${' ' + item.unit}"></span></div>
+                    <td><div class="measurement-number">
+                        <input type="hidden" th:name="|partsListItems[${i.index}].amount|" th:value="${item.amount}" th:text="${item.amount}">
+                        <input type="hidden" th:name="|partsListItems[${i.index}].unit|" th:value="${item.unit}" th:text="${item.unit}">
+                    </div>
                     </td>
                     <td>
                         <div class="measurement-number">
                         <label>
-                            <input type="number" class="input-price-size" required th:value="${item.amount * item.material.price}">
+                            <input type="number" id="material-price" class="input-price-size" th:name="|partsListItems[${i.index}].totalprice|" th:value="${item.totalprice}" onchange="setValidityOffer(this)" required oninvalid="this.setCustomValidity('Mangler en pris.')">
                         </label>
                         <span>kr.</span>
                         </div>
                     </td>
                 </tr>
-                </th:block>
                 </tbody>
             </table>
         </div>
         <div class="price-container">
-            <th:block th:object="${priceOffer}">
+            <th:block th:object="${price}">
             <div class="display-price-container">
                 <div class="display-coverage">
                     <h2 class="display-title">Dækningsgrad efter prisforslag</h2>
@@ -80,15 +84,17 @@
                     <h4 class="display-price" style="border-bottom-style: double">Pris uden moms: <span th:text="${priceOffer.priceWithoutTax}"></span> kr.</h4>
                     <h4 class="display-price">Pris med moms: <span th:text="${priceOffer.salesPrice}"></span> kr.</h4>
                     <h3 class="display-green-title" style="margin-top: 10px">Prisforslag ved salg:</h3>
-                    <input class="input-new-price" type="number"> kr.
-                    <h4 class="display-price" style="color: red; margin-top: 3px">Prisændring: <span>0</span> kr.</h4>
+                    <label>
+                        <input class="input-new-price" type="number" id="new-price" onchange="setValidityOffer(this)" name="new-price" value="">
+                    </label> kr.
+                    <h4 class="display-price" style="color: red; margin-top: 3px">Prisændring: <span th:text="${priceDifference}"></span> kr.</h4>
                 </div>
             </div>
             <div class="display-buttons-container">
-                <button type="submit" formaction="/saveOfferChanges" class="save-button" name="save-changes" value="Save" style="margin-right: 0">Gem ændringer</button>
+                <button type="submit" formaction="/saveChanges" class="save-button" id="save" name="save-changes" value="Save" style="margin-right: 0">Gem ændringer</button>
                 <button type="submit" formaction="/showDescription" class="blue-button" name="show-description" value="Description" style="margin-right: 0">Se beskrivelse</button>
                 <button type="submit" formaction="/showDrawing" class="blue-button" name="show-drawing" value="Drawing" style="margin-right: 0">Se tegning</button>
-                <button type="submit" class="cautious-button" name="send-offer" value="Offer" style="margin-right: 0">Send tilbud</button>
+                <button type="submit" class="cautious-button" id="send" name="send-offer" value="Offer" style="margin-right: 0">Send tilbud</button>
             </div>
             </th:block>
         </div>
@@ -96,5 +102,6 @@
     </form>
 </div>
 
+<script src="/js/button-script.js"></script>
 </body>
 </html>

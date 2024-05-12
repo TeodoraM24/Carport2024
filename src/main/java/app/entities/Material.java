@@ -9,9 +9,9 @@ public class Material {
     private int height;
     private int width;
     private int length;
-    private int price;
+    private double price;
 
-    public Material(int materialId, String description, int height, int width, int length, int price) {
+    public Material(int materialId, String description, int height, int width, int length, double price) {
         this.materialId = materialId;
         this.description = description;
         this.height = height;
@@ -20,7 +20,7 @@ public class Material {
         this.price = price;
     }
 
-    public Material(String description, int height, int width, int length, int price) {
+    public Material(String description, int height, int width, int length, double price) {
         this.description = description;
         this.height = height;
         this.width = width;
@@ -68,7 +68,7 @@ public class Material {
         this.length = length;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 

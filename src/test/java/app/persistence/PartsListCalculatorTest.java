@@ -39,4 +39,23 @@ public class PartsListCalculatorTest {
         assertEquals(expectedRemainingDistance, actualRemainingDistance);
     }
 
+    @Test
+    void testCalcAmountOfRafters() {
+        int expectedAmount = 16;
+        int rafterWidthMM = 45;
+
+        int actualAmount = partsListCalculator.calcAmountOfRafters(rafterWidthMM);
+
+        assertEquals(expectedAmount, actualAmount);
+    }
+
+    @Test
+    void testCalcRafterLength() {
+        int expectedLength = 600;
+
+        int actualLength = partsListCalculator.calcRafterLength();
+
+        assertEquals(expectedLength, actualLength);
+    }
+
 }

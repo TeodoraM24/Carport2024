@@ -8,21 +8,26 @@ public class PartsListItem {
     private int amount;
     private String unit;
     private String instruction;
+    private double totalPrice;
 
-    public PartsListItem(int partsListItemId, Material material, int amount, String unit, String instruction) {
+    public PartsListItem(int partsListItemId, Material material, int amount, String unit, String instruction, double totalPrice) {
         this.partsListItemId = partsListItemId;
         this.material = material;
         this.amount = amount;
         this.unit = unit;
         this.instruction = instruction;
+        this.totalPrice = totalPrice;
     }
 
-    public PartsListItem(Material material, int amount, String unit, String instruction) {
+    public PartsListItem(Material material, int amount, String unit, String instruction, double totalPrice) {
         this.material = material;
         this.amount = amount;
         this.unit = unit;
         this.instruction = instruction;
+        this.totalPrice = totalPrice;
     }
+
+    public PartsListItem() {}
 
     public int getPartsListItemId() {
         return partsListItemId;
@@ -64,6 +69,14 @@ public class PartsListItem {
         this.instruction = instruction;
     }
 
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this)
@@ -74,23 +87,25 @@ public class PartsListItem {
                 && partsListItem.getMaterial().equals(this.getMaterial())
                 && partsListItem.getAmount() == this.getAmount()
                 && partsListItem.getUnit().equals(this.getUnit())
-                && partsListItem.getInstruction().equals(this.getInstruction());
+                && partsListItem.getInstruction().equals(this.getInstruction())
+                && partsListItem.getTotalPrice() == this.getTotalPrice();
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPartsListItemId(), getMaterial(), getAmount(), getUnit(), getInstruction());
+        return Objects.hash(getPartsListItemId(), getMaterial(), getAmount(), getUnit(), getInstruction(), getTotalPrice());
     }
 
     @Override
     public String toString() {
-        return "PartsList{" +
-                "partsListId=" + partsListItemId +
+        return "PartsListItem{" +
+                "partsListItemId=" + partsListItemId +
                 ", material=" + material +
                 ", amount=" + amount +
                 ", unit='" + unit + '\'' +
-                ", instruction='" + instruction +
+                ", instruction='" + instruction + '\'' +
+                ", totalPrice=" + totalPrice +
                 '}';
     }
 }
