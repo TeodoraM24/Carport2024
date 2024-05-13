@@ -62,6 +62,7 @@ public class PartsListCalculator {
         return remainingDistance;
     }
 
+    //remme
     private void calcBeams() {
         int avgBeamLength = calcAvgDistanceBetweenPosts();
         int avgBeamLengthLast = avgBeamLength + 30;

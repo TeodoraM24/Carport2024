@@ -38,7 +38,7 @@ public class PriceCalculator {
     }
 
     public double calcPriceWithoutTax() {
-        return salesPrice / 1.25;
+        return salesPrice / 1.20;
     }
 
     public double calcCoverage() {
