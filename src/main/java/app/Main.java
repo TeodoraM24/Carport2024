@@ -24,7 +24,7 @@ public class Main {
         }).start(7070);
 
         // Routing
-        app.get("/", ctx -> ctx.render("carport-index.html"));
+        app.get("/", ctx -> ctx.render("customer-request-admin.html"));
         CustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
         CustomerController.addRoutes(app, connectionPool);
     }

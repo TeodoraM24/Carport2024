@@ -11,6 +11,7 @@ import io.javalin.http.Context;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,10 +59,6 @@ public class CustomerRequestController {
             return;
         }
 
-        int height = Integer.parseInt(ctx.formParam("carport-height"));
-        int width = Integer.parseInt(ctx.formParam("carport-width"));
-        int length = Integer.parseInt(ctx.formParam("carport-length"));
-        LocalDate date = LocalDate.now();
 
         try {
             CustomerRequestMapper.makeCustomerRequest(ctx, connectionPool);
@@ -73,6 +70,31 @@ public class CustomerRequestController {
         }
     }
 
+    public static List<CustomerRequest> getAllCustomerRequests(ConnectionPool connectionPool) throws DatabaseException {
+
+        List<CustomerRequest> customerRequests = new ArrayList<>();
+
+        String sql = "SELECT * FROM customer_request";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int customerID = rs.getInt("customer_id");
+                int height = rs.getInt("height");
+                int width = rs.getInt("width");
+                int length = rs.getInt("length");
+                LocalDate date = rs.getDate("date").toLocalDate();
+                String status = rs.getString("status");
+                customerRequests.add(new CustomerRequest(customerID, height, width, length, date, status));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl under indhentelse af kunde forespørgsler", e.getMessage());
+        }
+        return customerRequests;
+    }
 
 /*
     public static void updateCustomerRequest(Context ctx, ConnectionPool connectionPool) {
