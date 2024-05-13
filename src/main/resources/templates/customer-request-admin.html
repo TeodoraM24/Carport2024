@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+    <title>Admin forespørgslser</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/customer-own-order-frontpage-style.css" th:href="@{/css/customer-own-order-frontpage-style.css}" rel="stylesheet"/>
+    <link href="../public/css/customer-request-admin.css" th:href="@{/css/customer-request-admin.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="fragments/header :: div.main-header"></div>
+<div class="container">
+    <div class="flexbox">
+        <h1>Forespørgsler</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Dato</th>
+                <th>Mål</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${customerRequests}">
+                <td th:text="${request.date}"></td>
+                <td th:text="${request.height + ' x ' + request.length + ' x ' + request.width}"></td>
+                <td th:text="${request.status}"></td>
+                <td th:if="${request.status == 'Klar'}">
+                    <a class="button" th:href="@{/offer-acceptance/${request.customerRequestId}}">Accepter/Afvis Tilbud</a>
+                </td>
+                <td th:unless="${request.status == 'Klar'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

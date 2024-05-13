@@ -31,6 +31,7 @@ public class CustomerRequestMapperTest {
 
                 stmt.execute("DELETE FROM customer_request");
                 stmt.execute("DELETE FROM customer");
+                stmt.execute("DELETE FROM invoice");
 
                 // Reset the sequence number
                 stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', 1, false)");

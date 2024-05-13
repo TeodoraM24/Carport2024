@@ -10,10 +10,10 @@ import app.persistence.CustomerMapper;
 public class CustomerController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        /*app.post("login", ctx -> logInd(ctx, connectionPool));
+        app.post("login", ctx -> logInd(ctx, connectionPool));
         app.get("logout", ctx -> logout(ctx));
         app.get("createuser", ctx -> ctx.render("create-user-page.html"));
-        app.post("createuser", ctx -> createCustomer(ctx, connectionPool)); */
+        app.post("createuser", ctx -> createCustomer(ctx, connectionPool));
     }
 
     public static void logInd(Context ctx, ConnectionPool connectionPool){

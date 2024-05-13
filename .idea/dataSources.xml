@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="postgres@161.35.195.156" uuid="2790f21c-7932-4e52-aa50-edbabd3c0c02">
+    <data-source source="LOCAL" name="LiyaServer" uuid="370ea955-a755-46b2-813f-f365a2c1396f">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
