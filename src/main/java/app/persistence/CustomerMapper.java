@@ -21,8 +21,7 @@ public class CustomerMapper {
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
-            {
+            if (rs.next()) {
                 int id = rs.getInt("customer_id");
                 String role = rs.getString("role");
                 String firstName = rs.getString("first_name");

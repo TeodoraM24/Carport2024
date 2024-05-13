@@ -10,32 +10,22 @@ import app.persistence.CustomerMapper;
 public class CustomerController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.post("loginpage", ctx -> logInd(ctx, connectionPool));
+        app.get("loginpage", ctx -> logInd(ctx, connectionPool));
         app.get("logout", ctx -> logout(ctx));
         app.get("createuser", ctx -> ctx.render("create-user-page.html"));
         app.post("createuser", ctx -> createCustomer(ctx, connectionPool));
     }
 
-    public static void logInd(Context ctx, ConnectionPool connectionPool){
+    public static void logInd(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
 
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
+        Customer customer = CustomerMapper.logInd(email, password, connectionPool);
+        ctx.sessionAttribute("currentUser", customer);
 
-        try
-        {
-            Customer customer = CustomerMapper.logInd(email, password, connectionPool);
-            ctx.sessionAttribute("currentUser", customer);
-
-            ctx.attribute("message", "Du er nu logget ind");
-            ctx.render("customer-info-page.html");
-        }
-        catch (DatabaseException e)
-        {
-            ctx.attribute("message", e.getMessage() );
-            ctx.render("login-page.html");
-        }
-
+        ctx.attribute("message", "Du er nu logget ind");
+        ctx.render("customer-info-page.html");
     }
 
     private static void createCustomer(Context ctx, ConnectionPool connectionPool) {

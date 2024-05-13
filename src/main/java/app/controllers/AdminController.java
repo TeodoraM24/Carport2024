@@ -1,7 +1,9 @@
 package app.controllers;
 
+import app.entities.Admin;
 import app.entities.Customer;
 import app.exceptions.DatabaseException;
+import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.CustomerMapper;
 import io.javalin.Javalin;
@@ -10,7 +12,10 @@ import io.javalin.http.Context;
 public class AdminController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.post("/admin/login", ctx -> logInd(ctx, connectionPool));
+        app.get("loginpage-admin", ctx -> {
+            logInd(ctx, connectionPool);
+            //render admin page
+        });
         app.get("/admin/logout", ctx -> logout(ctx));
     }
 
@@ -19,8 +24,8 @@ public class AdminController {
         String password = ctx.formParam("password");
 
         try {
-            Customer customer = CustomerMapper.logInd(email, password, connectionPool);
-            ctx.sessionAttribute("currentUser", customer);
+            Admin admin = AdminMapper.logInd(email, password, connectionPool);
+            ctx.sessionAttribute("currentUser", admin);
             ctx.attribute("message", "Du er nu logget ind");
 
         } catch (DatabaseException e) {
