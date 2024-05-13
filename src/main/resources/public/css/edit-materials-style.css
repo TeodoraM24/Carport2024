@@ -1,0 +1,82 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh; /* Adjust as needed */
+    flex-direction: column; /* Displays children in a column */
+}
+
+.flexbox1 {
+    display: flex;
+    max-height: 50vh; /* Limiting height of the first flexbox */
+    overflow-y: auto; /* Adding vertical scrollbar if content overflows */
+    border-radius: 5px; /* Adjust border radius for smooth corners */
+}
+
+.flexbox2 {
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+/*----------------------------------------- TABLE SPECIFIC ------------------------------------------------------------------*/
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table Header */
+thead {
+    background-color: #b9babd;
+}
+
+/* Table Header Cells */
+th {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Table Body Rows */
+tbody tr:nth-child(even) {
+    background-color: #d0d1d5;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #dcdde1;
+}
+
+/* Table Body Cells */
+td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Form Elements inside Table */
+form {
+    display: inline-block;
+}
+
+input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+button[type="submit"] {
+    padding: 5px 10px;
+    background-color: #6096cc;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #416791;
+}
+
+/* Hover Effect for Table Rows */
+tbody tr:hover {
+    background-color: #f0f0f4;
+}

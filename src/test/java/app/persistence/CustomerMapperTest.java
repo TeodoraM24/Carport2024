@@ -14,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CustomerMapperTest {
 
     private static final String USER = "postgres";
-    private static final String PASSWORD = "HigAbt60ig";
-    private static final String URL = "jdbc:postgresql://161.35.195.156/%s?currentSchema=public";
+    private static final String PASSWORD = "postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
     private static final String DB = "carport_test";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
@@ -24,9 +24,15 @@ public class CustomerMapperTest {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
                 // Remove all rows from relevant tables
-                //stmt.execute("DELETE FROM customer");
+                stmt.execute("DELETE FROM customer");
                 // Reset the sequence number for customer_id
                 stmt.execute("SELECT setval('public.customer_customer_id_seq', 1, false)");
+                // Insert rows
+                stmt.execute("INSERT INTO customer (first_name, last_name, email, password, phonenumber, address, zip) VALUES " +
+                        "('Jon', 'Andersen', 'jon@blabla.com', '1234', 12455, 'Campusvej', 2770)");
+
+                // Set sequence to continue from the largest member_id
+                stmt.execute("SELECT setval('public.customer_customer_id_seq', COALESCE((SELECT MAX(customer_id)+1 FROM public.customer), 1), false)");
             }
         } catch (SQLException throwables) {
             fail("Database connection failed");
@@ -46,7 +52,7 @@ public class CustomerMapperTest {
         String firstName = "Fornavn";
         String lastName = "Efternavn";
         String address = "Testvej";
-        int zip = 3400;
+        int zip = 2770;
         int phoneNumber = 123456789;
 
         try {
@@ -59,8 +65,8 @@ public class CustomerMapperTest {
 
     @Test
     void testLogInValidCredentials() {
-        String email = "jesper@blabla.com";
-        String password = "123456";
+        String email = "jon@blabla.com";
+        String password = "1234";
 
         try {
             Customer actualCustomer = CustomerMapper.logInd(email, password, connectionPool);
@@ -69,11 +75,11 @@ public class CustomerMapperTest {
 
             assertEquals(email, actualCustomer.getEmail());
             assertEquals(password, actualCustomer.getPassword());
-            assertEquals("Fornavn", actualCustomer.getFirstName());
-            assertEquals("Efternavn", actualCustomer.getLastName());
-            assertEquals("Testvej", actualCustomer.getAddress());
-            assertEquals(3400, actualCustomer.getZip());
-            assertEquals(123456789, actualCustomer.getPhoneNumber());
+            assertEquals("Jon", actualCustomer.getFirstName());
+            assertEquals("Andersen", actualCustomer.getLastName());
+            assertEquals("Campusvej", actualCustomer.getAddress());
+            assertEquals(2770, actualCustomer.getZip());
+            assertEquals(12455, actualCustomer.getPhoneNumber());
         } catch (DatabaseException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
@@ -85,5 +91,3 @@ public class CustomerMapperTest {
     }
 
 }
-
-
