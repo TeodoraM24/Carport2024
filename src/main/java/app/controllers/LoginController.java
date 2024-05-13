@@ -1,25 +1,35 @@
 package app.controllers;
 
+import app.entities.Admin;
+import app.entities.Customer;
 import app.exceptions.DatabaseException;
+import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
+import app.persistence.CustomerMapper;
 import app.persistence.LoginMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 public class LoginController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.post("/login", ctx -> checkUserRole(ctx, connectionPool));
+        app.post("/login", ctx -> login(ctx, connectionPool));
     }
 
-    private static void checkUserRole(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static void login(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
         boolean isAdmin= LoginMapper.isAdmin(email, connectionPool);
 
         if (isAdmin){
+            Admin admin = AdminMapper.logInd(email, password, connectionPool);
+            ctx.sessionAttribute("currentUser", admin);
+            ctx.attribute("message", "Du er nu logget ind");
             ctx.redirect("loginpage-admin");
         } else {
+            Customer customer = CustomerMapper.logInd(email, password, connectionPool);
+            ctx.sessionAttribute("currentUser", customer);
+            ctx.attribute("message", "Du er nu logget ind");
             ctx.redirect("loginpage");
         }
     }
