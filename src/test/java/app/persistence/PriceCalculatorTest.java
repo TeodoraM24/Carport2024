@@ -32,7 +32,7 @@ public class PriceCalculatorTest {
 
     @Test
     void testGetPriceWithoutTax() {
-        double expectedPriceWithoutTax = 18000;
+        double expectedPriceWithoutTax = 18750;
 
         double actualPriceWithoutTax = priceCalculator.calcPriceWithoutTax();
 
@@ -41,7 +41,7 @@ public class PriceCalculatorTest {
 
     @Test
     void testCalcCoverage() {
-        double expectedCoverage = 58.33;
+        double expectedCoverage = 60.0;
 
         double actualCoverage = priceCalculator.calcCoverage();
 
