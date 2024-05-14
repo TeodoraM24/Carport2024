@@ -12,13 +12,14 @@ public class CustomerRequest {
     String status;
     LocalDate date;
 
-    public CustomerRequest(int customerRequestId, int length, int height, int width, LocalDate date, String status) {
+    public CustomerRequest(int customerRequestId, int length, int height, int width, String tileType, LocalDate date, String status) {
         this.customerRequestId = customerRequestId;
         this.length = length;
         this.height = height;
         this.width = width;
         this.date = date;
         this.status = status;
+        this.tileType = tileType;
     }
 
     public int getCustomerRequestId() {
@@ -75,5 +76,18 @@ public class CustomerRequest {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerRequest{" +
+                "customerRequestId=" + customerRequestId +
+                ", length=" + length +
+                ", height=" + height +
+                ", width=" + width +
+                ", tileType='" + tileType + '\'' +
+                ", status='" + status + '\'' +
+                ", date=" + date +
+                '}';
     }
 }

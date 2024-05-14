@@ -42,8 +42,9 @@ public class CustomerRequestMapper {
                     int height = rs.getInt("height");
                     LocalDate date = rs.getDate("date").toLocalDate();
                     String status = rs.getString("status");
+                    String tileType = rs.getString("tile_type");
 
-                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, date, status);
+                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);
                     customerRequests.add(customerRequest);
                 }
             }
@@ -77,8 +78,9 @@ public class CustomerRequestMapper {
                     int height = rs.getInt("height");
                     LocalDate date = rs.getDate("date").toLocalDate();
                     String status = rs.getString("status");
+                    String tileType = rs.getString("tile_type");
 
-                    customerRequest = new CustomerRequest(customerRequestId, length, width, height, date, status);
+                    customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);
                 }
             }
         } catch (SQLException e) {
@@ -117,12 +119,12 @@ public class CustomerRequestMapper {
 
         String insertCustomerRequestQuery = "INSERT INTO customer_request (length, width, height, date) VALUES (?, ?, ?, ?)";
         String insertAdminCustomerRequestQuery = "INSERT INTO admin_customer_request (customer_request_id) VALUES (?)";
-        String insertCustomerQuery = "INSERT INTO customer (customer_request_id) VALUES (?) WHERE customer_id = ?";
+        String updateCustomerQuery = "UPDATE customer SET customer_request_id = ? WHERE customer_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement insertCustomerRequestStatement = connection.prepareStatement(insertCustomerRequestQuery, PreparedStatement.RETURN_GENERATED_KEYS);
              PreparedStatement insertAdminCustomerRequestStatement = connection.prepareStatement(insertAdminCustomerRequestQuery);
-             PreparedStatement insertCustomerStatement = connection.prepareStatement(insertCustomerQuery)) {
+             PreparedStatement updateCustomerStatement = connection.prepareStatement(updateCustomerQuery)) {
 
             insertCustomerRequestStatement.setInt(1, length);
             insertCustomerRequestStatement.setInt(2, width);
@@ -143,9 +145,9 @@ public class CustomerRequestMapper {
             insertAdminCustomerRequestStatement.setInt(1, customerRequestId);
             insertAdminCustomerRequestStatement.executeUpdate();
 
-            insertCustomerStatement.setInt(1, customerRequestId);
-            insertCustomerStatement.setInt(2, currentUser.getCustomerId());
-            insertCustomerStatement.executeUpdate();
+            updateCustomerStatement.setInt(1, customerRequestId);
+            updateCustomerStatement.setInt(2, currentUser.getCustomerId());
+            updateCustomerStatement.executeUpdate();
 
             currentUser.setHaveRequest(true);
 
@@ -155,6 +157,7 @@ public class CustomerRequestMapper {
             throw new DatabaseException("Failed to make customer request", e.getMessage());
         }
     }
+
 
 
     /**

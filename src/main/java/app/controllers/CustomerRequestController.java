@@ -88,7 +88,8 @@ public class CustomerRequestController {
                 int length = rs.getInt("length");
                 LocalDate date = rs.getDate("date").toLocalDate();
                 String status = rs.getString("status");
-                customerRequests.add(new CustomerRequest(customerID, height, width, length, date, status));
+                String tileType = rs.getString("tile_type");
+                customerRequests.add(new CustomerRequest(customerID, height, width, length, tileType, date, status));
             }
         } catch (SQLException e) {
             throw new DatabaseException("Fejl under indhentelse af kunde forespørgsler", e.getMessage());
