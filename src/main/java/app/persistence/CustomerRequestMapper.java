@@ -78,4 +78,20 @@ public class CustomerRequestMapper {
             throw new DatabaseException("DB: SQL UPDATE error", e.getMessage());
         }
     }
+
+    public static void updateCustomerRequestStatus(int customerRequestId, String status, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE customer_request SET status = ? WHERE customer_request_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ){
+            ps.setString(1, status);
+            ps.setInt(2, customerRequestId);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("DB: SQL UPDATE error", e.getMessage());
+        }
+    }
 }
