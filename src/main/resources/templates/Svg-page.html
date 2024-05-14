@@ -9,14 +9,14 @@
 
 <body>
 
-<h1>Display Svg for order #12143</h1>
-
-<p>This is where we show the order details and the drawing when the customer has accepted the offer</p>
-
-<p>We want to inject a SVG drawing below:</p>
+<h1>Plan- og opstaltstegning for ordre #12345</h1>
 
 <div class="carport-svg-topview">
-    <div th:utext="${svg}"></div>
+    <div th:utext="${svgSideView}"></div>
+</div>
+
+<div class="carport-svg-topview">
+    <div th:utext="${svgTopDownView}"></div>
 </div>
 
 </body>
