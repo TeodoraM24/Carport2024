@@ -14,7 +14,7 @@ public class PriceCalculator {
     public PriceCalculator(List<PartsListItem> partsListItems) {
         this.partsListItems = partsListItems;
         this.purchasePrice = calcPurchasePrice();
-        this.salesPrice = purchasePrice * 3;
+        this.salesPrice = purchasePrice * 3.0;
     }
 
     public PriceCalculator(List<PartsListItem> partsListItems, double salesPrice) {

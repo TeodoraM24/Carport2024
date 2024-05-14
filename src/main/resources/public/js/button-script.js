@@ -11,6 +11,8 @@ function setValidityOffer(change) {
 function showButtons2() {
     document.getElementById('save').style.visibility='visible';
     document.getElementById('send').style.visibility='hidden';
+    document.getElementById('description').style.visibility='hidden';
+    document.getElementById('drawing').style.visibility='hidden';
 }
 
 function showButtons1() {

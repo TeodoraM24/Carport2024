@@ -3,6 +3,8 @@ package app.services;
 import app.entities.Material;
 import app.entities.PartsListItem;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class PartsListCalculator {
@@ -11,7 +13,6 @@ public class PartsListCalculator {
     private int length;
     private int height;
     private Integer[] beamsRaftersLengths = {300, 360, 420, 480, 540, 600};
-    private int maxDistancePost = 340;
     private int removeDistanceLength = 130;
 
     public PartsListCalculator(int length, int width, int height) {
@@ -29,22 +30,24 @@ public class PartsListCalculator {
     private void calcPost() {
         int amount = calcPostQuantity();
         int totalLength = height + 90;
-        double pricePrMeter = 44;
-        double totalPrice = (totalLength / 100.0) * pricePrMeter; // change price to double?
+        double pricePrMeter = 44.0;
+        BigDecimal postPrice = new BigDecimal(((double) totalLength / 100) * pricePrMeter).setScale(2, RoundingMode.HALF_UP);
         int postHeightMM = 97;
         int postWidthMM = 97;
         String postDescr = postHeightMM + "x" + postWidthMM + " mm. trykimp. Stolpe";
         String instruction = "Stolper nedgraves 90 cm. i jord";
         String unitType = "Stk.";
-        addToPartsListItems(postDescr, postHeightMM, postWidthMM, totalLength, totalPrice, amount, unitType, instruction);
+        addToPartsListItems(postDescr, postHeightMM, postWidthMM, totalLength, postPrice.doubleValue(), amount, unitType, instruction);
     }
 
     private void addToPartsListItems(String description, int heightMM, int widthMM, int length, double price, int amount, String unitType, String instruction) {
         Material carportPost = new Material(description, heightMM, widthMM, length, price);
-        partsListItems.add(new PartsListItem(carportPost, amount, unitType, instruction, price * amount));
+        BigDecimal totalPrice = new BigDecimal(price * (double) amount).setScale(2, RoundingMode.HALF_UP);
+        partsListItems.add(new PartsListItem(carportPost, amount, unitType, instruction, totalPrice.doubleValue()));
     }
 
     public int calcPostQuantity() {
+        int maxDistancePost = 340;
         return (2 * (2 + (length - removeDistanceLength) / maxDistancePost));
     }
 
@@ -77,7 +80,7 @@ public class PartsListCalculator {
             remainingBeamLength = calcRemainingDistance() + 100;
         }
 
-        double pricePrMeter = 38;
+        double pricePrMeter = 38.0;
         int beamHeightMM = 195;
         int beamWidthMM = 45;
         String beamDescr = beamWidthMM + "x" + beamHeightMM + " mm. spærtræ ubh.";
@@ -103,8 +106,9 @@ public class PartsListCalculator {
         Arrays.sort(beamsRaftersLengths);
         for (int beamLength: beamsRaftersLengths) {
             if (givenLength <= beamLength) {
-                double price = (beamLength/100.0) * pricePrM; // change price to double?
-                addToPartsListItems(beamDescr, beamHeightMM, beamWidthMM, beamLength, price, amount * 2, unitType, instruction);
+                BigDecimal beamPrice = new BigDecimal(((double)beamLength/100.0) * pricePrM).setScale(2, RoundingMode.HALF_UP);
+                //double price = (beamLength/100.0) * pricePrM; // change price to double?
+                addToPartsListItems(beamDescr, beamHeightMM, beamWidthMM, beamLength, beamPrice.doubleValue(), amount * 2, unitType, instruction);
                 break;
             }
         }
@@ -116,8 +120,8 @@ public class PartsListCalculator {
         int rafterHeightMM = 195;
         int amountOfRafters = calcAmountOfRafters(rafterWidthMM);
         int rafterLength = calcRafterLength();
-        double pricePrMeter = 38;
-        double totalPrice = (rafterLength / 100.0) * pricePrMeter;
+        double pricePrMeter = 38.0;
+        BigDecimal rafterPrice = new BigDecimal(((double)rafterLength / 100.0) * pricePrMeter).setScale(2, RoundingMode.HALF_UP);
         String rafterDescr = rafterWidthMM + "x" + rafterHeightMM + " mm. spærtræ ubh.";
         String instruction = "Spær, monteres på rem.";
 
@@ -127,7 +131,7 @@ public class PartsListCalculator {
 
         String unitType = "Stk.";
 
-        addToPartsListItems(rafterDescr, rafterHeightMM, rafterWidthMM, rafterLength, totalPrice, amountOfRafters, unitType, instruction);
+        addToPartsListItems(rafterDescr, rafterHeightMM, rafterWidthMM, rafterLength, rafterPrice.doubleValue(), amountOfRafters, unitType, instruction);
     }
 
     public int calcAmountOfRafters(int rafterWidthMM) {

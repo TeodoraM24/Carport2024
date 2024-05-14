@@ -2,15 +2,11 @@ package app.entities;
 
 public class PartsList {
     private int partsListId;
-    private double totalPriceWithTax;
+    private int priceId;
 
-    public PartsList(int partsListId, double totalPriceWithTax) {
+    public PartsList(int partsListId, int priceId) {
         this.partsListId = partsListId;
-        this.totalPriceWithTax = totalPriceWithTax;
-    }
-
-    public PartsList(double totalPriceWithTax) {
-        this.totalPriceWithTax = totalPriceWithTax;
+        this.priceId = priceId;
     }
 
     public int getPartsListId() {
@@ -21,11 +17,11 @@ public class PartsList {
         this.partsListId = partsListId;
     }
 
-    public double getTotalPriceWithTax() {
-        return totalPriceWithTax;
+    public int getPriceId() {
+        return priceId;
     }
 
-    public void setTotalPriceWithTax(double totalPriceWithTax) {
-        this.totalPriceWithTax = totalPriceWithTax;
+    public void setPriceId(int priceId) {
+        this.priceId = priceId;
     }
 }

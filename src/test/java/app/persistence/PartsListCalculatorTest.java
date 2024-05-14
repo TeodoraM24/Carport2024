@@ -9,7 +9,7 @@ public class PartsListCalculatorTest {
     private PartsListCalculator partsListCalculator;
     @BeforeEach
     void setup() {
-        partsListCalculator = new PartsListCalculator(900, 600, 210);
+        partsListCalculator = new PartsListCalculator(600, 500, 210);
     }
 
     @Test

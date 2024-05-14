@@ -12,26 +12,30 @@ import io.javalin.http.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerRequestController {
+public class AdminRequestController {
     private static List<PartsListItem> partsListItems;
     private static Price priceOffer;
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> { //change
-            //When admin is choosing a customer get their id from that page and send it here
-            int customerId = 1; //change
-            int customerRequestId = getCustomerRequestId(customerId, connectionPool);
-            CustomerRequest customerRequest = getCustomerRequest(customerRequestId, connectionPool);
+        //app.get("/", ctx -> ctx.redirect("/changethis"));
+
+        app.get("/changethis", ctx -> { //change
+            //When admin is choosing a customer get their id from that page - missing in setSessionCurrentRequestId method
+            setSessionCurrentRequestId(ctx, connectionPool);
+            CustomerRequest customerRequest = getCustomerRequest(getSessionCurrentRequestId(ctx), connectionPool);
             displayChosenCustomerRequestPage(customerRequest, ctx);
         });
 
-        app.get("/returnToAllRequests", ctx -> ctx.render("index.html")); //change
+        app.get("/returnToAllRequests", ctx -> {
+            ctx.req().removeAttribute("currentCustomerRequestId");
+            ctx.render("admin-frontpage.html");
+        }); //change
+
+        app.get("/cancelRequestChanges", ctx -> ctx.redirect("/changethis")); //change
 
         app.post("/saveRequestChanges", ctx -> {
             saveRequestChanges(ctx, connectionPool);
-            ctx.redirect("/"); //change
+            ctx.redirect("/changethis"); //change
         });
-
-        app.get("/cancelRequestChanges", ctx -> ctx.redirect("/")); //change
 
         app.post("/calculateRequest", ctx -> {
             partsListItems = calculatePartsListForChosenCustomer(ctx, connectionPool);
@@ -44,11 +48,29 @@ public class CustomerRequestController {
             Price newPriceOffer = calculateNewPriceOffer(ctx);
             displayCalculateOfferPage(ctx, partsListItems, newPriceOffer);
         });
+
+        app.post("/showDescription", ctx -> {
+            CustomerRequest customerRequest = getCustomerRequest(getSessionCurrentRequestId(ctx), connectionPool);
+            displayOfferDescriptionPage(customerRequest, ctx);
+        });
+
+        app.get("/returnToCalculateRequest", ctx -> displayCalculateOfferPage(ctx, partsListItems, priceOffer));
     }
 
-    private static void savePartsListChanges(Context ctx) {
-        List<PartsListItem> changedPartsListItems = new ArrayList<>();
-        for (int i = 0; i < partsListItems.size(); i++) {
+    private static void setSessionCurrentRequestId(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int customerId = 1; //change this
+        int customerRequestId = getCustomerRequestId(customerId, connectionPool);
+        ctx.sessionAttribute("currentCustomerRequestId", customerRequestId);
+    }
+
+    private static int getSessionCurrentRequestId(Context ctx) {
+        return ctx.sessionAttribute("currentCustomerRequestId");
+    }
+
+    public static List<PartsListItem> getAllPartsListItems(Context ctx) {
+        List<PartsListItem> partsListItemsToSave = new ArrayList<>();
+        int listSize = Integer.parseInt(ctx.formParam("list-size"));
+        for (int i = 0; i < listSize; i++) {
             String description = ctx.formParam("partsListItems["+ i +"].material.description");
             String instruction = ctx.formParam("partsListItems["+ i +"].instruction");
             int length = Integer.parseInt(ctx.formParam("partsListItems["+ i +"].material.length"));
@@ -57,9 +79,9 @@ public class CustomerRequestController {
             int amount = Integer.parseInt(ctx.formParam("partsListItems["+ i +"].amount"));
             String unit = ctx.formParam("partsListItems["+ i +"].unit");
             double totalPrice = Double.parseDouble(ctx.formParam("partsListItems["+ i +"].totalprice"));
-            changedPartsListItems.add(i, new PartsListItem(new Material(description, height, width, length, totalPrice/amount), amount, unit, instruction, totalPrice));
+            partsListItemsToSave.add(i, new PartsListItem(new Material(description, height, width, length, totalPrice/amount), amount, unit, instruction, totalPrice));
         }
-        partsListItems = changedPartsListItems;
+        return partsListItemsToSave;
     }
 
     private static Price calculateNewPriceOffer(Context ctx) {
@@ -85,17 +107,21 @@ public class CustomerRequestController {
         return partsListCalculator.getPartsListItems();
     }
 
+    private static void savePartsListChanges(Context ctx) {
+        partsListItems = getAllPartsListItems(ctx);
+    }
+
     private static Price calculatePriceOfferForChosenCustomer(List<PartsListItem> partsListItems) {
         PriceCalculator priceCalculator = new PriceCalculator(partsListItems);
 
         return new Price(priceCalculator.calcPurchasePrice(), priceCalculator.getSalesPrice(), priceCalculator.calcPriceWithoutTax(), priceCalculator.calcCoverage());
     }
+
     private static Price calculatePriceOfferForChosenCustomer(List<PartsListItem> partsListItems, double salesPrice) {
         PriceCalculator priceCalculator = new PriceCalculator(partsListItems, salesPrice);
 
         return new Price(priceCalculator.calcPurchasePrice(), priceCalculator.getSalesPrice(), priceCalculator.calcPriceWithoutTax(), priceCalculator.calcCoverage());
     }
-
     private static void saveRequestChanges(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int requestLength = Integer.parseInt(ctx.formParam("length"));
         int requestWidth = Integer.parseInt(ctx.formParam("width"));
@@ -109,8 +135,26 @@ public class CustomerRequestController {
         return CustomerRequestMapper.getCustomerRequestId(customerId, connectionPool);
     }
 
-    private static CustomerRequest getCustomerRequest(int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
-        return CustomerRequestMapper.getCustomerRequest(customerRequestId, connectionPool);
+    private static CustomerRequest getCustomerRequest(int currentCustomerRequest, ConnectionPool connectionPool) throws DatabaseException {
+        return CustomerRequestMapper.getCustomerRequest(currentCustomerRequest, connectionPool);
+    }
+
+    private static void displayOfferDescriptionPage(CustomerRequest customerRequest, Context ctx) {
+        ctx.attribute("requestId", getSessionCurrentRequestId(ctx));
+        ctx.attribute("carportWidth", customerRequest.getRequestWidth());
+        ctx.attribute("carportLength", customerRequest.getRequestLength());
+        ctx.attribute("carportHeight", customerRequest.getRequestHeight());
+
+        String rafterDescription = "Spær med rejsning";
+        String supportBeamDescription = "Spærtræ 45x195 mm.";
+        String tileType = "Plasttrapeztag";
+        ctx.attribute("rafterDescription", rafterDescription);
+        ctx.attribute("beamDescription", supportBeamDescription);
+        ctx.attribute("tileType", tileType);
+
+        ctx.attribute("offerPrice", priceOffer.getSalesPrice());
+
+        ctx.render("offer-information-page.html");
     }
 
     private static void displayCalculateOfferPage(Context ctx, List<PartsListItem> partsListItems, Price priceOffer) {

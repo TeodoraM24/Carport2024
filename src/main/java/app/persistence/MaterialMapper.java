@@ -87,10 +87,10 @@ public class MaterialMapper {
      * @param connectionPool  ConnectionPool used to insert cupcake id in database table basket
      * @throws DatabaseException Displays "Fejl under indsætning af materiale:" + system msg and "Fejl i DB connection" + system msg
      */
-    public static void addMaterial(String description, int height, int width, int length, double price, ConnectionPool connectionPool) throws DatabaseException {
-        Material newMaterial = null;
+    public static int addMaterial(String description, int height, int width, int length, double price, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "INSERT INTO material (material_description, height, width, length, price) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO material (material_description, height, width, length, price) VALUES (?,?,?,?,?)" +
+                "ON CONFLICT (material_description, height, width, length, price) DO NOTHING";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -105,9 +105,9 @@ public class MaterialMapper {
             if (rowsAffected == 1) {
                 ResultSet rs = ps.getGeneratedKeys();
                 rs.next();
-                int newId = rs.getInt(1);
+                return rs.getInt(1);
             } else {
-                throw new DatabaseException("Fejl under indsætning af materiale: " + description);
+                return -1;
             }
         } catch (SQLException e) {
             throw new DatabaseException("Fejl i DB connection", e.getMessage());
