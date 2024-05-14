@@ -6,7 +6,7 @@ public class CarportSvgTopDownView {
     private final Svg carportSvg;
 
     /***
-     * The constructor for the inner carport SVG with length and width parameters
+     * The constructor for the inner SVG carport top down view with length and width parameters
      * and methods adding beams, rafters, poles and cross.
      *
      * @param length the chosen length for the carport
@@ -29,7 +29,6 @@ public class CarportSvgTopDownView {
     private void addBeams() {
         carportSvg.addRectangle(0, 35, 4.5, length, "stroke-width:1px; stroke:#000000; fill: #ffffff");
         carportSvg.addRectangle(0, width - 35 - 4.5, 4.5, length, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-        carportSvg.addRectangle(length - 4.5, 0.0, width, 4.5, "stroke:#000000; fill: #ffffff");
     }
 
     /***
@@ -39,6 +38,7 @@ public class CarportSvgTopDownView {
         for (double i = 0; i < length; i += 55) {
             carportSvg.addRectangle(i, 0.0, width, 4.5, "stroke:#000000; fill: #ffffff");
         }
+        carportSvg.addRectangle(length - 4.5, 0.0, width, 4.5, "stroke:#000000; fill: #ffffff");
     }
 
     /***
