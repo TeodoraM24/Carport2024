@@ -70,11 +70,14 @@ public class CustomerRequestController {
         }
     }
 
-    public static List<CustomerRequest> getAllCustomerRequests(ConnectionPool connectionPool) throws DatabaseException {
+    public static List<CustomerRequest> getAllCustomerRequestWithCustomer(ConnectionPool connectionPool) throws DatabaseException {
 
-        List<CustomerRequest> customerRequests = new ArrayList<>();
+        List<CustomerRequest> customerRequestsWithCustomer = new ArrayList<>();
 
-        String sql = "SELECT * FROM customer_request";
+        String sql = "SELECT cr.customer_request_id, cr.length, cr.width, cr.height, cr.date, cr.status, cr.tile_type, c.first_name, c.last_name, c.customer_id " +
+                "FROM customer_request cr " +
+                "JOIN customer c ON cr.customer_id = c.customer_id";
+
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -82,19 +85,26 @@ public class CustomerRequestController {
         ) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int customerID = rs.getInt("customer_id");
+                int customerRequestId = rs.getInt("customer_request_id");
                 int height = rs.getInt("height");
                 int width = rs.getInt("width");
                 int length = rs.getInt("length");
                 LocalDate date = rs.getDate("date").toLocalDate();
                 String status = rs.getString("status");
                 String tileType = rs.getString("tile_type");
-                customerRequests.add(new CustomerRequest(customerID, height, width, length, tileType, date, status));
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                int customerId = rs.getInt("customer_id");
+
+                Customer customer = new Customer(firstName, lastName, customerId);
+
+                customerRequestsWithCustomer.add(new CustomerRequest(customerRequestId, height, width, length, tileType, date, status, customer));
             }
         } catch (SQLException e) {
             throw new DatabaseException("Fejl under indhentelse af kunde forespørgsler", e.getMessage());
         }
-        return customerRequests;
+        System.out.println("Customer Requests with Customers: " + customerRequestsWithCustomer);
+        return customerRequestsWithCustomer;
     }
 
 /*

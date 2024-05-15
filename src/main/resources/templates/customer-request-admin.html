@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+
     <title>Admin forespørgslser</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,7 @@
     <link href="../public/css/customer-request-admin.css" th:href="@{/css/customer-request-admin.css}" rel="stylesheet"/>
 </head>
 <body>
-<div th:replace="fragments/header :: div.main-header"></div>
+<div th:replace="~{fragments/header :: div.main-header}"></div>
 <div class="container">
     <div class="flexbox">
         <h1>Forespørgsler</h1>
@@ -22,14 +23,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="request : ${customerRequests}">
+            <tr th:each="request : ${customerRequestList}">
                 <td th:text="${request.customerRequestId}"></td>
                 <td th:text="${request.date}"></td>
-                <td th:text="${request.status}"></td>
+                <!-- Accessing customer's first name and last name -->
+                <td th:text="${request.customer.firstName} + ' ' + ${request.customer.lastName}"></td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
+
 </body>
 </html>

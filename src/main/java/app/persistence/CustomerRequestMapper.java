@@ -56,7 +56,7 @@ public class CustomerRequestMapper {
     }
 
     public static List<CustomerRequest> getAllCustomerRequestWithCustomer(ConnectionPool connectionPool) throws DatabaseException {
-        List<CustomerRequest> customerRequests = new ArrayList<>();
+        List<CustomerRequest> customerRequestsWithCustomer = new ArrayList<>();
         String sql = "SELECT cr.customer_request_id, cr.length, cr.width, cr.height, cr.date, cr.status, cr.tile_type, c.first_name, c.last_name, c.customer_id " +
                 "FROM customer_request cr " +
                 "JOIN customer c ON cr.customer_request_id = c.customer_request_id";
@@ -80,14 +80,15 @@ public class CustomerRequestMapper {
                     Customer customer = new Customer(firstName, lastName, customerId);
 
                     CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status, customer);
-                    customerRequests.add(customerRequest);
+                    customerRequestsWithCustomer.add(customerRequest);
                 }
             }
         } catch (SQLException e) {
             String msg = "Fejl i getAllCustomerRequest()!";
             throw new DatabaseException(msg, e.getMessage());
         }
-        return customerRequests;
+        System.out.println("Customer Requests with Customers: " + customerRequestsWithCustomer);
+        return customerRequestsWithCustomer;
     }
 
     /**

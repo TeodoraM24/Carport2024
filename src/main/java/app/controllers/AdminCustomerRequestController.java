@@ -23,10 +23,10 @@ public class AdminCustomerRequestController {
 
         try {
             // Retrieve all customer requests
-            customerRequestList = CustomerRequestMapper.getAllCustomerRequest(connectionPool);
+            customerRequestList = CustomerRequestMapper.getAllCustomerRequestWithCustomer(connectionPool);
 
             // Add the list of customer requests as an attribute to the context
-            ctx.attribute("customerRequests", customerRequestList);
+            ctx.attribute("customerRequestList", customerRequestList);
 
             // Render the HTML template
             ctx.render("customer-request-admin.html");
@@ -35,4 +35,5 @@ public class AdminCustomerRequestController {
         }
     }
 }
+
 
