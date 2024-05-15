@@ -20,11 +20,9 @@ public class AdminRequestMapper {
         ){
             ps.setInt(1, customerId);
 
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected == 1) {
-                ResultSet rs = ps.getGeneratedKeys();
-                rs.next();
-                return rs.getInt(1);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("customer_request_id");
             } else {
                 throw new DatabaseException("Failed at retrieving chosen customer's request id.");
             }
