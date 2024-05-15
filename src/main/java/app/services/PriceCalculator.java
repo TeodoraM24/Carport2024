@@ -24,26 +24,28 @@ public class PriceCalculator {
     }
 
     public double calcPurchasePrice() {
-        int purchasePrice = 0;
+        double purchasePrice = 0.0;
         for (PartsListItem p : partsListItems) {
             double price = p.getMaterial().getPrice();
-            int amount = p.getAmount();
-            purchasePrice += (int) (price * amount);
+            BigDecimal amount = new BigDecimal(p.getAmount()).setScale(2, RoundingMode.HALF_UP);
+            purchasePrice += (price * amount.doubleValue());
         }
         return purchasePrice;
     }
 
     public double getSalesPrice() {
-        return salesPrice;
+        BigDecimal salesPriceWithTax = new BigDecimal(salesPrice).setScale(2, RoundingMode.HALF_UP);
+        return salesPriceWithTax.doubleValue();
     }
 
     public double calcPriceWithoutTax() {
-        return salesPrice / 1.20;
+        BigDecimal salesPriceWithoutTax = new BigDecimal(salesPrice / 1.20).setScale(2, RoundingMode.HALF_UP);
+        return salesPriceWithoutTax.doubleValue();
     }
 
     public double calcCoverage() {
         double profit = calcPriceWithoutTax() - purchasePrice;
-        BigDecimal twoDecimalRoundUp = new BigDecimal(profit / calcPriceWithoutTax() * 100).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal twoDecimalRoundUp = new BigDecimal(profit / calcPriceWithoutTax() * 100.0).setScale(2, RoundingMode.HALF_UP);
         return twoDecimalRoundUp.doubleValue();
     }
 }

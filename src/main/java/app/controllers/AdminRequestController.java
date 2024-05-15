@@ -16,7 +16,7 @@ public class AdminRequestController {
     private static List<PartsListItem> partsListItems;
     private static Price priceOffer;
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        //app.get("/", ctx -> ctx.redirect("/changethis"));
+        app.get("/", ctx -> ctx.redirect("/changethis"));
 
         app.get("/changethis", ctx -> { //change
             //When admin is choosing a customer get their id from that page - missing in setSessionCurrentRequestId method
@@ -45,8 +45,8 @@ public class AdminRequestController {
 
         app.post("/saveChanges", ctx -> {
             savePartsListChanges(ctx);
-            Price newPriceOffer = calculateNewPriceOffer(ctx);
-            displayCalculateOfferPage(ctx, partsListItems, newPriceOffer);
+            priceOffer = calculateNewPriceOffer(ctx);
+            displayCalculateOfferPage(ctx, partsListItems, priceOffer);
         });
 
         app.post("/showDescription", ctx -> {
