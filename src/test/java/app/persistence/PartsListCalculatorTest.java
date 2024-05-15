@@ -1,15 +1,39 @@
 package app.persistence;
 
+import app.entities.Material;
+import app.entities.PartsListItem;
 import app.services.PartsListCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PartsListCalculatorTest {
     private PartsListCalculator partsListCalculator;
     @BeforeEach
     void setup() {
-        partsListCalculator = new PartsListCalculator(600, 500, 210);
+        Material post = new Material("97x97 mm. trykimp. Stolpe", 97, 97);
+        Material beam = new Material("45x195 mm. spærtræ ubh.", 195, 45);
+        Material rafter = new Material("45x195 mm. spærtræ ubh.", 97, 97);
+        partsListCalculator = new PartsListCalculator(900, 600, 210, post, beam, rafter);
+    }
+
+    @Test
+    void testCalculateCarport() {
+        int postAmount = 8;
+        int beamAmount = 8;
+        int rafterAmount = 16;
+        int expectedTotalAmount = postAmount + beamAmount + rafterAmount;
+        int actualTotalAmount = 0;
+
+        partsListCalculator.calcCarport();
+        List<PartsListItem> partsListItems = partsListCalculator.getPartsListItems();
+        for (PartsListItem p: partsListItems) {
+            actualTotalAmount += p.getAmount();
+        }
+
+        assertEquals(expectedTotalAmount, actualTotalAmount);
     }
 
     @Test

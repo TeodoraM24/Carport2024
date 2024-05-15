@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CustomerRequestMapperTest {
+public class AdminRequestMapperTest {
 
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
@@ -62,7 +62,7 @@ public class CustomerRequestMapperTest {
         int expectedCustomerRequestId = 1;
 
         //Act
-        int actualCustomerRequestId = CustomerRequestMapper.getCustomerRequestId(chosenCustomerId, connectionPool);
+        int actualCustomerRequestId = AdminRequestMapper.getCustomerRequestId(chosenCustomerId, connectionPool);
 
         //Assert
         assertEquals(expectedCustomerRequestId, actualCustomerRequestId);
@@ -78,8 +78,8 @@ public class CustomerRequestMapperTest {
         CustomerRequest expectedCustomerRequest = new CustomerRequest(1, 300, 330, 210, "Plasttrapezplader", date, "Afventer");
 
         //Act
-        int customerRequestId = CustomerRequestMapper.getCustomerRequestId(chosenCustomerId, connectionPool);
-        CustomerRequest actualCustomerRequest = CustomerRequestMapper.getCustomerRequest(customerRequestId, connectionPool);
+        int customerRequestId = AdminRequestMapper.getCustomerRequestId(chosenCustomerId, connectionPool);
+        CustomerRequest actualCustomerRequest = AdminRequestMapper.getCustomerRequest(customerRequestId, connectionPool);
 
         //Assert
         assertEquals(expectedCustomerRequest.hashCode(),actualCustomerRequest.hashCode());
@@ -95,8 +95,8 @@ public class CustomerRequestMapperTest {
         CustomerRequest expectedCustomerRequest = new CustomerRequest(customerRequestId, length, width, height, "Plasttrapezplader", LocalDate.of(2024, 8, 5), "Afventer");
 
         //Arrange
-        CustomerRequestMapper.updateCustomerRequest(customerRequestId, length, width, height, connectionPool);
-        CustomerRequest actualCustomerRequest = CustomerRequestMapper.getCustomerRequest(customerRequestId, connectionPool);
+        AdminRequestMapper.updateCustomerRequest(customerRequestId, length, width, height, connectionPool);
+        CustomerRequest actualCustomerRequest = AdminRequestMapper.getCustomerRequest(customerRequestId, connectionPool);
 
         //Assert
         assertEquals(expectedCustomerRequest.hashCode(), actualCustomerRequest.hashCode());
@@ -107,8 +107,8 @@ public class CustomerRequestMapperTest {
         String expectedStatus = "Klar";
         int customerRequestId = 1;
 
-        CustomerRequestMapper.updateCustomerRequestStatus(customerRequestId, expectedStatus, connectionPool);
-        CustomerRequest customerRequest = CustomerRequestMapper.getCustomerRequest(customerRequestId, connectionPool);
+        AdminRequestMapper.updateCustomerRequestStatus(customerRequestId, expectedStatus, connectionPool);
+        CustomerRequest customerRequest = AdminRequestMapper.getCustomerRequest(customerRequestId, connectionPool);
         String actualStatus = customerRequest.getStatus();
         assertEquals(expectedStatus, actualStatus);
     }

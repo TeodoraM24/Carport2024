@@ -5,7 +5,7 @@ import app.exceptions.DatabaseException;
 import java.sql.*;
 import java.time.LocalDate;
 
-public class OfferMapper {
+public class AdminOfferMapper {
     public static int addPrice(double purchasePrice, double salesPrice, double coverage, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO price (purchase_price, salesprice_with_tax, coverage_ratio) VALUES (?,?,?)";
 
@@ -31,7 +31,7 @@ public class OfferMapper {
         }
     }
 
-    public static int addOffer(String rafterDescription, String supportBeamDescription, String tileType, LocalDate currentDate, int partsListId, int priceId, int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
+    public static int addOffer(String rafterDescription, String beamDescription, String tileType, LocalDate currentDate, int partsListId, int priceId, int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO offer (rafter_type_desc, support_beam_desc_size, roof_materials, date, parts_list_id, price_id, customer_request_id) " +
                 "VALUES (?,?,?,?,?,?,?)";
 
@@ -40,7 +40,7 @@ public class OfferMapper {
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, rafterDescription);
-            ps.setString(2,supportBeamDescription);
+            ps.setString(2,beamDescription);
             ps.setString(3,tileType);
             ps.setDate(4, Date.valueOf(currentDate));
             ps.setInt(5,partsListId);
@@ -53,7 +53,7 @@ public class OfferMapper {
                 rs.next();
                 return rs.getInt(1);
             } else {
-                return -1;
+                throw new DatabaseException("Could not add new offer to offer table");
             }
 
         } catch (SQLException e) {

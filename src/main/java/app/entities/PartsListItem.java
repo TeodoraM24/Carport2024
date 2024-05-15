@@ -27,8 +27,6 @@ public class PartsListItem {
         this.totalPrice = totalPrice;
     }
 
-    public PartsListItem() {}
-
     public int getPartsListItemId() {
         return partsListItemId;
     }

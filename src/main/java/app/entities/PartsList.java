@@ -24,4 +24,12 @@ public class PartsList {
     public void setPriceId(int priceId) {
         this.priceId = priceId;
     }
+
+    @Override
+    public String toString() {
+        return "PartsList{" +
+                "partsListId=" + partsListId +
+                ", priceId=" + priceId +
+                '}';
+    }
 }

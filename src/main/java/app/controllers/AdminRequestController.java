@@ -3,7 +3,7 @@ package app.controllers;
 import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
-import app.persistence.CustomerRequestMapper;
+import app.persistence.AdminRequestMapper;
 import app.services.PartsListCalculator;
 import app.services.PriceCalculator;
 import io.javalin.Javalin;
@@ -70,6 +70,7 @@ public class AdminRequestController {
     public static List<PartsListItem> getAllPartsListItems(Context ctx) {
         List<PartsListItem> partsListItemsToSave = new ArrayList<>();
         int listSize = Integer.parseInt(ctx.formParam("list-size"));
+
         for (int i = 0; i < listSize; i++) {
             String description = ctx.formParam("partsListItems["+ i +"].material.description");
             String instruction = ctx.formParam("partsListItems["+ i +"].instruction");
@@ -81,6 +82,7 @@ public class AdminRequestController {
             double totalPrice = Double.parseDouble(ctx.formParam("partsListItems["+ i +"].totalprice"));
             partsListItemsToSave.add(i, new PartsListItem(new Material(description, height, width, length, totalPrice/amount), amount, unit, instruction, totalPrice));
         }
+
         return partsListItemsToSave;
     }
 
@@ -99,9 +101,12 @@ public class AdminRequestController {
 
     private static List<PartsListItem> calculatePartsListForChosenCustomer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int customerRequestId = Integer.parseInt(ctx.formParam("customer-request-id"));
-
         CustomerRequest customerRequest = getCustomerRequest(customerRequestId, connectionPool);
-        PartsListCalculator partsListCalculator = new PartsListCalculator(customerRequest.getRequestLength(), customerRequest.getRequestWidth(), customerRequest.getRequestHeight());
+        Material post = new Material("97x97 mm. trykimp. Stolpe", 97, 97);
+        Material beam = new Material("45x195 mm. spærtræ ubh.", 195, 45);
+        Material rafter = new Material("45x195 mm. spærtræ ubh.", 97, 97);
+
+        PartsListCalculator partsListCalculator = new PartsListCalculator(customerRequest.getRequestLength(), customerRequest.getRequestWidth(), customerRequest.getRequestHeight(), post, beam, rafter);
         partsListCalculator.calcCarport();
 
         return partsListCalculator.getPartsListItems();
@@ -128,15 +133,15 @@ public class AdminRequestController {
         int requestHeight = Integer.parseInt(ctx.formParam("height"));
         int customerRequestId = Integer.parseInt(ctx.formParam("customer-request-id"));
 
-        CustomerRequestMapper.updateCustomerRequest(customerRequestId, requestLength, requestWidth, requestHeight, connectionPool);
+        AdminRequestMapper.updateCustomerRequest(customerRequestId, requestLength, requestWidth, requestHeight, connectionPool);
     }
 
     private static int getCustomerRequestId(int customerId, ConnectionPool connectionPool) throws DatabaseException {
-        return CustomerRequestMapper.getCustomerRequestId(customerId, connectionPool);
+        return AdminRequestMapper.getCustomerRequestId(customerId, connectionPool);
     }
 
-    private static CustomerRequest getCustomerRequest(int currentCustomerRequest, ConnectionPool connectionPool) throws DatabaseException {
-        return CustomerRequestMapper.getCustomerRequest(currentCustomerRequest, connectionPool);
+    private static CustomerRequest getCustomerRequest(int currentCustomerRequestId, ConnectionPool connectionPool) throws DatabaseException {
+        return AdminRequestMapper.getCustomerRequest(currentCustomerRequestId, connectionPool);
     }
 
     private static void displayOfferDescriptionPage(CustomerRequest customerRequest, Context ctx) {
@@ -151,7 +156,6 @@ public class AdminRequestController {
         ctx.attribute("rafterDescription", rafterDescription);
         ctx.attribute("beamDescription", supportBeamDescription);
         ctx.attribute("tileType", tileType);
-
         ctx.attribute("offerPrice", priceOffer.getSalesPrice());
 
         ctx.render("offer-information-page.html");

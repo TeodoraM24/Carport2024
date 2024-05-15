@@ -34,7 +34,7 @@ public class PriceCalculator {
     }
 
     public double getSalesPrice() {
-        return salesPrice; // we dont know their markup..
+        return salesPrice;
     }
 
     public double calcPriceWithoutTax() {

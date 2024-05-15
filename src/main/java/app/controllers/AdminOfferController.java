@@ -26,12 +26,13 @@ public class AdminOfferController {
     private static void setCustomerRequestStatus(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int customerRequestId = ctx.sessionAttribute("currentCustomerRequestId");
         String status = "Klar";
-        CustomerRequestMapper.updateCustomerRequestStatus(customerRequestId, status, connectionPool);
+
+        AdminRequestMapper.updateCustomerRequestStatus(customerRequestId, status, connectionPool);
     }
 
     private static void savePartsList(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Price price = getPriceOffer(ctx);
-        int priceId = OfferMapper.addPrice(price.getPurchasePrice(), price.getSalesPrice(), price.getCoverage(), connectionPool);
+        int priceId = AdminOfferMapper.addPrice(price.getPurchasePrice(), price.getSalesPrice(), price.getCoverage(), connectionPool);
         int partsListId = PartsListMapper.addPartsList(priceId, connectionPool);
         List<PartsListItem> partsListItemsToBeSaved = AdminRequestController.getAllPartsListItems(ctx);
 
@@ -45,10 +46,12 @@ public class AdminOfferController {
 
     private static int getPartsListItemId(PartsListItem partsListItem, ConnectionPool connectionPool) throws DatabaseException {
         Material material = partsListItem.getMaterial();
+
         int materialId = MaterialMapper.addMaterial(material.getDescription(), material.getHeight(), material.getWidth(), material.getLength(), material.getPrice(), connectionPool);
         if (materialId == -1) {
             materialId = MaterialMapper.getMaterialIdByData(material.getDescription(), material.getHeight(), material.getWidth(), material.getLength(), material.getPrice(), connectionPool);
         }
+
         return PartsListItemMapper.addPartsListItem(materialId, partsListItem.getAmount(), partsListItem.getInstruction(), partsListItem.getUnit(), partsListItem.getTotalPrice(), connectionPool);
     }
 
@@ -60,7 +63,8 @@ public class AdminOfferController {
         String supportBeamDescription = "Spærtræ 45x195 mm.";
         String tileType = "Plasttrapeztag";
         LocalDate currentDate = LocalDate.now();
-        OfferMapper.addOffer(rafterDescription, supportBeamDescription, tileType, currentDate ,partsListId, priceId, customerRequestId, connectionPool);
+
+        AdminOfferMapper.addOffer(rafterDescription, supportBeamDescription, tileType, currentDate ,partsListId, priceId, customerRequestId, connectionPool);
     }
 
     private static Price getPriceOffer(Context ctx) {
@@ -68,6 +72,7 @@ public class AdminOfferController {
         double coverage = Double.parseDouble(ctx.formParam("coverage"));
         double priceWithoutTax = Double.parseDouble(ctx.formParam("price-without-tax"));
         double salesPrice = Double.parseDouble(ctx.formParam("sales-price"));
+
         return new Price(purchasePrice, salesPrice, priceWithoutTax, coverage);
     }
 

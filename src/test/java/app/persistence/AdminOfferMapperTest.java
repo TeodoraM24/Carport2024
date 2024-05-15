@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class OfferMapperTest {
+public class AdminOfferMapperTest {
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
@@ -70,7 +70,7 @@ public class OfferMapperTest {
     void testAddPrice() throws DatabaseException {
         int expectedPriceId = 1;
 
-        int actualPriceId = OfferMapper.addPrice(100,300,30,connectionPool);
+        int actualPriceId = AdminOfferMapper.addPrice(100,300,30,connectionPool);
 
         assertEquals(expectedPriceId, actualPriceId);
     }
@@ -79,10 +79,10 @@ public class OfferMapperTest {
     void testAddOffer() throws DatabaseException {
         int expectedRowsAffected = 1;
         LocalDate date = LocalDate.of(2024,5,14);
-        int priceId = OfferMapper.addPrice(100,300,30,connectionPool);
+        int priceId = AdminOfferMapper.addPrice(100,300,30,connectionPool);
         int partsListId = PartsListMapper.addPartsList(priceId, connectionPool);
 
-        int actualRowsAffected = OfferMapper.addOffer("test","test","test", date, partsListId, priceId, 1, connectionPool);
+        int actualRowsAffected = AdminOfferMapper.addOffer("test","test","test", date, partsListId, priceId, 1, connectionPool);
         assertEquals(expectedRowsAffected, actualRowsAffected);
     }
 }

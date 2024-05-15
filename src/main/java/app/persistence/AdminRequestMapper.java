@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class CustomerRequestMapper {
+public class AdminRequestMapper {
 
     public static int getCustomerRequestId(int customerId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT customer_request_id FROM customer WHERE customer_id = ?;";
@@ -20,9 +20,11 @@ public class CustomerRequestMapper {
         ){
             ps.setInt(1, customerId);
 
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("customer_request_id");
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 1) {
+                ResultSet rs = ps.getGeneratedKeys();
+                rs.next();
+                return rs.getInt(1);
             } else {
                 throw new DatabaseException("Failed at retrieving chosen customer's request id.");
             }
