@@ -24,7 +24,7 @@ public class AdminOfferController {
     }
 
     private static void setCustomerRequestStatus(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        int customerRequestId = ctx.sessionAttribute("currentCustomerRequestId");
+        int customerRequestId = AdminRequestController.getSessionCurrentRequestId(ctx);
         String status = "Klar";
 
         AdminRequestMapper.updateCustomerRequestStatus(customerRequestId, status, connectionPool);
@@ -58,7 +58,7 @@ public class AdminOfferController {
     private static void createOffer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int partsListId = partsList.getPartsListId();
         int priceId = partsList.getPriceId();
-        int customerRequestId = ctx.sessionAttribute("currentCustomerRequestId");
+        int customerRequestId = AdminRequestController.getSessionCurrentRequestId(ctx);
         String rafterDescription = "Spær med rejsning";
         String supportBeamDescription = "Spærtræ 45x195 mm.";
         String tileType = "Plasttrapeztag";

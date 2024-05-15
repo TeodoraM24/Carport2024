@@ -16,7 +16,7 @@ public class AdminRequestController {
     private static List<PartsListItem> partsListItems;
     private static Price priceOffer;
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.redirect("/changethis"));
+        //app.get("/", ctx -> ctx.redirect("/changethis"));
 
         app.get("/changethis", ctx -> { //change
             //When admin is choosing a customer get their id from that page - missing in setSessionCurrentRequestId method
@@ -26,7 +26,7 @@ public class AdminRequestController {
         });
 
         app.get("/returnToAllRequests", ctx -> {
-            ctx.req().removeAttribute("currentCustomerRequestId");
+            removeSessionCurrentCustomerId(ctx);
             ctx.render("admin-frontpage.html");
         }); //change
 
@@ -57,13 +57,17 @@ public class AdminRequestController {
         app.get("/returnToCalculateRequest", ctx -> displayCalculateOfferPage(ctx, partsListItems, priceOffer));
     }
 
+    private static void removeSessionCurrentCustomerId(Context ctx) {
+        ctx.req().removeAttribute("currentCustomerRequestId");
+    }
+
     private static void setSessionCurrentRequestId(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int customerId = 1; //change this
         int customerRequestId = getCustomerRequestId(customerId, connectionPool);
         ctx.sessionAttribute("currentCustomerRequestId", customerRequestId);
     }
 
-    private static int getSessionCurrentRequestId(Context ctx) {
+    public static int getSessionCurrentRequestId(Context ctx) {
         return ctx.sessionAttribute("currentCustomerRequestId");
     }
 
