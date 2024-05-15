@@ -30,6 +30,7 @@ public class InvoiceMapperTest {
                 stmt.execute("DELETE FROM carport_parts_list");
                 stmt.execute("DELETE FROM parts_list");
                 stmt.execute("DELETE FROM invoice");
+                //add customer delete.
 
                 // Insert rows
 

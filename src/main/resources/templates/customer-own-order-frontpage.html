@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
     <title>Admin startside</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +9,10 @@
 </head>
 
 <body>
-<div th:replace="fragments/header :: div.main-header"></div>
-<a href="/templates/customer-own-order-frontpage.html" th:href="@{/orderoverview}">
+<div th:replace="~{fragments/header :: div.main-header}"></div>
 <div class="body-background">
     <div class="container">
         <div class="flexbox">
-            <form th:action="@{/vieworder}" method="POST">
                 <div>
                     <h2>Ordre Historik</h2>
                     <table>
@@ -23,30 +21,41 @@
                         <tr>
                             <td> Dato</td>
                             <td> Ordrenummer</td>
+                            <td></td>
                         </tr>
                         </tbody>
                         <tbody>
                         <tr th:each="invoice : ${listOfInvoices}">
-                            <td th:text="${invoice.invoice_dat}"></td>
-                            <td th:text="${invoice.order_id}"></td>
+                            <td th:text="${invoice.localDate}"></td>
+                            <td th:text="${invoice.invoiceID}" ></td>
+                            <td>
+                                <div th:if="${not #lists.isEmpty(listOfInvoices)}">
+                                    <a type="button" class="button" th:href="@{/vieworderallorder/{invoiceid}(invoiceid=${invoice.getInvoiceID()})}">Læs mere</a>
+                                </div>
+
+                                <div th:if="${#lists.isEmpty(listOfInvoices)}">
+                                    <p>Ingen kvittering blev fundet</p>
+                                    <button type="button" class="button" th:href="">Tilbage til Kunde info</button>
+
+                                </div>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <span th:if="${#ctx.session.currentCustomer.customerId == 'customer_id'}">
+                <!--<span >
                 <span th:each="invoice : ${listOfInvoices}">
-                <button type="submit" class="button" formaction="custoner-own order-page.html">Læs mere</button></span>
+                <button type="submit" class="button" >Læs mere</button></span>
 
                 <div th:if="${#lists.isEmpty(listOfInvoices)}">
                     <p>Ingen kvittering blev fundet</p>
                     <button type="submit" class="button" formaction="customer-info-frontpage.html'">Tilbage til Kunde info</button>
 
                 </div>
-                </span>
-            </form>
+                </span>-->
         </div>
     </div>
-
+</div>
 
 </body>
 </html>

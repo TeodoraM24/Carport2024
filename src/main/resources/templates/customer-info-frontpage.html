@@ -3,7 +3,7 @@
 <head th:replace="fragments/header :: common_header(~{::title},~{::link})">
     <title>Kunde-info forside</title>
     <meta charset="UTF-8">
-    <meta name ="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../public/css/customer-info-style.css" th:href="@{/css/customer-info-style.css}" rel="stylesheet"/>
     <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
 </head>
@@ -11,34 +11,41 @@
 <div th:replace="fragments/header :: div.main-header"></div>
 
 <div class="body-background">
-    <div class="container">
-        <div class="flexbox">
-            <form th:action ="@{/customerinfo}" method="POST">
-            <a class="reference-format" href="customer-own-request-page.html" th:href="@{/customer-own-request-page}">
-                <div class="top-half">
-                    <h2>Forespørgsler</h2>
+    <form th:action="@{/customerinfo}" method="POST">
+        <div class="container">
+            <div class="flexbox1">
+                <div class="flexbox2">
+                    <a class="reference-format" href="customer-own-request-page.html"
+                       th:href="@{/customer-own-request-page}">
+                        <div class="top-half">
+                            <h2>Forespørgsler</h2>
+                        </div>
+                        <div class="bottom-half">
+                            <img class="option-images" src="../public/images/customer-request-logo.png"
+                                 th:src="@{/images/customer-request-logo.png}"
+                                 alt="customer-request_logo">
+                        </div>
+                    </a>
                 </div>
-                <div class="bottom-half">
-                    <img class="option-images" src="../public/images/customer-request-logo.png"
-                         th:src="@{/images/customer-request-logo.png}"
-                         alt="customer-request_logo">
+            </div>
+            <div class="flexbox1">
+                <div class="flexbox2">
+                    <a class="reference-format" th: href="${/}customer-own-order-frontpage.html"
+                       th:href="@{/customer-own-order-frontpage}">
+                        <!-- lav den rigtige GET metode til siden. -->
+                        <div class="top-half">
+                            <h2>Mine Ordre </h2>
+                        </div>
+                        <div class="bottom-half">
+                            <img class="option-images" src="../public/images/order-history-logo.png"
+                                 th:src="@{/images/order-history-logo.png}"
+                                 alt="order-history_logo">
+                        </div>
+                    </a>
                 </div>
-            </a>
-
-        <div class="flexbox">
-            <a class="reference-format" href="customer-own-order-frontpage.html" th:href="@{/customer-own-order-frontpage}">
-                <div class="top-half">
-                    <h2>Mine Ordre </h2>
-                </div>
-                <div class="bottom-half">
-                    <img class="option-images" src="../public/images/order-history-logo.png"
-                         th:src="@{/images/order-history-logo.png}"
-                         alt="order-history_logo">
-                </div>
-            </a>
+            </div>
         </div>
-            </form>
-    </div>
+    </form>
 </div>
 </body>
 </html>

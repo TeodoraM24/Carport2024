@@ -5,8 +5,12 @@ import app.config.ThymeleafConfig;
 import app.controllers.InvoiceController;
 import app.controllers.MaterialController;
 import app.controllers.CustomerController;
+import app.entities.Customer;
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.persistence.InvoiceMapper;
 import io.javalin.Javalin;
+import io.javalin.http.Context;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
 
@@ -26,8 +30,9 @@ public class Main {
         //MaterialController.addRoutes(app, ConnectionPool.getInstance());
         //CustomerController.addRoutes(app, ConnectionPool.getInstance());
         InvoiceController.addRoutes(app, ConnectionPool.getInstance());
-       app.get("/", ctx ->  ctx.render("customer-own-order-frontpage.html")); // uncomment this if want to try materials
-       // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
+
+
+         //app.get("/", ctx ->  ctx.render("customer-info-own-frontpage.html")); // uncomment this if want to try materials
 
         //app.get("/", ctx ->  ctx.render("materials-page.html")); // uncomment this is want to try login/createuser
     }

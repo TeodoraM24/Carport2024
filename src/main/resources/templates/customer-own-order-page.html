@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
     <title>Se Valgte ordre</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +8,12 @@
     <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
 </head>
 <body>
-<div th:replace="fragments/header :: div.main-header"></div>
+<div th:replace="~{fragments/header :: div.main-header}"></div>
 <a href="/templates/customer-own-order-page.html" th:href="@{/customerInvoice}">
 <div class="body-background">
     <div class="container">
         <div class="flexbox">
-            <form th:action="@{/materialInstruction}" method="POST">
+            <form action= "/viewaorder" method="POST">
                 <div>
                      <h2>Værebro</h2>
                     <div> <h1>Carport</h1></div>

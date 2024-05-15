@@ -16,10 +16,36 @@ public class InvoiceController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         //app.post("/customerinfo", ctx -> customerInfoPage(ctx, connectionPool));
-        app.get("/orderoverview", ctx -> displayCustomerOwnOrderPage(ctx, connectionPool));
-        app.post("/vieworder", ctx -> displayCustomerOwnOrderPage(ctx, connectionPool));
+        app.get("/", ctx -> displayCustomerOwnOrderPage(ctx, connectionPool));
+
+        app.get("vieworderallorder/{invoiceid}", ctx -> {
+            //get invoiceId
+            int id = Integer.parseInt(ctx.pathParam("invoiceid"));
+            System.out.println(id);
+            displayPartlist(ctx, connectionPool);
+        });
+
+        app.get("/", ctx -> displayCustomerInfoPage(ctx, connectionPool));
+        //app.post("/vieworderallorder", ctx -> displayCustomerOwnOrderPage(ctx, connectionPool));
+        //app.post("/viewaorder", ctx -> displayPartlist(ctx, connectionPool));
 
     }
+
+    private static void displayCustomerInfoPage(Context ctx, ConnectionPool connectionPool) {
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
     /**
      * Displays the customerInfo page for the current customer
      * Retrieves all necessary data from the database
@@ -46,10 +72,10 @@ public class InvoiceController {
 
     private static void displayCustomerOwnOrderPage(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
-        Customer customer = InvoiceMapper.getCustomerById(1, connectionPool);
+        Customer customer = new Customer(1, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer" );
         ctx.sessionAttribute("currentCustomer", customer);
         List<Invoice> listOfInvoices = null;
-        listOfInvoices = InvoiceMapper.getACustomersInvoice(customer.getCustomerId(), connectionPool);
+        listOfInvoices = InvoiceMapper.getACustomersInvoice(1, connectionPool);
         ctx.attribute("listOfInvoices", listOfInvoices);
 
         ctx.render("customer-own-order-frontpage.html");
@@ -67,6 +93,10 @@ public class InvoiceController {
     private static void displayPartlist(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Customer customer = ctx.sessionAttribute("currentCustomerId");
         ctx.attribute("currentCustomerId", customer.getCustomerId());
+
+        //get invoiceId
+        int id = Integer.parseInt(ctx.pathParam("invoiceid"));
+        System.out.println(id);
 
         List<CustomerPartslist> listOfPartlists = null;
         listOfPartlists = InvoiceMapper.getACustomersPartslist(customer.getCustomerId(), connectionPool);

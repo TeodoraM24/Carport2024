@@ -92,6 +92,10 @@ public class InvoiceMapper {
         }
         return listOfCustomerPartlist;
     }
+//Get the specifik parlist ud fra Invoice_ID
+//Display udfra enkel objekt fra Mapper i HTML th:object
+// tilføj invoiceId I parameterne i metoden getACustomersPartslist og add det resterende.
+
 
     /**
      * Retrieves a customer from the database based on the provided customer ID.
@@ -102,27 +106,27 @@ public class InvoiceMapper {
      * @throws DatabaseException   if there's an issue with the database operation
      */
 
-    public static Customer getCustomerById(int customerId, ConnectionPool connectionPool) throws DatabaseException {
-        Customer customer = new Customer(1); // Instantiate a new Customer object
-
-        String sql = "SELECT customer_id\n" +
-                "FROM customer\n" +
-                "WHERE customer_id = 1;";
-        //change the SQL when customer_id =!Null..
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-            ps.setInt(1, customerId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                customer.setCustomerId(rs.getInt("customer_id"));
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("Fejl i SQL!!", e.getMessage());
-        }
-        return customer;
-    }
+//    public static Customer getCustomerById(int customerId, ConnectionPool connectionPool) throws DatabaseException {
+//        Customer customer = new Customer(1); // Instantiate a new Customer object
+//
+//        String sql = "SELECT customer_id\n" +
+//                "FROM customer\n" +
+//                "WHERE customer_id = 1;";
+//        //change the SQL when customer_id =!Null..
+//        try (
+//                Connection connection = connectionPool.getConnection();
+//                PreparedStatement ps = connection.prepareStatement(sql)
+//        ) {
+//            ps.setInt(1, customerId);
+//            ResultSet rs = ps.executeQuery();
+//            if (rs.next()) {
+//                customer.setCustomerId(rs.getInt("customer_id"));
+//            }
+//        } catch (SQLException e) {
+//            throw new DatabaseException("Fejl i SQL!!", e.getMessage());
+//        }
+//        return customer;
+//    }
 
 
 }
