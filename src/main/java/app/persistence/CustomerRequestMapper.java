@@ -29,7 +29,10 @@ public class CustomerRequestMapper {
 
     public static List<CustomerRequest> getAllCustomerRequest(ConnectionPool connectionPool) throws DatabaseException {
         List<CustomerRequest> customerRequests = new ArrayList<>();
-        String sql = "SELECT * FROM customer_request";
+        String sql = "SELECT cr.customer_request_id, cr.length, cr.width, cr.height, cr.date, cr.status, cr.tile_type, c.first_name, c.last_name, c.customer_id " +
+                "FROM customer_request cr " +
+                "JOIN customer c ON cr.customer_request_id = c.customer_request_id";
+
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -43,8 +46,13 @@ public class CustomerRequestMapper {
                     LocalDate date = rs.getDate("date").toLocalDate();
                     String status = rs.getString("status");
                     String tileType = rs.getString("tile_type");
+                    String firstName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
+                    int customerId = rs.getInt("customer_id");
 
-                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);
+                    Customer customer = new Customer(firstName, lastName, customerId);
+
+                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status, customer);
                     customerRequests.add(customerRequest);
                 }
             }

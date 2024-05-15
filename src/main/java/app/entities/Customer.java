@@ -12,6 +12,12 @@ public class Customer {
     private String role;
     private boolean haveRequest;
 
+    public Customer(String firstName, String lastName, int customerId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.customerId = customerId;
+    }
+
     public Customer(int customerId, String email, String password, int phoneNumber, String firstName, String lastName, String address, int zip, String role, boolean haveRequest) {
         this.customerId = customerId;
         this.email = email;

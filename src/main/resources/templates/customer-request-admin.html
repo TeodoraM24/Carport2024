@@ -17,7 +17,7 @@
             <tr>
                 <th>ID</th>
                 <th>Dato</th>
-                <th>Status</th>
+                <th>Navn (ID)</th>
                 <th></th>
             </tr>
             </thead>
@@ -25,7 +25,9 @@
             <tr th:each="request : ${customerRequests}">
                 <td th:text="${request.customerRequestId}"></td>
                 <td th:text="${request.date}"></td>
-                <td th:text="${request.status}"></td>
+                <td>
+                    <span th:text="${request.customer.getFirstName() + ' ' + request.customer.getLastName() + ' (' + request.customer.getCustomerId() + ')'}"></span>
+                </td>
             </tr>
             </tbody>
         </table>

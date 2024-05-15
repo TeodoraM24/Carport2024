@@ -11,6 +11,7 @@ public class CustomerRequest {
     String tileType;
     String status;
     LocalDate date;
+    Customer customer;
 
     public CustomerRequest(int customerRequestId, int length, int height, int width, String tileType, LocalDate date, String status) {
         this.customerRequestId = customerRequestId;
@@ -20,6 +21,17 @@ public class CustomerRequest {
         this.date = date;
         this.status = status;
         this.tileType = tileType;
+    }
+
+    public CustomerRequest(int customerRequestId, int length, int height, int width, String tileType, LocalDate date, String status, Customer customer) {
+        this.customerRequestId = customerRequestId;
+        this.length = length;
+        this.height = height;
+        this.width = width;
+        this.date = date;
+        this.status = status;
+        this.tileType = tileType;
+        this.customer = customer;
     }
 
     public int getCustomerRequestId() {
@@ -76,6 +88,14 @@ public class CustomerRequest {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     @Override

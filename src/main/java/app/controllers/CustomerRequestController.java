@@ -70,7 +70,7 @@ public class CustomerRequestController {
         }
     }
 
-    public static List<CustomerRequest> getAllCustomerRequests(ConnectionPool connectionPool) throws DatabaseException {
+    /*public static List<CustomerRequest> getAllCustomerRequests(ConnectionPool connectionPool) throws DatabaseException {
 
         List<CustomerRequest> customerRequests = new ArrayList<>();
 
@@ -95,7 +95,7 @@ public class CustomerRequestController {
             throw new DatabaseException("Fejl under indhentelse af kunde forespørgsler", e.getMessage());
         }
         return customerRequests;
-    }
+    }*/
 
 /*
     public static void updateCustomerRequest(Context ctx, ConnectionPool connectionPool) {
