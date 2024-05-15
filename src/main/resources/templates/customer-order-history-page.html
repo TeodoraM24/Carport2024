@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Admin startside</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/customer-own-order-frontpage-style.css" th:href="@{/css/customer-own-order-frontpage-style.css}" rel="stylesheet"/>
+    <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: div.main-header}"></div>
+<div class="body-background">
+    <div class="container">
+        <div class="flexbox">
+            <div>
+                <h2>Ordre Historik</h2>
+                <table>
+                    <tbody>
+                    <tr>
+                        <td> Dato</td>
+                        <td> Ordrenummer</td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr th:if="${not #lists.isEmpty(listOfInvoices)}">
+                        <td th:text="${invoice.localDate}"></td>
+                        <td th:text="${invoice.invoiceID}" ></td>
+                        <td>
+                            <a type="button" class="button" th:href="@{/viewInvoiceDetails/{invoiceid}(invoiceid=${invoice.getInvoiceID()})}">Læs mere</a>
+                        </td>
+                        <!-- Tilføj almindelig tilbage knap, selvom listen ikke er top-->
+                    </tr>
+                    <tr th:unless="${not #lists.isEmpty(listOfInvoices)}">
+                        <td colspan="3">
+                            <p>Ingen kvittering blev fundet</p>
+                            <a type="button" class="button" th:href="@{/backToInfoPage}">Tilbage</a>
+                        </td>
+                        <!-- Tilføj routes tilbage til Info page-->
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

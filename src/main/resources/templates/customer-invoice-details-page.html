@@ -9,11 +9,9 @@
 </head>
 <body>
 <div th:replace="~{fragments/header :: div.main-header}"></div>
-<a href="/templates/customer-own-order-page.html" th:href="@{/customerInvoice}">
 <div class="body-background">
     <div class="container">
         <div class="flexbox">
-            <form action= "/viewaorder" method="POST">
                 <div>
                      <h2>Værebro</h2>
                     <div> <h1>Carport</h1></div>
@@ -27,19 +25,19 @@
                             <td>Enhed</td>
                             <td>Beskrivelse</td>
                         </tr>
-                        </tbody>
+
                         <tr th:each="partlist :${listOfPartlists}">
-                            <td th:text="${partlist.material_description}"></td>
-                            <td th:text="${partlist.length}"></td>
-                            <td th:text="${partlist.amount}"></td>
-                            <td th:text="${partlist.unit_nam}"></td>
-                            <td th:text="${partlist.instruction_description}"></td>
+                            <td th:object="${partlist.materialDescription}"></td>
+                            <td th:object="${partlist.length}"></td>
+                            <td th:object="${partlist.amount}"></td>
+                            <td th:object="${partlist.unit}"></td>
+                            <td th:object="${partlist.instructionDescription}"></td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
                 <span>
-                <button class="button" style="margin-top: 30px" formaction="customer-own-order-frontpage">Tilbage til kunde </button></span>
-            </form>
+                <a type="button" class="button" style="margin-top: 30px"  th:href="@{/backToOrderHistory}">Tilbage til kunde info </a></span>
         </div>
     </div>
 </div>

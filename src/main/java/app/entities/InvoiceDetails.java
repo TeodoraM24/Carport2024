@@ -1,20 +1,22 @@
 package app.entities;
 
-public class CustomerPartslist {
+public class InvoiceDetails {
     private String materialDescription;
     private int length;
     private int amount;
-    private String unitName;
-    private String description;
+    private String unit;
+    private String instructionDescription;
     private int customerId;
+    private int invoiceId;
 
-    public CustomerPartslist(String materialDescription, int length, int amount, String unitName, String description, int  customerId) {
+    public InvoiceDetails(String materialDescription, int length, int amount, String unit, String instructionDescription, int customerId, int invoiceId) {
         this.materialDescription = materialDescription;
         this.length = length;
         this.amount = amount;
-        this.unitName = unitName;
-        this.description = description;
-        this.customerId =  customerId;
+        this.unit = unit;
+        this.instructionDescription = instructionDescription;
+        this.customerId = customerId;
+        this.invoiceId = invoiceId;
     }
 
     public String getMaterialDescription() {
@@ -41,20 +43,20 @@ public class CustomerPartslist {
         this.amount = amount;
     }
 
-    public String getUnitName() {
-        return unitName;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setUnitName(String unitName) {
-        this.unitName = unitName;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
-    public String getDescription() {
-        return description;
+    public String getInstructionDescription() {
+        return instructionDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setInstructionDescription(String instructionDescription) {
+        this.instructionDescription = instructionDescription;
     }
 
     public int getCustomerId() {
@@ -63,5 +65,13 @@ public class CustomerPartslist {
 
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
+    }
+
+    public int getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(int invoiceId) {
+        this.invoiceId = invoiceId;
     }
 }

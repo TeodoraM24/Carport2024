@@ -27,13 +27,7 @@ public class Main {
         }).start(7070);
 
         // Routing
-        //MaterialController.addRoutes(app, ConnectionPool.getInstance());
-        //CustomerController.addRoutes(app, ConnectionPool.getInstance());
+
         InvoiceController.addRoutes(app, ConnectionPool.getInstance());
-
-
-         //app.get("/", ctx ->  ctx.render("customer-info-own-frontpage.html")); // uncomment this if want to try materials
-
-        //app.get("/", ctx ->  ctx.render("materials-page.html")); // uncomment this is want to try login/createuser
     }
 }

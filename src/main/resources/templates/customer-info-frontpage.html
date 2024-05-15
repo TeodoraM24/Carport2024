@@ -15,8 +15,8 @@
         <div class="container">
             <div class="flexbox1">
                 <div class="flexbox2">
-                    <a class="reference-format" href="customer-own-request-page.html"
-                       th:href="@{/customer-own-request-page}">
+                    <!--Add CustomerRequestPag th: href -->
+                    <a class="reference-format" href="customer-own-request-page.html">
                         <div class="top-half">
                             <h2>Forespørgsler</h2>
                         </div>
@@ -30,9 +30,7 @@
             </div>
             <div class="flexbox1">
                 <div class="flexbox2">
-                    <a class="reference-format" th: href="${/}customer-own-order-frontpage.html"
-                       th:href="@{/customer-own-order-frontpage}">
-                        <!-- lav den rigtige GET metode til siden. -->
+                    <a class="reference-format" th:href="@{/viewOrderHistory}">
                         <div class="top-half">
                             <h2>Mine Ordre </h2>
                         </div>

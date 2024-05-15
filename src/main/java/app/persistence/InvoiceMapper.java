@@ -1,7 +1,6 @@
 package app.persistence;
 
-import app.entities.Customer;
-import app.entities.CustomerPartslist;
+import app.entities.InvoiceDetails;
 import app.entities.Invoice;
 import app.exceptions.DatabaseException;
 
@@ -16,24 +15,21 @@ import java.sql.*;
 public class InvoiceMapper {
 
     /***
-     * Gets a customers invoice (order_id and date) from the database by joining customer_carport, carport_parts_list and invoice table
-     * and returns a List of Customers Invoices
+     * Retrieves the order history of a customer.
+     * Retrieves a list of invoices associated with the specified customer ID.
      *
-     * @param connectionPool ConnectionPool used to execute sql for retrieving all materials
-     * @return list of object of type Invoice
-     * @throws DatabaseException Displays "Fejl under indhentelse af materialer" + system msg
+     * @param customerId The unique identifier of the customer whose order history is to be retrieved
+     * @param connectionPool The ConnectionPool object used to establish a database connection
+     * @return A List of Invoice objects representing the order history of the customer
+     * @throws DatabaseException Thrown if there's an error in executing the SQL query
      */
-    public static List<Invoice> getACustomersInvoice(int customerId, ConnectionPool connectionPool) throws DatabaseException {
-        List<Invoice> listOfCustomersInvoices = new ArrayList<>();
-        String sql = "SELECT customer.customer_id,invoice.date AS invoice_date, invoice.invoice_id\n" +
-                "FROM customer\n" +
-                "INNER JOIN customer_invoice ON customer.customer_id = customer_invoice.customer_id \n" +
-                "INNER JOIN invoice ON customer_invoice.invoice_id = invoice.invoice_id \n" +
-                "INNER JOIN customer_carport ON customer.customer_id = customer_carport.customer_id\n" +
-                "INNER JOIN carport_parts_list ON customer_carport.carport_id = carport_parts_list.carport_id \n" +
-                "INNER JOIN parts_list ON carport_parts_list.parts_list_id = parts_list.parts_list_id \n" +
-                "WHERE customer.customer_id = ?";
 
+    public static List<Invoice> getCustomersOrderHistory(int customerId, ConnectionPool connectionPool) throws DatabaseException {
+        List<Invoice> listOfCustomersInvoices = new ArrayList<>();
+        String sql = "SELECT customer_invoice.customer_id, invoice.invoice_id, invoice.date AS invoice_date\n" +
+                "FROM public.customer_invoice\n" +
+                "JOIN public.invoice ON customer_invoice.invoice_id = invoice.invoice_id\n" +
+                "WHERE customer_invoice.customer_id = ?";
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
@@ -53,81 +49,65 @@ public class InvoiceMapper {
     }
 
 
-    /**
-     * Retrieves a customer's parts list ( material description, length, amount, unit name, and instruction description)
-     * from the database by joining the customer_invoice, invoice and parts_list tables.
-     * Returns a List of CustomerPartslist objects representing the customer's parts list for a specific invoice.
+    /***
+     * Retrieves the details of an invoice for a specific customer.
+     * Retrieves a list of InvoiceDetails associated with the specified invoice ID and customer ID.
      *
-     * @param customerId     The ID of the customer for whom to retrieve the parts list
-     * @param connectionPool The ConnectionPool used to execute SQL queries
-     * @return A list of CustomerPartslist objects representing the customer's parts list
-     * @throws DatabaseException If an error occurs while retrieving the parts list, displays "Fejl under indhentelse af materialer" followed by the system message
+     * @param invoiceId The unique identifier of the invoice for which details are to be retrieved
+     * @param customerId The unique identifier of the customer associated with the invoice
+     * @param connectionPool The ConnectionPool object used to establish a database connection
+     * @return A List of InvoiceDetails objects representing the details of the invoice for the specified customer
+     * @throws DatabaseException Thrown if there's an error in executing the SQL query
      */
-    public static List<CustomerPartslist> getACustomersPartslist(int customerId, ConnectionPool connectionPool) throws DatabaseException {
-        List<CustomerPartslist> listOfCustomerPartlist = new ArrayList<>();
-        String sql = "SELECT customer.customer_id,material.material_description, material.length, parts_list.amount,unit.unit_name, parts_list.instruction_description\n" +
-                "FROM customer\n" +
-                "INNER JOIN customer_parts_list ON customer.customer_id = customer_parts_list.customer_id\n" +
-                "INNER JOIN  parts_list ON customer_parts_list.parts_list_id = parts_list.parts_list_id\n" +
-                "INNER JOIN material ON parts_list.parts_list_id = material.material_id\n" +
-                "INNER JOIN unit ON parts_list.unit_id = unit.unit_id\n" +
-                "WHERE customer.customer_id = ?";
+
+    public static List<InvoiceDetails> getCustomerInvoiceDetails(int invoiceId, int customerId, ConnectionPool connectionPool) throws DatabaseException {
+        List<InvoiceDetails> listOfInvoiceDetails = new ArrayList<>();
+        String sql = "SELECT\n" +
+                "    customer.customer_id,\n" +
+                "\tinvoice.invoice_id,\n" +
+                "    material.material_description,\n" +
+                "    material.length,\n" +
+                "    parts_list_item.amount,\n" +
+                "    parts_list_item.unit,\n" +
+                "    parts_list_item.instruction_description\n" +
+                "FROM\n" +
+                "    public.customer\n" +
+                "INNER JOIN\n" +
+                "    public.customer_invoice ON customer.customer_id = customer_invoice.customer_id\n" +
+                "INNER JOIN\n" +
+                "    public.invoice ON customer_invoice.invoice_id = invoice.invoice_id\n" +
+                "INNER JOIN\n" +
+                "    public.parts_list ON invoice.parts_list_id = parts_list.parts_list_id\n" +
+                "INNER JOIN\n" +
+                "    public.parts_list_parts_list_item ON parts_list.parts_list_id = parts_list_parts_list_item.parts_list_id\n" +
+                "INNER JOIN\n" +
+                "\tpublic.parts_list_item ON parts_list_parts_list_item.parts_list_item_id = parts_list_item.parts_list_item_id\n" +
+                "INNER JOIN\n" +
+                "    public.material ON parts_list_item.material_id = material.material_id\n" +
+                "WHERE\n" +
+                "    customer.customer_id = ?" +
+                "    AND invoice.invoice_id = ?";
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
             ps.setInt(1, customerId);
+            ps.setInt(2, invoiceId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String materialDescription = rs.getString("material_description");
                 int length = rs.getInt("length");
                 int amount = rs.getInt("amount");
-                String unitName = rs.getString("unit_name");
+                String unit = rs.getString("unit");
                 String description = rs.getString("instruction_description");
 
-                listOfCustomerPartlist.add(new CustomerPartslist(materialDescription, length, amount, unitName, description, customerId));
+                listOfInvoiceDetails.add(new InvoiceDetails(materialDescription, length, amount, unit, description, customerId, invoiceId));
             }
         } catch (SQLException e) {
             throw new DatabaseException("Fejl i SQL!!", e.getMessage());
         }
-        return listOfCustomerPartlist;
+        return listOfInvoiceDetails;
     }
-//Get the specifik parlist ud fra Invoice_ID
-//Display udfra enkel objekt fra Mapper i HTML th:object
-// tilføj invoiceId I parameterne i metoden getACustomersPartslist og add det resterende.
-
-
-    /**
-     * Retrieves a customer from the database based on the provided customer ID.
-     *
-     * @param customerId   the ID of the customer to retrieve
-     * @param connectionPool   the connection pool to use for the database connection
-     * @return   the Customer object representing the retrieved customer
-     * @throws DatabaseException   if there's an issue with the database operation
-     */
-
-//    public static Customer getCustomerById(int customerId, ConnectionPool connectionPool) throws DatabaseException {
-//        Customer customer = new Customer(1); // Instantiate a new Customer object
-//
-//        String sql = "SELECT customer_id\n" +
-//                "FROM customer\n" +
-//                "WHERE customer_id = 1;";
-//        //change the SQL when customer_id =!Null..
-//        try (
-//                Connection connection = connectionPool.getConnection();
-//                PreparedStatement ps = connection.prepareStatement(sql)
-//        ) {
-//            ps.setInt(1, customerId);
-//            ResultSet rs = ps.executeQuery();
-//            if (rs.next()) {
-//                customer.setCustomerId(rs.getInt("customer_id"));
-//            }
-//        } catch (SQLException e) {
-//            throw new DatabaseException("Fejl i SQL!!", e.getMessage());
-//        }
-//        return customer;
-//    }
-
 
 }
 
