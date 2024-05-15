@@ -33,6 +33,7 @@ public class Main {
         app.get("/", ctx ->  ctx.render("admin-frontpage.html"));
         CustomerController.addRoutes(app, connectionPool);
         AdminCustomerRequestController.addRoutes(app, connectionPool);
+        CustomerRequestController.addRoutes(app, connectionPool);
 
     }
 }

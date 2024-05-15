@@ -15,21 +15,17 @@
         <table>
             <thead>
             <tr>
+                <th>ID</th>
                 <th>Dato</th>
-                <th>Mål</th>
                 <th>Status</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="request : ${customerRequests}">
+                <td th:text="${request.customerRequestId}"></td>
                 <td th:text="${request.date}"></td>
-                <td th:text="${request.height + ' x ' + request.length + ' x ' + request.width}"></td>
                 <td th:text="${request.status}"></td>
-                <td th:if="${request.status == 'Klar'}">
-                    <a class="button" th:href="@{/offer-acceptance/${request.customerRequestId}}">Accepter/Afvis Tilbud</a>
-                </td>
-                <td th:unless="${request.status == 'Klar'}"></td>
             </tr>
             </tbody>
         </table>
