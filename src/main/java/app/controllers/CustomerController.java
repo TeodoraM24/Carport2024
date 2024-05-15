@@ -3,6 +3,8 @@ package app.controllers;
 import app.entities.Customer;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.validators.EmailValidator;
+import app.validators.PasswordValidator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import app.persistence.CustomerMapper;
@@ -49,6 +51,17 @@ public class CustomerController {
         int zip = Integer.parseInt(ctx.formParam("zip"));
         int phoneNumber = Integer.parseInt(ctx.formParam("phoneNumber"));
         String address=ctx.formParam("address");
+
+        if(EmailValidator.isValidEmail(email)) {
+            ctx.attribute("message", "Den indtastede mail er ikke gyldig. Prøv igen");
+            ctx.render("create-user-page.html");
+            return;
+        }
+
+        if(PasswordValidator.isValidPassword(password1)){
+            ctx.attribute("message", "Det indtastede kodeord er ikke gyldigt. Den skal minimum indeholde 8 tegn, et stort bogstav, et småt bogstav og et nummer. Prøv igen.");
+            return;
+        }
 
         if (!email.equals(email2)) {
             ctx.attribute("message", "Dine e-mails matcher ikke! Prøv igen.");
