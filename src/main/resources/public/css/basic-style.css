@@ -11,3 +11,19 @@ h1 {
     padding: 0;
     height: 100%;
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Align items at the top */
+    height: 80vh
+}
+
+.flexbox {
+    width: 800px; /* Adjust width as needed */
+    height: 400px; /* Adjust height as needed */
+    background-color: #ffffff; /* Adjust background color as needed */
+    border-radius: 5px; /* Adjust border radius for smooth corners */
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+}

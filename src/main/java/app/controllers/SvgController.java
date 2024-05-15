@@ -1,6 +1,8 @@
 package app.controllers;
 
+import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
+import app.persistence.AdminRequestMapper;
 import app.persistence.ConnectionPool;
 import app.services.CarportSvgSideView;
 import app.services.CarportSvgTopDownView;
@@ -13,6 +15,25 @@ public class SvgController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/Svg", ctx -> displaySvg(ctx, connectionPool));
+
+        app.post("/showDrawing", ctx -> {
+            displayDrawing(ctx, connectionPool);
+        });
+    }
+
+    private static void displayDrawing(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int customerRequestId = AdminRequestController.getSessionCurrentRequestId(ctx);
+        CustomerRequest customerRequest = AdminRequestMapper.getCustomerRequest(customerRequestId, connectionPool);
+        int carportLength = customerRequest.getRequestLength();
+        int carportWidth = customerRequest.getRequestWidth();
+        int carportHeight = customerRequest.getRequestHeight();
+
+        Locale.setDefault(new Locale("US"));
+        CarportSvgTopDownView svgTopDownView = new CarportSvgTopDownView(carportLength, carportWidth);
+        CarportSvgSideView svgSideView = new CarportSvgSideView(carportLength, carportHeight);
+        ctx.attribute("svgTopDownView", svgTopDownView.toString());
+        ctx.attribute("svgSideView", svgSideView.toString());
+        ctx.render("Svg-page.html");
     }
 
     /**
