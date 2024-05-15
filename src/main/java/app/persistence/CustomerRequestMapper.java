@@ -55,6 +55,41 @@ public class CustomerRequestMapper {
         return customerRequests;
     }
 
+    public static List<CustomerRequest> getAllCustomerRequestWithCustomer(ConnectionPool connectionPool) throws DatabaseException {
+        List<CustomerRequest> customerRequests = new ArrayList<>();
+        String sql = "SELECT cr.customer_request_id, cr.length, cr.width, cr.height, cr.date, cr.status, cr.tile_type, c.first_name, c.last_name, c.customer_id " +
+                "FROM customer_request cr " +
+                "JOIN customer c ON cr.customer_request_id = c.customer_request_id";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    int customerRequestId = rs.getInt("customer_request_id");
+                    int length = rs.getInt("length");
+                    int width = rs.getInt("width");
+                    int height = rs.getInt("height");
+                    LocalDate date = rs.getDate("date").toLocalDate();
+                    String status = rs.getString("status");
+                    String tileType = rs.getString("tile_type");
+                    String firstName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
+                    int customerId = rs.getInt("customer_id");
+
+                    Customer customer = new Customer(firstName, lastName, customerId);
+
+                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status, customer);
+                    customerRequests.add(customerRequest);
+                }
+            }
+        } catch (SQLException e) {
+            String msg = "Fejl i getAllCustomerRequest()!";
+            throw new DatabaseException(msg, e.getMessage());
+        }
+        return customerRequests;
+    }
+
     /**
      * Getting a customer request from the database based on the customer request id
      *

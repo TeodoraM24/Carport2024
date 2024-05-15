@@ -53,8 +53,11 @@ public class CustomerRequestMapperTest {
                 stmt.execute("INSERT INTO customer_request (length, width, height, date) VALUES " +
                         "(8, 4, 3, CURRENT_DATE)");
 
-                stmt.execute("INSERT INTO customer (first_name, last_name, email, password, phonenumber, address, zip) VALUES " +
-                        "('Morten', 'Hvor blev du af', 'email@email.dk', '1234', 12345678, 'Vejen 2', 2770)");
+                stmt.execute("INSERT INTO customer (first_name, last_name, email, password, phonenumber, address, zip, customer_request_id) VALUES " +
+                        "('Morten', 'Hvor blev du af', 'email@email.dk', '1234', 12345678, 'Vejen 2', 2770, 1)");
+
+                stmt.execute("INSERT INTO customer (first_name, last_name, email, password, phonenumber, address, zip, customer_request_id) VALUES " +
+                        "('Lars', 'Larsen', 'email@email.live.dk', '1234', 12345679, 'Vejen 3', 2770, 2)");
 
                 // Set sequence to continue from the largest member_id
                 //stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', COALESCE((SELECT MAX(customer_request_id)+1 FROM public.customer_request), 1), false)");
@@ -96,6 +99,16 @@ public class CustomerRequestMapperTest {
         assertEquals("Plasttrapezplader", customerRequests.get(1).getTileType());
         assertEquals("Afventer", customerRequests.get(1).getStatus());
         assertEquals(localDate, customerRequests.get(1).getDate());*/
+    }
+
+    @Test
+    void getAllCustomerRequestWithCustomer() throws DatabaseException {
+       List<CustomerRequest> customerRequests = new CustomerRequestMapper().getAllCustomerRequestWithCustomer(connectionPool);
+
+       for (CustomerRequest customerRequest : customerRequests) {
+           System.out.println(customerRequest.toString());
+           System.out.println("-------------------------------------------------");
+       }
     }
 
 
