@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
     <title>Velkommen til Fog</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<div th:replace="fragments/header :: div.main-header"></div>
+<div th:replace="~{fragments/header :: div.main-header}"></div>
 
 <div class="body-background">
     <div class="body">

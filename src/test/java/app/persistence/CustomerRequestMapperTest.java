@@ -1,10 +1,7 @@
 package app.persistence;
 
-import app.entities.Customer;
 import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
-import io.javalin.http.Context;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -84,33 +81,7 @@ public class CustomerRequestMapperTest {
             System.out.println("--------------------------------");
         }
         assertEquals(2, customerRequests.size());
-
-/*
-        assertEquals(7, customerRequests.get(0).getLength());
-        assertEquals(5, customerRequests.get(0).getWidth());
-        assertEquals(3, customerRequests.get(0).getHeight());
-        assertEquals("Plasttrapezplader", customerRequests.get(0).getTileType());
-        assertEquals("Afventer", customerRequests.get(0).getStatus());
-        assertEquals(localDate, customerRequests.get(0).getDate());
-
-        assertEquals(8, customerRequests.get(1).getLength());
-        assertEquals(4, customerRequests.get(1).getWidth());
-        assertEquals(3, customerRequests.get(1).getHeight());
-        assertEquals("Plasttrapezplader", customerRequests.get(1).getTileType());
-        assertEquals("Afventer", customerRequests.get(1).getStatus());
-        assertEquals(localDate, customerRequests.get(1).getDate());*/
     }
-
-    @Test
-    void getAllCustomerRequestWithCustomer() throws DatabaseException {
-       List<CustomerRequest> customerRequests = new CustomerRequestMapper().getAllCustomerRequestWithCustomer(connectionPool);
-
-       for (CustomerRequest customerRequest : customerRequests) {
-           System.out.println(customerRequest.toString());
-           System.out.println("-------------------------------------------------");
-       }
-    }
-
 
     @Test
     void getCustomerRequestById() throws DatabaseException {
@@ -130,13 +101,13 @@ public class CustomerRequestMapperTest {
         assertEquals(expected.getStatus(), actual.getStatus());
     }
 
-
-   /* @Test
+/*
+   @Test
     void deleteCustomerRequest() throws DatabaseException {
         CustomerRequestMapper.deleteCustomerRequest(1, connectionPool);
         assertEquals(0, new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size());
     }
-/*
+
     @Test
     void makeCustomerRequest() throws DatabaseException {
         // 1. Prepare Data

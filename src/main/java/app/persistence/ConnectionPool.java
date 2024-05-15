@@ -14,10 +14,10 @@ import java.util.logging.Logger;
 public class ConnectionPool
 {
 
-    private static final String USER = "postgres";
+    private static final String USER ="postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "carport";
+    private static final String DB = "carport_test_local";
 
     public static ConnectionPool instance = null;
     public static HikariDataSource ds = null;
@@ -28,10 +28,9 @@ public class ConnectionPool
      */
     private ConnectionPool() {}
 
-    public static ConnectionPool getInstance() {
+    public static ConnectionPool getInstance(){
         return getInstance(USER, PASSWORD, URL, DB);
     }
-
     /***
      * Getting a singleton instance of a Hikari Connection Pool with specific credentials
      * and connection string. If an environment variable "DEPLOYED" exists then local
