@@ -90,6 +90,14 @@ public class CustomerRequest {
         this.date = date;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     @Override
     public String toString() {
         return "CustomerRequest{" +
@@ -100,7 +108,6 @@ public class CustomerRequest {
                 ", tileType='" + tileType + '\'' +
                 ", status='" + status + '\'' +
                 ", date=" + date +
-                ", customer=" + customer +
                 '}';
     }
 }

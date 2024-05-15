@@ -29,37 +29,10 @@ public class CustomerRequestMapper {
 
     public static List<CustomerRequest> getAllCustomerRequest(ConnectionPool connectionPool) throws DatabaseException {
         List<CustomerRequest> customerRequests = new ArrayList<>();
-        String sql = "SELECT * FROM customer_request";
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    int customerRequestId = rs.getInt("customer_request_id");
-                    int length = rs.getInt("length");
-                    int width = rs.getInt("width");
-                    int height = rs.getInt("height");
-                    LocalDate date = rs.getDate("date").toLocalDate();
-                    String status = rs.getString("status");
-                    String tileType = rs.getString("tile_type");
-
-                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);
-                    customerRequests.add(customerRequest);
-                }
-            }
-        } catch (SQLException e) {
-            String msg = "Fejl i getAllCustomerRequest()!";
-            throw new DatabaseException(msg, e.getMessage());
-        }
-        return customerRequests;
-    }
-
-    public static List<CustomerRequest> getAllCustomerRequestWithCustomer(ConnectionPool connectionPool) throws DatabaseException {
-        List<CustomerRequest> customerRequestsWithCustomer = new ArrayList<>();
         String sql = "SELECT cr.customer_request_id, cr.length, cr.width, cr.height, cr.date, cr.status, cr.tile_type, c.first_name, c.last_name, c.customer_id " +
                 "FROM customer_request cr " +
                 "JOIN customer c ON cr.customer_request_id = c.customer_request_id";
+
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -80,15 +53,14 @@ public class CustomerRequestMapper {
                     Customer customer = new Customer(firstName, lastName, customerId);
 
                     CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status, customer);
-                    customerRequestsWithCustomer.add(customerRequest);
+                    customerRequests.add(customerRequest);
                 }
             }
         } catch (SQLException e) {
             String msg = "Fejl i getAllCustomerRequest()!";
             throw new DatabaseException(msg, e.getMessage());
         }
-        System.out.println("Customer Requests with Customers: " + customerRequestsWithCustomer);
-        return customerRequestsWithCustomer;
+        return customerRequests;
     }
 
     /**
