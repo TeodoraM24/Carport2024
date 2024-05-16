@@ -108,7 +108,7 @@ public class AdminRequestController {
         CustomerRequest customerRequest = getCustomerRequest(customerRequestId, connectionPool);
         Material post = new Material("97x97 mm. trykimp. Stolpe", 97, 97);
         Material beam = new Material("45x195 mm. spærtræ ubh.", 195, 45);
-        Material rafter = new Material("45x195 mm. spærtræ ubh.", 97, 97);
+        Material rafter = new Material("45x195 mm. spærtræ ubh.", 195, 45);
 
         PartsListCalculator partsListCalculator = new PartsListCalculator(customerRequest.getRequestLength(), customerRequest.getRequestWidth(), customerRequest.getRequestHeight(), post, beam, rafter);
         partsListCalculator.calcCarport();
