@@ -3,18 +3,14 @@ package app.entities;
 public class Offer {
     private int offerId;
     private String carportSize;
-    private String toolShedSize;
-    private String claddingDesc;
     private String rafterTypeDesc;
     private String supportBeamDescSize;
     private String roofMaterials;
     private double totalPriceWithTax;
 
-    public Offer(int offerId, String carportSize, String toolShedSize, String clddingDesc, String rafterTypeDesc, String supportBeamDescSize, String roofMaterials, double totalPriceWithTax) {
+    public Offer(int offerId, String carportSize, String rafterTypeDesc, String supportBeamDescSize, String roofMaterials, double totalPriceWithTax) {
         this.offerId = offerId;
         this.carportSize = carportSize;
-        this.toolShedSize = toolShedSize;
-        this.claddingDesc = clddingDesc;
         this.rafterTypeDesc = rafterTypeDesc;
         this.supportBeamDescSize = supportBeamDescSize;
         this.roofMaterials = roofMaterials;
@@ -35,22 +31,6 @@ public class Offer {
 
     public void setCarportSize(String carportSize) {
         this.carportSize = carportSize;
-    }
-
-    public String getToolShedSize() {
-        return toolShedSize;
-    }
-
-    public void setToolShedSize(String toolShedSize) {
-        this.toolShedSize = toolShedSize;
-    }
-
-    public String getCladdingDesc() {
-        return claddingDesc;
-    }
-
-    public void setCladdingDesc(String claddingDesc) {
-        this.claddingDesc = claddingDesc;
     }
 
     public String getRafterTypeDesc() {
@@ -85,14 +65,11 @@ public class Offer {
         this.totalPriceWithTax = totalPriceWithTax;
     }
 
-
     @Override
     public String toString() {
         return "Offer{" +
                 "offerId=" + offerId +
                 ", carportSize='" + carportSize + '\'' +
-                ", toolShedSize='" + toolShedSize + '\'' +
-                ", clddingDesc='" + claddingDesc + '\'' +
                 ", rafterTypeDesc='" + rafterTypeDesc + '\'' +
                 ", supportBeamDescSize='" + supportBeamDescSize + '\'' +
                 ", roofMaterials='" + roofMaterials + '\'' +

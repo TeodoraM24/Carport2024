@@ -26,6 +26,7 @@ public class MaterialMapperTest {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
                 // Remove all rows from relevant tables
+                stmt.execute("DELETE FROM parts_list_parts_list_item");
                 stmt.execute("DELETE FROM parts_list_item");
                 stmt.execute("DELETE FROM material");
 

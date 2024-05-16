@@ -11,22 +11,23 @@ import java.sql.SQLException;
 public class OfferMapper {
 
     public static Offer getOfferByCustomerId(int customerId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT * FROM offer o JOIN customer c ON o.offer_id = c.offer_id WHERE c.customer_id = ?";
+        String sql = "SELECT o.offer_id, c.customer_id, cq.length, cq.width, cq.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax FROM offer o INNER JOIN customer c ON o.customer_request_id = 1 INNER JOIN customer_request cq ON o.customer_request_id = 1 INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id) WHERE customer_id = ?";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int offerId = rs.getInt("offer_id");
-                String carportSize = rs.getString("carport_size");
-                String toolShedSize = rs.getString("tool_shed_size");
-                String claddingDesc = rs.getString("cladding_desc");
+                int length= rs.getInt("length");
+                int height= rs.getInt("height");
+                int width=rs.getInt("width");
+                String carportSize = width + "x" + length + "x" + height;
                 String rafterTypeDesc = rs.getString("rafter_type_desc");
                 String supportBeamDescSize = rs.getString("support_beam_desc_size");
                 String roofMaterials = rs.getString("roof_materials");
-                double totalPriceWithTax = rs.getDouble("total_price_with_tax");
+                double totalPriceWithTax = rs.getDouble("salesprice_with_tax");
 
-                return new Offer(offerId, carportSize, toolShedSize, claddingDesc, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax);
+                return new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax);
             } else {
                 throw new DatabaseException("Offer not found for customer with id: " + customerId);
             }
@@ -36,7 +37,7 @@ public class OfferMapper {
     }
 
     public static void updateOfferStatus(int offerId, String status, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE offer SET offer_status = ? WHERE offer_id = ?";
+        String sql = "UPDATE offer SET status = ? WHERE offer_id = ?";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, status);
