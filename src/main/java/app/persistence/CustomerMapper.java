@@ -1,5 +1,6 @@
 package app.persistence;
 
+import app.entities.Admin;
 import app.entities.Customer;
 import app.exceptions.DatabaseException;
 
@@ -10,27 +11,30 @@ import java.sql.SQLException;
 
 public class CustomerMapper {
     public static Customer logInd(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT * FROM public.\"customer\" WHERE email=? AND password=?";
+        String sql = "SELECT * FROM customer WHERE email=? AND password=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
+        )
+        {
             ps.setString(1, email);
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int id = rs.getInt("customer_id");
-                String role = rs.getString("role");
+                int customerId = rs.getInt("customer_id");
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
+                email = rs.getString("email");
+                password = rs.getString("password");
                 String address = rs.getString("address");
                 int zip = rs.getInt("zip");
                 int phoneNumber = rs.getInt("phonenumber");
+                String role = rs.getString("role");
 
 
-                return new Customer(id, email, password, phoneNumber, firstName, lastName, address, zip, role);
+                return new Customer(customerId, email, password, phoneNumber, firstName, lastName, address, zip, role);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }

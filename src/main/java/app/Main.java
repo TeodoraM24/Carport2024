@@ -2,16 +2,7 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
-import app.controllers.InvoiceController;
-import app.controllers.MaterialController;
-import app.controllers.CustomerController;
-import app.entities.Customer;
-import app.exceptions.DatabaseException;
-import app.controllers.AdminOfferController;
-import app.controllers.AdminRequestController;
-import app.controllers.CustomerController;
-import app.controllers.SvgController;
-import app.controllers.MaterialController;
+import app.controllers.*;
 import app.persistence.ConnectionPool;
 import app.persistence.InvoiceMapper;
 import io.javalin.Javalin;
@@ -42,5 +33,8 @@ public class Main {
         //app.get("/", ctx -> displaySvg(ctx, ConnectionPool.getInstance())); // uncomment this if want to try Svg
         // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
         // app.get("/", ctx ->  ctx.render("login-page.html")); // uncomment this is want to try login/createuser
+        AdminController.addRoutes(app, ConnectionPool.getInstance());
+        LoginController.addRoutes(app, ConnectionPool.getInstance());
+        CustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
     }
 }
