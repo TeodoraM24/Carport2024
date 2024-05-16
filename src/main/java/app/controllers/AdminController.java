@@ -12,7 +12,7 @@ import io.javalin.http.Context;
 public class AdminController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("loginpage-admin", ctx -> {
+        app.get("/loginpage-admin", ctx -> {
             ctx.render("admin-frontpage.html");
         });
         app.get("/admin/logout", ctx -> logout(ctx));

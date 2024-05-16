@@ -26,12 +26,12 @@ public class LoginController {
             Admin admin = AdminMapper.logInd(email, password, connectionPool);
             ctx.sessionAttribute("currentUser", admin);
             ctx.attribute("message", "Du er nu logget ind");
-            ctx.redirect("loginpage-admin");
+            ctx.redirect("/loginpage-admin");
         } else {
             Customer customer = CustomerMapper.logInd(email, password, connectionPool);
             ctx.sessionAttribute("currentUser", customer);
             ctx.attribute("message", "Du er nu logget ind");
-            ctx.redirect("loginpage-customer");
+            ctx.redirect("/loginpage-customer");
         }
     }
 }
