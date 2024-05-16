@@ -107,25 +107,6 @@ public class CustomerRequestController {
         return customerRequestsWithCustomer;
     }
 
-/*
-    public static void updateCustomerRequest(Context ctx, ConnectionPool connectionPool) {
-        try{
-        LocalDate date = LocalDate.now();
-        int height = Integer.parseInt(ctx.formParam("height"));
-        int width = Integer.parseInt(ctx.formParam("width"));
-        int length = Integer.parseInt(ctx.formParam("length"));
-        String status = ctx.formParam("status");
-
-        CustomerRequestMapper.updateCustomerRequest(length, width, height, date, status, connectionPool);
-        List<CustomerRequest> customerRequestList = CustomerRequestMapper.getAllCustomerRequest(connectionPool);
-        ctx.attribute("customerRequestList", customerRequestList);
-        ctx.render("carport-form.html");
-    } catch (DatabaseException e) {
-        ctx.attribute("message", e.getMessage());
-        ctx.render("carport-form.html");
-        }
-    }*/
-
     /**
      * Handle the process of deleting customer request
      *

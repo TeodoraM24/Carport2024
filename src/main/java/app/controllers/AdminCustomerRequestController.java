@@ -23,20 +23,13 @@ public class AdminCustomerRequestController {
         List<CustomerRequest> customerRequestList; // Initialize to empty list
 
         try {
-            // Retrieve all customer requests
             customerRequestList = CustomerRequestMapper.getAllCustomerRequest(connectionPool);
 
-            // Add the list of customer requests as an attribute to the context
             ctx.attribute("customerRequests", customerRequestList);
 
-            // Render the HTML template
             ctx.render("customer-request-admin.html");
         } catch (DatabaseException e) {
-            // Log the error
-            e.printStackTrace();
-            // Handle the error gracefully
-            ctx.result("Error occurred while fetching customer requests.");
-            ctx.status(500); // Internal Server Error
+            ctx.result("Der skete en fejl mens programmet hentede kundeforespørgsler");
         }
     }
 }
