@@ -51,7 +51,7 @@
                 <form th:action="@{'/offer/' + ${offer.offerId} + '/accept'}" method="post">
                     <button type="submit" class="button accept-button">Godkend</button>
                 </form>
-                <form action="deny-offer-page.html">
+                <form th:action="@{'/offer/' + ${offer.offerId} + '/deny'}" method="post">
                     <input type="submit" class="button deny-button" value="Afvis">
                 </form>
             </div>
