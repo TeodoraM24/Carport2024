@@ -134,53 +134,7 @@ public class CustomerRequestMapper {
      * @return Returns a list the requested customer request
      * @throws DatabaseException Handles database error
      */
-   /* public static void makeCustomerRequest(Customer currentUser, int height, int width, int length, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
-        if (currentUser.getCustomer_request_id() != 0) {
-            throw new DatabaseException("Du har allerede en forespørgsel, vent venligst på vi vender tilbage");
-        }
-
-        String insertCustomerRequestQuery = "INSERT INTO customer_request (length, width, height, date) VALUES (?, ?, ?, ?)";
-        String insertAdminCustomerRequestQuery = "INSERT INTO admin_customer_request (admin_id, customer_request_id) VALUES (?, ?)";
-        String updateCustomerQuery = "UPDATE customer SET customer_request_id = ? WHERE customer_id = ? AND customer_request_id IS NULL";
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement insertCustomerRequestStatement = connection.prepareStatement(insertCustomerRequestQuery, PreparedStatement.RETURN_GENERATED_KEYS);
-             PreparedStatement insertAdminCustomerRequestStatement = connection.prepareStatement(insertAdminCustomerRequestQuery);
-             PreparedStatement updateCustomerStatement = connection.prepareStatement(updateCustomerQuery)) {
-
-            insertCustomerRequestStatement.setInt(1, length);
-            insertCustomerRequestStatement.setInt(2, width);
-            insertCustomerRequestStatement.setInt(3, height);
-            insertCustomerRequestStatement.setDate(4, java.sql.Date.valueOf(date));
-            int rowsAffected = insertCustomerRequestStatement.executeUpdate();
-
-            if (rowsAffected != 1) {
-                throw new DatabaseException("Database fejl");
-            }
-
-            ResultSet rs = insertCustomerRequestStatement.getGeneratedKeys();
-            if (!rs.next()) {
-                throw new DatabaseException("Mislykkedes med at hente genereret nøgle til kundens forespørgsel");
-            }
-
-            int customerRequestId = rs.getInt(1);
-
-            insertAdminCustomerRequestStatement.setInt(1, 1); // assuming admin_id is 1
-            insertAdminCustomerRequestStatement.setInt(2, customerRequestId);
-            insertAdminCustomerRequestStatement.executeUpdate();
-
-            updateCustomerStatement.setInt(1, customerRequestId);
-            updateCustomerStatement.setInt(2, currentUser.getCustomerId());
-            int updatedRows = updateCustomerStatement.executeUpdate();
-
-            if (updatedRows == 0) {
-                throw new DatabaseException("Der findes allerede en forspørgsel");
-            }
-
-        } catch (SQLException e) {
-            throw new DatabaseException("Fejl under oprettelsen af forespørgsel", e.getMessage());
-        }
-    }*/
+   /* 
     public static void makeCustomerRequest(Customer currentUser, int height, int width, int length, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
         if (customerIdAlreadyHasRequest(connectionPool, currentUser.getCustomer_request_id())) {
             throw new DatabaseException("Der findes allerede en forspørgsel");
