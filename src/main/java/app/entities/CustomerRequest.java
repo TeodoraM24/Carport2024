@@ -11,6 +11,7 @@ public class CustomerRequest {
     private String requestTileType;
     private LocalDate date;
     private String status;
+    private Customer customer;
 
     public CustomerRequest(int customerRequestId, int requestLength, int requestWidth, int requestHeight, String requestTileType, LocalDate date, String status) {
         this.customerRequestId = customerRequestId;
@@ -20,6 +21,17 @@ public class CustomerRequest {
         this.requestTileType = requestTileType;
         this.date = date;
         this.status = status;
+    }
+
+    public CustomerRequest(int customerRequestId, int requestLength, int requestHeight, int requestWidth, String requestTileType, LocalDate date, String status, Customer customer) {
+        this.customerRequestId = customerRequestId;
+        this.requestLength = requestLength;
+        this.requestHeight = requestHeight;
+        this.requestWidth = requestWidth;
+        this.date = date;
+        this.status = status;
+        this.requestTileType = requestTileType;
+        this.customer = customer;
     }
 
     public int getCustomerRequestId() {

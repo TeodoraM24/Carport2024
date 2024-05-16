@@ -30,12 +30,12 @@ public class CustomerController {
             ctx.sessionAttribute("currentUser", customer);
 
             ctx.attribute("message", "Du er nu logget ind");
-            ctx.render("customer-info-page.html");
+            ctx.render("index.html"); //skal ændres
         }
         catch (DatabaseException e)
         {
             ctx.attribute("message", e.getMessage() );
-            ctx.render("login-page.html"); //same here
+            ctx.render("index.html"); //same here
         }
 
     }

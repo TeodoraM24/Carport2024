@@ -14,6 +14,10 @@ import app.controllers.SvgController;
 import app.controllers.MaterialController;
 import app.persistence.ConnectionPool;
 import app.persistence.InvoiceMapper;
+import app.controllers.AdminCustomerRequestController;
+import app.controllers.CustomerController;
+import app.controllers.CustomerRequestController;
+import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -38,7 +42,11 @@ public class Main {
         MaterialController.addRoutes(app, ConnectionPool.getInstance());
         CustomerController.addRoutes(app, ConnectionPool.getInstance());
         SvgController.addRoutes(app, ConnectionPool.getInstance());
+        CustomerController.addRoutes(app, ConnectionPool.getInstance());
+        AdminCustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
+        CustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
 
+        //app.get("/", ctx ->  ctx.render("admin-frontpage.html"));
         //app.get("/", ctx -> displaySvg(ctx, ConnectionPool.getInstance())); // uncomment this if want to try Svg
         // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
         // app.get("/", ctx ->  ctx.render("login-page.html")); // uncomment this is want to try login/createuser
