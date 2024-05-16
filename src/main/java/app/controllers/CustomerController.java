@@ -11,10 +11,13 @@ import app.persistence.CustomerMapper;
 public class CustomerController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("loginpage-customer", ctx -> ctx.render("customer-info-frontpage.html"));
+        app.get("loginpage-customer", ctx -> ctx.render("carport-index.html"));
         app.get("logout", ctx -> logout(ctx));
         app.get("createuser", ctx -> ctx.render("create-user-page.html"));
-        app.post("createuser", ctx -> createCustomer(ctx, connectionPool));
+        app.post("createuser", ctx -> {
+            createCustomer(ctx, connectionPool);
+            ctx.redirect("/login-page");
+        });
     }
 
     private static void createCustomer(Context ctx, ConnectionPool connectionPool) {

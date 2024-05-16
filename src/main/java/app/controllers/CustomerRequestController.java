@@ -26,11 +26,11 @@ public class CustomerRequestController {
      */
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("/carport-form", ctx -> ctx.render("carport-form.html"));
+        app.get("/index", ctx -> ctx.render("index.html"));
         app.get("/customer-request-status", ctx -> getAllCustomerRequests(ctx, connectionPool));
         app.get("/carport-index", ctx -> ctx.render("carport-index.html"));
-        app.get("/carport-form", ctx -> ctx.render("carport-form.html"));
         app.get("/customer-info-page", ctx -> ctx.render("customer-info-page.html"));
-        app.get("/login-page", ctx -> ctx.render("login-page.html"));
         app.post("/carport-offer-sent", ctx -> ctx.render("carport-offer-sent.html"));
         app.post("/make-customer-request", ctx -> makeCustomerRequest(ctx, connectionPool));
     }
@@ -62,13 +62,13 @@ public class CustomerRequestController {
     public static void makeCustomerRequest(Context ctx, ConnectionPool connectionPool) {
         Customer currentUser = ctx.sessionAttribute("currentUser");
         if (currentUser == null) {
-            ctx.redirect("/login-page.html");
+            ctx.render("login-page.html");
             ctx.attribute("message", "Du skal logge ind før du kan bestille en forespørgsel");
             return;
         }
 
         if (currentUser.isHaveRequest()) {
-            ctx.redirect("/customer-info-page.html");
+            ctx.render("customer-info-frontpage.html");
             ctx.attribute("message", "Du har allerede bestilt en forespørgsel, vent venligst på vi vender tilbage");
             return;
         }
@@ -76,13 +76,13 @@ public class CustomerRequestController {
 
         try {
             LocalDate date = LocalDate.now();
-            int height = Integer.parseInt(ctx.formParam("carport-height"));
-            int width = Integer.parseInt(ctx.formParam("carport-width"));
-            int length = Integer.parseInt(ctx.formParam("carport-length"));
+            int height = Integer.parseInt(ctx.formParam("height"));
+            int width = Integer.parseInt(ctx.formParam("width"));
+            int length = Integer.parseInt(ctx.formParam("length"));
 
             CustomerRequestMapper.makeCustomerRequest(currentUser, height, width, length, date, connectionPool);
             currentUser.setHaveRequest(true);
-            ctx.redirect("/carport-offer-sent.html");
+            ctx.render("carport-offer-sent.html");
 
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());

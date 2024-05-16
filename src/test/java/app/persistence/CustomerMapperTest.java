@@ -56,8 +56,8 @@ public class CustomerMapperTest {
         int phoneNumber = 123456789;
 
         try {
-            CustomerMapper.createUser(email, password, firstName, lastName, zip, address, phoneNumber, connectionPool);
-            assertTrue(true);
+            int customerId = CustomerMapper.createUser(email, password, firstName, lastName, zip, address, phoneNumber, connectionPool);
+            assertEquals(2, customerId);
         } catch (DatabaseException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
