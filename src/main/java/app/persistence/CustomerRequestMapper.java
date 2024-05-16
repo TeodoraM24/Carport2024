@@ -134,7 +134,7 @@ public class CustomerRequestMapper {
      * @return Returns a list the requested customer request
      * @throws DatabaseException Handles database error
      */
-   /* 
+   
     public static void makeCustomerRequest(Customer currentUser, int height, int width, int length, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
         if (customerIdAlreadyHasRequest(connectionPool, currentUser.getCustomer_request_id())) {
             throw new DatabaseException("Der findes allerede en forspørgsel");
