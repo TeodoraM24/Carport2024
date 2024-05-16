@@ -33,7 +33,7 @@ public class MaterialMapper {
                 int height = rs.getInt("height");
                 int width = rs.getInt("width");
                 int length = rs.getInt("length");
-                int price = rs.getInt("price");
+                double price = rs.getDouble("price");
                 materials.add(new Material(materialId, description, height, width, length, price));
             }
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class MaterialMapper {
                 int height = rs.getInt("height");
                 int width = rs.getInt("width");
                 int length = rs.getInt("length");
-                int price = rs.getInt("price");
+                double price = rs.getDouble("price");
                 material = new Material(id, description, height, width, length, price);
             }
         }
@@ -87,10 +87,10 @@ public class MaterialMapper {
      * @param connectionPool  ConnectionPool used to insert cupcake id in database table basket
      * @throws DatabaseException Displays "Fejl under indsætning af materiale:" + system msg and "Fejl i DB connection" + system msg
      */
-    public static void addMaterial(String description, int height, int width, int length, int price, ConnectionPool connectionPool) throws DatabaseException {
-        Material newMaterial = null;
+    public static int addMaterial(String description, int height, int width, int length, double price, ConnectionPool connectionPool) throws DatabaseException {
 
-        String sql = "INSERT INTO material (material_description, height, width, length, price) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO material (material_description, height, width, length, price) VALUES (?,?,?,?,?)" +
+                "ON CONFLICT (material_description, height, width, length, price) DO NOTHING";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -100,14 +100,14 @@ public class MaterialMapper {
             ps.setInt(2, height);
             ps.setInt(3, width);
             ps.setInt(4, length);
-            ps.setInt(5, price);
+            ps.setDouble(5, price);
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 1) {
                 ResultSet rs = ps.getGeneratedKeys();
                 rs.next();
-                int newId = rs.getInt(1);
+                return rs.getInt(1);
             } else {
-                throw new DatabaseException("Fejl under indsætning af materiale: " + description);
+                return -1;
             }
         } catch (SQLException e) {
             throw new DatabaseException("Fejl i DB connection", e.getMessage());
@@ -152,7 +152,7 @@ public class MaterialMapper {
      * @param connectionPool  ConnectionPool used to update material in material table in database
      * @throws DatabaseException Displays "Fejl i opdatering af en materiale" + system msg
      */
-    public static void updateMaterial(int materialId, String description, int height, int width, int length, int price, ConnectionPool connectionPool) throws DatabaseException {
+    public static void updateMaterial(int materialId, String description, int height, int width, int length, double price, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "UPDATE material SET material_description = ?, height = ?, width = ?, length = ?, price = ? WHERE material_id = ?";
         try (
                 Connection connection = connectionPool.getConnection();
@@ -162,7 +162,7 @@ public class MaterialMapper {
             ps.setInt(2, height);
             ps.setInt(3, width);
             ps.setInt(4, length);
-            ps.setInt(5, price);
+            ps.setDouble(5, price);
             ps.setInt(6, materialId);
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
@@ -170,6 +170,31 @@ public class MaterialMapper {
             }
         } catch (SQLException e) {
             throw new DatabaseException("Error updating material: " + e.getMessage());
+        }
+    }
+
+    public static int getMaterialIdByData(String description, int height, int width, int length, double price, ConnectionPool connectionPool) throws DatabaseException{
+        String sql = "SELECT material_id FROM material WHERE material_description = ? " +
+                "AND height = ? AND width = ? AND length = ? AND price = ?;";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ){
+            ps.setString(1, description);
+            ps.setInt(2, height);
+            ps.setInt(3, width);
+            ps.setInt(4, length);
+            ps.setDouble(5, price);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("material_id");
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB: SQL SELECT error in getMaterialIdByData", e.getMessage());
         }
     }
 }

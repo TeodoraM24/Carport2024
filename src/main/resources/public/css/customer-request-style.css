@@ -1,0 +1,317 @@
+.customer-request-title {
+    font-size: 1.8em;
+    margin-left: 20vh;
+    padding-top: 0.5em;
+    margin-bottom: 0;
+}
+
+.customer-name {
+    color: black;
+}
+
+.carport-title {
+    font-size: 2em;
+    font-weight: 800;
+}
+
+.measurement-container, .roof-container {
+    height: 50px;
+}
+
+.button-container, .measurement-container, .roof-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-container {
+    height: 100px;
+}
+
+.return-button, .save-button, .cancel-button, .calculate-button, .cautious-button, .blue-button {
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.return-button, .blue-button {
+    background-color: rgb(47, 75, 184);
+}
+
+.save-button, .cancel-button {
+    background-color: grey;
+}
+
+.calculate-button {
+    background-color: #6CE34F;
+}
+
+#height-title, #length-title, #width-title{
+    font-size: 1.8em;
+    font-weight: 450;
+}
+
+.input-measurement {
+    font-size: 30px;
+    margin-left: 10px;
+    width: 100px;
+    height: 25px;
+   text-align: right;
+}
+
+.roof-title {
+    font-weight: lighter;
+}
+
+.materials-table-container {
+    margin-top: 15px;
+}
+
+.materials-table-container, .price-container {
+    width: 85%;
+    height: 50vh;
+}
+
+.container {
+    flex-direction: column;
+}
+
+.materials-table-container {
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    position: relative;
+    border-collapse: collapse;
+    background-color: lightgray;
+    table-layout: fixed;
+}
+
+th, td {
+    padding: 0.25rem;
+}
+
+tr.header th {
+    background: darkblue;
+    color: white;
+}
+
+tr {
+    height: 60px;
+}
+
+tr:hover {
+    background-color: darkgray;
+}
+
+th {
+    background: white;
+    position: sticky;
+    top: 0; /* Don't forget this, required for the stickiness */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
+
+#delete-material {
+    width: 50px;
+}
+
+#material-id {
+    width: 70px;
+}
+
+#material-desc {
+    width: 450px;
+}
+
+#additional-text {
+    width: 350px;
+}
+
+.material-size, #amount {
+    width: 150px;
+}
+
+#total-price {
+    width: 200px;
+}
+
+th, td {
+    border: 1px solid white;
+}
+
+td {
+    font-size: 1em;
+}
+
+.remove-button {
+    width: 100%;
+    background-color: white;
+    font-size: 2em
+}
+
+.remove-button:hover {
+    background-color: red;
+}
+
+textarea {
+    font-size: 1.2em;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    background-color: lightgray;
+    border-style: none;
+}
+
+.select-size {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: lightgray;
+    border-style: none;
+    text-align: center;
+}
+
+.select-size:focus, .input-amount-size:focus, textarea:focus, .input-price-size:focus, .input-new-price:focus,
+.input-measurement-size {
+    background-color: white;
+}
+
+.input-amount-size, .input-price-size, .input-measurement-size {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    background-color: lightgray;
+    font-size: 1.2em;
+    border-style: none;
+    text-align: center;
+}
+
+.input-amount-size {
+    width: 50%;
+}
+
+.input-measurement-size {
+    width: 70%;
+}
+
+
+.input-price-size {
+    width: 70%;
+}
+
+.price-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Align items at the top */
+    flex-direction: row;
+}
+
+.display-price-container {
+    height: 100%;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Align items at the top */
+}
+
+.display-buttons-container {
+    height: 100%;
+    width: 20%;
+    flex-direction: column;
+    padding-top: 50px;
+}
+
+.display-coverage, .display-price-offer {
+    width: 60vh;
+    height: 80%;
+    background-color: white;
+    font-family: Arial, sans-serif;
+}
+
+.display-coverage {
+    margin-right: 10vh;
+    text-align: center;
+}
+
+.display-price-offer {
+    margin-left: 10vh;
+    text-align: center;
+}
+
+.display-title {
+    font-size: 1.2em;
+    font-weight: bolder;
+}
+
+.display-green-title {
+    color: green;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.display-purchase-price {
+    margin-top: 5px;
+    padding-top: 0;
+    padding-bottom: 7px;
+    font-size: 1em;
+    border-bottom: double black;
+}
+
+.display-coverage-amount {
+    color: red;
+    font-size: 1.5em;
+}
+
+.display-price {
+    font-size: 1em;
+    padding: 2px;
+    margin: 0;
+}
+
+.input-new-price {
+    font-size: 1.1em;
+    text-align: right;
+    height: 25px;
+    background-color: lightgray;
+}
+
+.cautious-button {
+    background-color: #E0E34F;
+}
+
+.blue-button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#save, #cancel {
+    visibility: hidden;
+}
+
+.measurement-number {
+    font-size: 1.2em;
+    width: 100%;
+    text-align: right;
+}
+
+.offer-sent-title {
+    font-size: 2em;
+    margin-bottom: 2em;
+}

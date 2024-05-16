@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MaterialMapperTest {
 
     private static final String USER = "postgres";
-    private static final String PASSWORD = "HigAbt60ig";
-    private static final String URL = "jdbc:postgresql://161.35.195.156/%s?currentSchema=public";
+    private static final String PASSWORD = "postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
     private static final String DB = "carport_test";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
@@ -26,6 +26,7 @@ public class MaterialMapperTest {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
                 // Remove all rows from relevant tables
+                stmt.execute("DELETE FROM parts_list_item");
                 stmt.execute("DELETE FROM material");
 
                 // Reset the sequence number
@@ -86,5 +87,33 @@ public class MaterialMapperTest {
         assertEquals(700, materials.get(3).getWidth());
         assertEquals(620, materials.get(3).getLength());
         assertEquals(240, materials.get(3).getPrice());
+    }
+
+    @Test
+    void testGetMaterialIdByDataInvalid() throws DatabaseException {
+        int expectedId = -1;
+        int height = 300;
+        int totalPrice = (height / 100) * 35;
+        int postLengthMM = 97;
+        int postWidthMM = 97;
+        String postDesc = postLengthMM + "x" + postWidthMM + " mm. trykimp. Stolpe";
+
+        int actualMaterial = MaterialMapper.getMaterialIdByData(postDesc, height, postWidthMM, postLengthMM, totalPrice, connectionPool);
+
+        assertEquals(expectedId, actualMaterial);
+    }
+
+    @Test
+    void testGetMaterialIdByDataValid() throws DatabaseException {
+        int expectedId = 5;
+        int height = 300;
+        int totalPrice = (height / 100) * 35;
+        int postLengthMM = 97;
+        int postWidthMM = 97;
+        String postDesc = postLengthMM + "x" + postWidthMM + " mm. trykimp. Stolpe";
+
+        MaterialMapper.addMaterial(postDesc, height, postWidthMM, postLengthMM, totalPrice, connectionPool);
+        int actualMaterial = MaterialMapper.getMaterialIdByData(postDesc, height, postWidthMM, postLengthMM, totalPrice, connectionPool);
+        assertEquals(expectedId, actualMaterial);
     }
 }

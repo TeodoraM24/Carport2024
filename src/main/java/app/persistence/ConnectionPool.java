@@ -18,6 +18,7 @@ public class ConnectionPool
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
     private static final String DB = "carport_test";
+    private static final String DB = "carport";
 
     public static ConnectionPool instance = null;
     public static HikariDataSource ds = null;

@@ -35,7 +35,7 @@ public class MaterialController {
             int height = Integer.parseInt(ctx.formParam("height"));
             int width = Integer.parseInt(ctx.formParam("width"));
             int length = Integer.parseInt(ctx.formParam("length"));
-            int price = Integer.parseInt(ctx.formParam("price"));
+            double price = Double.parseDouble(ctx.formParam("price"));
 
             MaterialMapper.updateMaterial(materialId, description, height, width, length, price, connectionPool);
 
@@ -101,7 +101,7 @@ public class MaterialController {
         int height = Integer.parseInt(ctx.formParam("height"));
         int width = Integer.parseInt(ctx.formParam("width"));
         int length = Integer.parseInt(ctx.formParam("length"));
-        int price = Integer.parseInt(ctx.formParam("price"));
+        double price = Double.parseDouble(ctx.formParam("price"));
 
         try {
             MaterialMapper.addMaterial(description, height, width, length, price, connectionPool);
