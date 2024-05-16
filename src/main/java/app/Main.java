@@ -4,9 +4,7 @@ import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
 import app.controllers.*;
 import app.persistence.ConnectionPool;
-import app.persistence.InvoiceMapper;
 import io.javalin.Javalin;
-import io.javalin.http.Context;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
 
@@ -30,8 +28,8 @@ public class Main {
         CustomerController.addRoutes(app, ConnectionPool.getInstance());
         SvgController.addRoutes(app, ConnectionPool.getInstance());
 
-        //app.get("/", ctx -> displaySvg(ctx, ConnectionPool.getInstance())); // uncomment this if want to try Svg
-        // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
+        //app.get("/", ctx -> SvgController.displaySvg(ctx, ConnectionPool.getInstance())); // uncomment this if want to try Svg
+         //app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
         // app.get("/", ctx ->  ctx.render("login-page.html")); // uncomment this is want to try login/createuser
         AdminController.addRoutes(app, ConnectionPool.getInstance());
         LoginController.addRoutes(app, ConnectionPool.getInstance());

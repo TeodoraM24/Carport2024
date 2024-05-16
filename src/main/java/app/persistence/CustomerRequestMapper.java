@@ -35,7 +35,7 @@ public class CustomerRequestMapper {
                 LocalDate date = sqlDate.toLocalDate();
                 String status = rs.getString("status");
 
-                CustomerRequest customerRequest = new CustomerRequest(customerRequestId, date, length, height, width, status);
+                CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);
                 customerRequests.add(customerRequest);
             }
         } catch (SQLException e) {
