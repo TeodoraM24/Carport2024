@@ -3,7 +3,6 @@ package app.persistence;
 import app.entities.Customer;
 import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
-import io.javalin.http.Context;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +18,36 @@ import java.util.List;
 
 public class CustomerRequestMapper {
 
+    public static List<CustomerRequest> getAllCustomerRequests(int customerId, ConnectionPool connectionPool) throws DatabaseException {
+        List<CustomerRequest> customerRequests = new ArrayList<>();
+        String sql = "SELECT * FROM customer_request WHERE customer_request_id = ?";
+
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, customerId);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int customerRequestId = rs.getInt("customer_request_id");
+                int length = rs.getInt("length");
+                int height = rs.getInt("height");
+                int width = rs.getInt("width");
+                String tileType = rs.getString("tile_type");
+                java.sql.Date sqlDate = rs.getDate("date");
+                LocalDate date = sqlDate.toLocalDate();
+                String status = rs.getString("status");
+
+                CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);
+                customerRequests.add(customerRequest);
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Error retrieving customer requests from the database", e.getMessage());
+        }
+        return customerRequests;
+    }
+
     /**
      * This method retrives all customer requests from the database
      *
@@ -26,13 +55,11 @@ public class CustomerRequestMapper {
      * @return Returns a list of Customer Requests
      * @throws DatabaseException Handles database error
      */
-
     public static List<CustomerRequest> getAllCustomerRequest(ConnectionPool connectionPool) throws DatabaseException {
         List<CustomerRequest> customerRequests = new ArrayList<>();
         String sql = "SELECT cr.customer_request_id, cr.length, cr.width, cr.height, cr.date, cr.status, cr.tile_type, c.first_name, c.last_name, c.customer_id " +
                 "FROM customer_request cr " +
                 "JOIN customer c ON cr.customer_request_id = c.customer_request_id";
-
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -50,7 +77,7 @@ public class CustomerRequestMapper {
                     String lastName = rs.getString("last_name");
                     int customerId = rs.getInt("customer_id");
 
-                    Customer customer = new Customer(firstName, lastName, customerId);
+                    Customer customer = new Customer(customerId, firstName, lastName);
 
                     CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status, customer);
                     customerRequests.add(customerRequest);
@@ -105,26 +132,7 @@ public class CustomerRequestMapper {
      * @return Returns a list the requested customer request
      * @throws DatabaseException Handles database error
      */
-    public static void makeCustomerRequest(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Customer currentUser = ctx.sessionAttribute("currentUser");
-
-        if (currentUser == null) {
-            ctx.redirect("/login-page.html");
-            ctx.attribute("message", "Du skal logge ind før du kan bestille en forespørgsel");
-            return;
-        }
-
-        if (currentUser.isHaveRequest()) {
-            ctx.redirect("/customer-info-page.html");
-            ctx.attribute("message", "Du har allerede bestilt en forespørgsel, vent venligst på vi vender tilbage");
-            return;
-        }
-
-        LocalDate date = LocalDate.now();
-        int height = Integer.parseInt(ctx.formParam("carport-height"));
-        int width = Integer.parseInt(ctx.formParam("carport-width"));
-        int length = Integer.parseInt(ctx.formParam("carport-length"));
-
+    public static void makeCustomerRequest(Customer currentUser, int height, int width, int length, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
         String insertCustomerRequestQuery = "INSERT INTO customer_request (length, width, height, date) VALUES (?, ?, ?, ?)";
         String insertAdminCustomerRequestQuery = "INSERT INTO admin_customer_request (customer_request_id) VALUES (?)";
         String updateCustomerQuery = "UPDATE customer SET customer_request_id = ? WHERE customer_id = ?";
@@ -148,6 +156,7 @@ public class CustomerRequestMapper {
             if (!rs.next()) {
                 throw new DatabaseException("Failed to retrieve generated key for customer request");
             }
+
             int customerRequestId = rs.getInt(1);
 
             insertAdminCustomerRequestStatement.setInt(1, customerRequestId);
@@ -156,11 +165,6 @@ public class CustomerRequestMapper {
             updateCustomerStatement.setInt(1, customerRequestId);
             updateCustomerStatement.setInt(2, currentUser.getCustomerId());
             updateCustomerStatement.executeUpdate();
-
-            currentUser.setHaveRequest(true);
-
-            ctx.redirect("/carport-offer-sent.html");
-
         } catch (SQLException e) {
             throw new DatabaseException("Failed to make customer request", e.getMessage());
         }

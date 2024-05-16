@@ -1,7 +1,5 @@
 package app.entities;
 
-import java.util.Objects;
-
 public class Customer {
     private int customerId;
     private String email;
@@ -28,7 +26,7 @@ public class Customer {
         this.role = role;
     }
 
-    public Customer(String firstName, String lastName, int customerId){
+    public Customer(int customerId, String firstName, String lastName){
         this.firstName = firstName;
         this.lastName = lastName;
         this.customerId = customerId;
@@ -147,4 +145,3 @@ public class Customer {
     }
 
 }
-

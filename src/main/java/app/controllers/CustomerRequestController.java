@@ -9,9 +9,7 @@ import app.persistence.CustomerRequestMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,12 +26,28 @@ public class CustomerRequestController {
      */
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("/customer-request-status", ctx -> getAllCustomerRequests(ctx, connectionPool));
         app.get("/carport-index", ctx -> ctx.render("carport-index.html"));
         app.get("/carport-form", ctx -> ctx.render("carport-form.html"));
         app.get("/customer-info-page", ctx -> ctx.render("customer-info-page.html"));
         app.get("/login-page", ctx -> ctx.render("login-page.html"));
         app.post("/carport-offer-sent", ctx -> ctx.render("carport-offer-sent.html"));
         app.post("/make-customer-request", ctx -> makeCustomerRequest(ctx, connectionPool));
+    }
+
+    public static void getAllCustomerRequests(Context ctx, ConnectionPool connectionPool) {
+        try {
+
+            Customer currentUser = ctx.sessionAttribute("currentUser");
+            currentUser.getCustomerId();
+
+
+            List<CustomerRequest> customerRequests = CustomerRequestMapper.getAllCustomerRequests(currentUser.getCustomerId(), connectionPool);
+
+            ctx.json(customerRequests);
+        } catch (DatabaseException e) {
+            ctx.status(500).result("Error retrieving customer requests: " + e.getMessage());
+        }
     }
 
     /**
@@ -61,50 +75,19 @@ public class CustomerRequestController {
 
 
         try {
-            CustomerRequestMapper.makeCustomerRequest(ctx, connectionPool);
+            LocalDate date = LocalDate.now();
+            int height = Integer.parseInt(ctx.formParam("carport-height"));
+            int width = Integer.parseInt(ctx.formParam("carport-width"));
+            int length = Integer.parseInt(ctx.formParam("carport-length"));
+
+            CustomerRequestMapper.makeCustomerRequest(currentUser, height, width, length, date, connectionPool);
             currentUser.setHaveRequest(true);
             ctx.redirect("/carport-offer-sent.html");
+
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("carport-form.html");
         }
-    }
-
-    public static List<CustomerRequest> getAllCustomerRequestWithCustomer(ConnectionPool connectionPool) throws DatabaseException {
-
-        List<CustomerRequest> customerRequestsWithCustomer = new ArrayList<>();
-
-        String sql = "SELECT cr.customer_request_id, cr.length, cr.width, cr.height, cr.date, cr.status, cr.tile_type, c.first_name, c.last_name, c.customer_id " +
-                "FROM customer_request cr " +
-                "JOIN customer c ON cr.customer_id = c.customer_id";
-
-
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int customerRequestId = rs.getInt("customer_request_id");
-                int height = rs.getInt("height");
-                int width = rs.getInt("width");
-                int length = rs.getInt("length");
-                LocalDate date = rs.getDate("date").toLocalDate();
-                String status = rs.getString("status");
-                String tileType = rs.getString("tile_type");
-                String firstName = rs.getString("first_name");
-                String lastName = rs.getString("last_name");
-                int customerId = rs.getInt("customer_id");
-
-                Customer customer = new Customer(firstName, lastName, customerId);
-
-                customerRequestsWithCustomer.add(new CustomerRequest(customerRequestId, height, width, length, tileType, date, status, customer));
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("Fejl under indhentelse af kunde forespørgsler", e.getMessage());
-        }
-        System.out.println("Customer Requests with Customers: " + customerRequestsWithCustomer);
-        return customerRequestsWithCustomer;
     }
 
     /**

@@ -25,18 +25,20 @@ public class CustomerRequestMapperTest {
     private static final String USER ="postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "carport_test_local";
+    private static final String DB = "carport_test";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
    @BeforeEach
     void setup() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
-
-                stmt.executeUpdate("DELETE FROM customer_request");
+                stmt.execute("DELETE FROM public.admin_customer_request");
+                stmt.execute("DELETE FROM customer_request");
+                stmt.execute("DELETE FROM admin");
 
                 // Reset sequence number for customer_request_id (assuming it's an auto-incremented sequence)
                 stmt.executeUpdate("ALTER SEQUENCE customer_request_customer_request_id_seq RESTART WITH 1");
+                stmt.execute("SELECT setval('public.admin_admin_id_seq', 1, false)");
 
                 // Delete all records from customer
                 stmt.executeUpdate("DELETE FROM customer");
@@ -45,10 +47,12 @@ public class CustomerRequestMapperTest {
                 stmt.executeUpdate("ALTER SEQUENCE customer_customer_id_seq RESTART WITH 1");
 
                 // Insert rows
+                stmt.execute("INSERT INTO admin(email, password) VALUES ('admin@admin.dk', 'admin')");
                 stmt.execute("INSERT INTO customer_request (length, width, height, date) VALUES " +
                         "(7, 5, 3, CURRENT_DATE)");
                 stmt.execute("INSERT INTO customer_request (length, width, height, date) VALUES " +
                         "(8, 4, 3, CURRENT_DATE)");
+                stmt.execute("INSERT INTO admin_customer_request (admin_id, customer_request_id) VALUES (1,2)");
 
                 stmt.execute("INSERT INTO customer (first_name, last_name, email, password, phonenumber, address, zip, customer_request_id) VALUES " +
                         "('Morten', 'Hvor blev du af', 'email@email.dk', '1234', 12345678, 'Vejen 2', 2770, 1)");
@@ -92,22 +96,21 @@ public class CustomerRequestMapperTest {
         CustomerRequest expected = new CustomerRequest(1, 7, 5, 3, "Plasttrapezplader",localDate, "Afventer");
         CustomerRequest actual = new CustomerRequestMapper().getCustomerRequestById(firstCustomerRequestId, connectionPool);
 
-        assertEquals(expected.getLength(), actual.getLength());
-        assertEquals(expected.getHeight(), actual.getHeight());
-        assertEquals(expected.getWidth(), actual.getWidth());
-        assertEquals(expected.getTileType(), actual.getTileType());
+        assertEquals(expected.getRequestLength(), actual.getRequestLength());
+        assertEquals(expected.getRequestHeight(), actual.getRequestHeight());
+        assertEquals(expected.getRequestWidth(), actual.getRequestWidth());
+        assertEquals(expected.getRequestTileType(), actual.getRequestTileType());
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getDate(), actual.getDate());
         assertEquals(expected.getStatus(), actual.getStatus());
     }
 
-/*
    @Test
     void deleteCustomerRequest() throws DatabaseException {
         CustomerRequestMapper.deleteCustomerRequest(1, connectionPool);
-        assertEquals(0, new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size());
+        assertEquals(1, new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size());
     }
-
+/*
     @Test
     void makeCustomerRequest() throws DatabaseException {
         // 1. Prepare Data
@@ -115,12 +118,19 @@ public class CustomerRequestMapperTest {
         int initialSize = new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size();
 
         // 2. Invoke the Method
-        CustomerRequestMapper.makeCustomerRequest(connectionPool);
+        Customer currentCustomer = new Customer(1, "test", "123", 1234, "first", "last", "test", 2770, "Customer");
+        LocalDate date = LocalDate.now();
+        int height = 300;
+        int width = 400;
+        int length = 600;
+        CustomerRequestMapper.makeCustomerRequest(currentCustomer, height, width, length, date, connectionPool);
 
         // 3. Assertion
         int updatedSize = new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size();
         assertEquals(initialSize + 1, updatedSize);
-    }*/
+    }
+
+ */
 
 
     @Test
@@ -133,11 +143,22 @@ public class CustomerRequestMapperTest {
 
         CustomerRequest updatedRequest = new CustomerRequestMapper().getCustomerRequestById(firstCustomerRequestId, connectionPool);
 
-        assertEquals(9, updatedRequest.getLength());
-        assertEquals(9, updatedRequest.getHeight());
-        assertEquals(9, updatedRequest.getWidth());
+        assertEquals(9, updatedRequest.getRequestLength());
+        assertEquals(9, updatedRequest.getRequestHeight());
+        assertEquals(9, updatedRequest.getRequestWidth());
         assertEquals(localDate, updatedRequest.getDate());
         assertEquals("Klar", updatedRequest.getStatus());
+    }
+
+    @Test
+    void testGetAllCustomerRequests() {
+        int customerId = 1;
+        try {
+            List<CustomerRequest> customerRequests = CustomerRequestMapper.getAllCustomerRequests(customerId, connectionPool);
+            assertNotNull(customerRequests);
+        } catch (DatabaseException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
     }
 
 }
