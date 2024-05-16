@@ -132,7 +132,7 @@ public class PartsListCalculator {
     }
 
     public int calcAmountOfRafters(int rafterWidthMM) {
-        int spaceBetweenCM = 55;
+        double spaceBetweenCM = 55.0;
         double rafterWidthCM = rafterWidthMM/10.0;
         return (int) Math.ceil(carportLength / (spaceBetweenCM + rafterWidthCM));
     }
