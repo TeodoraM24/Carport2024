@@ -1,25 +1,12 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: rgba(218, 238, 253, 1);
+.title{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+    text-align: left;
+    margin-bottom: 5px;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: calc(100vh - 60px);
-    padding-top: 20px;
-}
-
-
-
-h1 {
-    margin-bottom: 10px;
-}
-
-h3 {
+.title3 {
+    text-align: left;
     margin-top: 0;
     margin-bottom: 10px;
 }
@@ -88,5 +75,8 @@ th {
 .deny-button:hover {
     background-color: #da190b;
 }
+
+
+
 
 
