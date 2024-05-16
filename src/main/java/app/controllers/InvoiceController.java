@@ -14,13 +14,16 @@ import java.util.List;
 public class InvoiceController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> {
+        /*app.get("/", ctx -> {
             ctx.render("customer-info-frontpage.html");
-        });
+        });*/
+
         app.get("backToInfoPage", ctx -> {
             ctx.redirect("customer-info-frontpage.html");
         });
+
         app.get("viewOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
+
         app.get("viewInvoiceDetails/{invoiceid}", ctx -> {
             //get invoiceId
             int id = Integer.parseInt(ctx.pathParam("invoiceid"));

@@ -4,10 +4,7 @@ import app.entities.Admin;
 import app.entities.Customer;
 import app.exceptions.DatabaseException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class CustomerMapper {
     public static Customer logInd(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
@@ -43,12 +40,12 @@ public class CustomerMapper {
         }
     }
 
-    public static void createUser(String email, String password, String firstName, String lastName, int zip, String address, int phoneNumber, ConnectionPool connectionPool) throws DatabaseException {
+    public static int createUser(String email, String password, String firstName, String lastName, int zip, String address, int phoneNumber, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO customer (email, password, first_name, last_name, zip, address, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, email);
             ps.setString(2, password);
@@ -59,7 +56,11 @@ public class CustomerMapper {
             ps.setInt(7, phoneNumber);
 
             int rowsAffected = ps.executeUpdate();
-            if (rowsAffected != 1) {
+            if (rowsAffected == 1) {
+                ResultSet rs = ps.getGeneratedKeys();
+                rs.next();
+                return rs.getInt(1);
+            } else {
                 throw new DatabaseException("Fejl ved oprettelse af ny bruger");
             }
         } catch (SQLException e) {
