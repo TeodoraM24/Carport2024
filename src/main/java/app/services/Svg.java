@@ -41,15 +41,32 @@ public class Svg {
      * @param carportWidth the chosen carport Width
      */
     public Svg(int x, int y, String viewBox, String width, int carportLength, int carportWidth) {
+
+        //Appending outer SVG for measurement lines and arrows
         svg.append(String.format(SVG_TEMPLATE, x, y, viewBox, width));
         svg.append(SVG_ARROW_DEFS);
-        addLine(40, 10, 40, carportWidth + 10, "stroke:#000000");
-        addLine(75, carportWidth + 50, carportLength + 75, carportWidth + 50, "stroke:#000000");
-        addArrow(40, 10, 40, carportWidth + 10, "stroke:#000000");
-        addArrow(75, carportWidth + 50, carportLength + 75, carportWidth + 50, "stroke:#000000");
-        addText(30, carportWidth * 0.5, -90, carportWidth + " cm");
-        addText(carportLength * 0.5 + 75, carportWidth + 75, 0, carportLength + " cm");
-        svg.append(String.format(SVG_INNER_SVG, 75, 10, carportLength + 20, carportWidth, "0 0 " + carportLength + " " + carportWidth));
+
+        //Vertical line, arrow and text for measurement
+        int vLineX = 30;
+        int vLineY = vLineX - 20;
+        String vLineStyle = "stroke:#000000";
+        //Horisontal line, arrow and text for measurement
+        int hLineX = vLineX + 35;
+        int hLineY = vLineY + 40;
+        String hLineStyle = "stroke:#000000";
+
+        //Vertical measurement
+        addLine(vLineX, vLineY, vLineX, carportWidth + vLineY, vLineStyle);
+        addArrow(vLineX, vLineY, vLineX, carportWidth + vLineY, vLineStyle);
+        addText(vLineX - 10, carportWidth * 0.5 + vLineY, -90, carportWidth + " cm");
+
+        //Horisontal measurement
+        addLine(hLineX, carportWidth + hLineY, carportLength + hLineX, carportWidth + hLineY, hLineStyle);
+        addArrow(hLineX, carportWidth + hLineY, carportLength + hLineX, carportWidth + hLineY, hLineStyle);
+        addText(carportLength * 0.5 + hLineX, carportWidth + hLineX, 0, carportLength + " cm");
+
+        // appending inner SVG for carport drawing
+        svg.append(String.format(SVG_INNER_SVG, hLineX, vLineY, carportLength + 20, carportWidth, "0 0 " + carportLength + " " + carportWidth));
     }
 
     /***
