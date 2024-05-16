@@ -9,38 +9,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CustomerMapper {
-    public static Customer logInd(String email, String password, ConnectionPool connectionPool) throws DatabaseException
-    {
+    public static Customer logInd(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM public.\"customer\" WHERE email=? AND password=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
-        )
-        {
+        ) {
             ps.setString(1, email);
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
-            {
+            if (rs.next()) {
                 int id = rs.getInt("customer_id");
                 String role = rs.getString("role");
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
                 String address = rs.getString("address");
                 int zip = rs.getInt("zip");
-                int phoneNumber=rs.getInt("phonenumber");
-
+                int phoneNumber = rs.getInt("phonenumber");
 
 
                 return new Customer(id, email, password, phoneNumber, firstName, lastName, address, zip, role);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DatabaseException("DB fejl", e.getMessage());
         }
     }
