@@ -28,6 +28,12 @@ public class Customer {
         this.role = role;
     }
 
+    public Customer(String firstName, String lastName, int customerId){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.customerId = customerId;
+    }
+
     public int getCustomerId() {
         return customerId;
     }
