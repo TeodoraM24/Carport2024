@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<head th:fragment="common_header(title,links)">
-    <title th:replace="${title}">FOG Carport Hjemmeside</title>
+<head th:fragment="common_header(title, links)">
+    <title th:text="${title}">FOG Carport Hjemmeside</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../../public/css/header-style.css" th:href="@{/css/header-style.css}" rel="stylesheet"/>
@@ -11,9 +11,9 @@
 
 <body>
 <div class="main-header">
-        <div class="header-left">
-            <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
-        </div>
+    <div class="header-left">
+        <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
+    </div>
 
     <div class="header-right">
         <div class="fog-konto">

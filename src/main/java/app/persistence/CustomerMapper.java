@@ -70,5 +70,4 @@ public class CustomerMapper {
             throw new DatabaseException(msg, e.getMessage());
         }
     }
-
 }

@@ -1,54 +1,27 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
-<title>Startside</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/carport-index.css" th:href="@{/css/starside.css}" rel="stylesheet"/>
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Velkommen til Fog</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/carport-index.css" th:href="@{/css/carport-index.css}" rel="stylesheet"/>
+    <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
 </head>
+
 <body>
-<div class="main-header">
-
-    <div class="header-left">
-        <img src="../public/images/fog-logo.png" th:src="@{/images/Fog_logo.png}" alt="Fog Logo">
-    </div>
-
-    <div class="header-right">
-
-        <div class="fog-konto">
-            <a href="createuser.html" th:href="@{/createuser}">
-                <img src="../public/images/fog-konto.png" th:src="@{/images/Fog_konto.png}" alt="Fog Konto">
-                <span>Fog Konto</span>
-            </a>
-        </div>
-
-        <div class="dropdown">
-            <div class="dropdown-img">
-                <img src="../public/images/menu-icon.PNG" alt="Menu Icon">
-                <span>Menu</span>
-            </div>
-            <div class="dropdown-content">
-                <a href="#">Konto</a>
-                <a href="#">Kontakt</a>
-                <a href="#">Log ud</a>
-            </div>
-        </div>
-    </div>
-
-
-</div>
+<div th:replace="~{fragments/header :: div.main-header}"></div>
 
 <div class="body-background">
     <div class="body">
         <div class="standard-carport">
 
-        <div class="standard-carport-button-side">
-            <span>Standard carport</span>
-            <br>
-            <button class="carport-button" onclick="window.location.href='index.html'">Se udvalget &#8594;</button>
-        </div>
+            <div class="standard-carport-button-side">
+                <span>Standard carport</span>
+                <br>
+                <button class="carport-button" onclick="window.location.href='index.html'">Se udvalget &#8594;</button>
+            </div>
             <div class="standard-carport-img-side">
-                <img src="../public/images/standard_carport.PNG" th src="@{/images/standard_carport.png}" alt="Standard Carport">
+                <img src="../public/images/standard_carport.png" th:src="@{/images/standard_carport.png}" alt="Standard Carport">
             </div>
         </div>
 
@@ -58,14 +31,15 @@
             <div class="design-carport-button-side">
                 <span>Design din carport</span>
                 <br>
-                <button class="carport-button" onclick="window.location.href='your-carport.html'">Indtast mål &#8594;</button>
+                <button class="carport-button" onclick="window.location.href='/carport-form'">Indtast mål &#8594;</button>
+
             </div>
 
             <div class="design-carport-img-side">
-                <img src="../public/images/design_carport_2.png" th:src="@{/images/design_carport.png}" alt="Design Carport">
+                <img src="../public/images/design_carport.png" th:src="@{/images/design_carport.png}" alt="Design Carport">
             </div>
         </div>
-</div>
+    </div>
 </div>
 </body>
 </html>
