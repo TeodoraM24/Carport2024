@@ -24,9 +24,9 @@ public class OfferMapperTest {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
                 // Remove all rows from relevant tables
+                stmt.execute("DELETE FROM customer_invoice");
                 stmt.execute("DELETE FROM customer");
-                stmt.execute("DELETE FROM public.customer_invoice");
-                stmt.execute("DELETE FROM public.invoice");
+                stmt.execute("DELETE FROM invoice");
                 stmt.execute("DELETE FROM offer");
                 stmt.execute("DELETE FROM parts_list_parts_list_item");
                 stmt.execute("DELETE FROM parts_list");
@@ -34,7 +34,6 @@ public class OfferMapperTest {
                 stmt.execute("DELETE FROM material");
                 stmt.execute("DELETE FROM carport");
                 stmt.execute("DELETE FROM price");
-                stmt.execute("DELETE FROM customer_invoice");
                 stmt.execute("DELETE FROM customer_request");
 
                 // Reset the sequence number for offer

@@ -26,6 +26,7 @@ public class InvoiceMapperTest {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
                 // Remove all rows from relevant tables
+                stmt.execute("DELETE FROM public.admin_customer_request");
                 stmt.execute("DELETE FROM public.customer_invoice");
                 stmt.execute("DELETE FROM public.invoice");
                 stmt.execute("DELETE FROM public.parts_list_parts_list_item");

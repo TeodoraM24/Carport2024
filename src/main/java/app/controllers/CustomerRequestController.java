@@ -9,9 +9,7 @@ import app.persistence.CustomerRequestMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -77,9 +75,15 @@ public class CustomerRequestController {
 
 
         try {
-            CustomerRequestMapper.makeCustomerRequest(ctx, connectionPool);
+            LocalDate date = LocalDate.now();
+            int height = Integer.parseInt(ctx.formParam("carport-height"));
+            int width = Integer.parseInt(ctx.formParam("carport-width"));
+            int length = Integer.parseInt(ctx.formParam("carport-length"));
+
+            CustomerRequestMapper.makeCustomerRequest(currentUser, height, width, length, date, connectionPool);
             currentUser.setHaveRequest(true);
             ctx.redirect("/carport-offer-sent.html");
+
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("carport-form.html");

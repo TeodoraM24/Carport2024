@@ -19,24 +19,22 @@ public class Main {
         }).start(7070);
 
         // Routing
-        InvoiceController.addRoutes(app, ConnectionPool.getInstance());
-        AdminRequestController.addRoutes(app, ConnectionPool.getInstance());
-        AdminOfferController.addRoutes(app, ConnectionPool.getInstance());
-        MaterialController.addRoutes(app, ConnectionPool.getInstance());
-        CustomerController.addRoutes(app, ConnectionPool.getInstance());
-        SvgController.addRoutes(app, ConnectionPool.getInstance());
-        CustomerController.addRoutes(app, ConnectionPool.getInstance());
+        AdminController.addRoutes(app, ConnectionPool.getInstance());
         AdminCustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
+        AdminRequestController.addRoutes(app, ConnectionPool.getInstance());
+        CustomerController.addRoutes(app, ConnectionPool.getInstance());
         CustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
-        // Add routes and controllers
+        InvoiceController.addRoutes(app, ConnectionPool.getInstance());
+        LoginController.addRoutes(app, ConnectionPool.getInstance());
+        MaterialController.addRoutes(app, ConnectionPool.getInstance());
         OfferController.addRoutes(app, ConnectionPool.getInstance());
+        SvgController.addRoutes(app, ConnectionPool.getInstance());
+
 
         //app.get("/", ctx ->  ctx.render("admin-frontpage.html"));
         //app.get("/", ctx -> displaySvg(ctx, ConnectionPool.getInstance())); // uncomment this if want to try Svg
         // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
         // app.get("/", ctx ->  ctx.render("login-page.html")); // uncomment this is want to try login/createuser
-        AdminController.addRoutes(app, ConnectionPool.getInstance());
-        LoginController.addRoutes(app, ConnectionPool.getInstance());
-        CustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
+
     }
 }

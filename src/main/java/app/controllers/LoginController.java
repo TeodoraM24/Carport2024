@@ -30,7 +30,7 @@ public class LoginController {
             Customer customer = CustomerMapper.logInd(email, password, connectionPool);
             ctx.sessionAttribute("currentUser", customer);
             ctx.attribute("message", "Du er nu logget ind");
-            ctx.redirect("loginpage");
+            ctx.redirect("loginpage-customer");
         }
     }
 }
