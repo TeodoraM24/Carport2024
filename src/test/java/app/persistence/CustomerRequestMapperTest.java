@@ -114,10 +114,8 @@ public class CustomerRequestMapperTest {
 
     @Test
     void makeCustomerRequest() throws DatabaseException {
-        // Creating a new customer
         Customer currentCustomer = new Customer(0, "test@email.live.dk", "123", 87654321, "Johny", "Deluxe", "test", 2770,"customer");
-
-        // Inserting the customer into the database
+ 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement insertCustomerStatement = connection.prepareStatement("INSERT INTO customer (email, password, phonenumber, first_name, last_name, address, zip) VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
 
