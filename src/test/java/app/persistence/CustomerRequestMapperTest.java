@@ -22,8 +22,8 @@ public class CustomerRequestMapperTest {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);*/
 
     private static final String USER ="postgres";
-    private static final String PASSWORD = "HigAbt60ig";
-    private static final String URL = "jdbc:postgresql://161.35.195.156/%s?currentSchema=public";
+    private static final String PASSWORD = "postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
     private static final String DB = "carport_test";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
@@ -31,11 +31,13 @@ public class CustomerRequestMapperTest {
     void setup() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
+
                 stmt.execute("DELETE FROM customer_parts_list");
                 stmt.execute("DELETE FROM admin_customer_request");
                 stmt.execute("DELETE FROM customer_request");
                 stmt.execute("DELETE FROM admin");
                 stmt.execute("DELETE FROM customer");
+
 
                 // Reset sequence number for customer_request_id (assuming it's an auto-incremented sequence)
                 stmt.executeUpdate("ALTER SEQUENCE customer_request_customer_request_id_seq RESTART WITH 1");
@@ -60,6 +62,7 @@ public class CustomerRequestMapperTest {
 
                 stmt.execute("INSERT INTO customer (first_name, last_name, email, password, phonenumber, address, zip, customer_request_id) VALUES " +
                         "('Lars', 'Larsen', 'email@email.live.dk', '1234', 12345679, 'Vejen 3', 2770, 2)");
+
 
                 // Set sequence to continue from the largest member_id
                 //stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', COALESCE((SELECT MAX(customer_request_id)+1 FROM public.customer_request), 1), false)");

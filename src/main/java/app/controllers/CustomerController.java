@@ -29,7 +29,7 @@ public class CustomerController {
         String firstName = ctx.formParam("firstName");
         String lastName = ctx.formParam("lastName");
         int zip = Integer.parseInt(ctx.formParam("zip"));
-        int phoneNumber = Integer.parseInt(ctx.formParam("phoneNumber"));
+        int phonenumber = Integer.parseInt(ctx.formParam("phonenumber"));
         String address=ctx.formParam("address");
 
         if(EmailValidator.isValidEmail(email)) {
@@ -51,7 +51,7 @@ public class CustomerController {
 
         if (password1.equals(password2)) {
             try {
-                CustomerMapper.createUser(email, password1, firstName, lastName, zip, address, phoneNumber, connectionPool);
+                CustomerMapper.createUser(email, password1, firstName, lastName, zip, address, phonenumber, connectionPool);
                 ctx.attribute("message", "Du er hermed oprettet med e-mail: " + email + ". Nu skal du logge på.");
                 ctx.render("create-user-page.html"); //her
             } catch (DatabaseException e) {

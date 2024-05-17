@@ -33,21 +33,22 @@ public class CustomerRequestController {
         app.get("/customer-info-page", ctx -> ctx.render("customer-info-page.html"));
         app.post("/carport-offer-sent", ctx -> ctx.render("carport-offer-sent.html"));
         app.post("/make-customer-request", ctx -> makeCustomerRequest(ctx, connectionPool));
+        //app.get("showRequestStatus", ctx-> ctx.redirect("customer-request-status.html"));
+        app.get("showRequest", ctx -> getAllCustomerRequests(ctx,connectionPool));
     }
 
-    public static void getAllCustomerRequests(Context ctx, ConnectionPool connectionPool) {
-        try {
-
-            Customer currentUser = ctx.sessionAttribute("currentUser");
-            currentUser.getCustomerId();
+    public static void getAllCustomerRequests(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
 
-            List<CustomerRequest> customerRequests = CustomerRequestMapper.getAllCustomerRequests(currentUser.getCustomerId(), connectionPool);
+        Customer currentUser = ctx.sessionAttribute("currentUser");
+        currentUser.getCustomerId();
 
-            ctx.json(customerRequests);
-        } catch (DatabaseException e) {
-            ctx.status(500).result("Error retrieving customer requests: " + e.getMessage());
-        }
+
+        List<CustomerRequest> customerRequests = CustomerRequestMapper.getAllCustomerRequests(currentUser.getCustomerId(), connectionPool);
+            ctx.attribute("customerRequests", customerRequests);
+
+            ctx.render("customer-request-status.html");
+
     }
 
     /**

@@ -7,14 +7,16 @@ public class Offer {
     private String supportBeamDescSize;
     private String roofMaterials;
     private double totalPriceWithTax;
+    private String status;
 
-    public Offer(int offerId, String carportSize, String rafterTypeDesc, String supportBeamDescSize, String roofMaterials, double totalPriceWithTax) {
+    public Offer(int offerId, String carportSize, String rafterTypeDesc, String supportBeamDescSize, String roofMaterials, double totalPriceWithTax, String status) {
         this.offerId = offerId;
         this.carportSize = carportSize;
         this.rafterTypeDesc = rafterTypeDesc;
         this.supportBeamDescSize = supportBeamDescSize;
         this.roofMaterials = roofMaterials;
         this.totalPriceWithTax = totalPriceWithTax;
+        this.status=status;
     }
 
     public int getOfferId() {

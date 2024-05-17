@@ -17,7 +17,7 @@ import java.util.List;
 public class OfferController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-            app.get("/offer/{offerId}", ctx -> getOffer(ctx, connectionPool));
+            app.get("offer", ctx -> getOffer(ctx, connectionPool));
             app.post("/offer/{offerId}/accept", ctx -> acceptOffer(ctx, connectionPool));
             app.post("/offer/{offerId}/deny", ctx -> denyOffer(ctx, connectionPool));
         }
@@ -30,7 +30,7 @@ public class OfferController {
 
             Offer offer = OfferMapper.getOfferByCustomerId(currentUser.getCustomerId(), connectionPool);
 
-            ctx.json(offer);
+            ctx.render("accept-or-deny-offer.html");
         } catch (NumberFormatException e) {
             ctx.status(400).result("Invalid offer ID");
         } catch (DatabaseException e) {
@@ -61,5 +61,5 @@ public class OfferController {
             ctx.status(500).result("Error updating offer status: " + e.getMessage());
         }
     }
-
 }
+
