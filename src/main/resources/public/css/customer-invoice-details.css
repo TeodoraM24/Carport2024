@@ -1,22 +1,33 @@
-.container {
+.h1 {
+    color: #369;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 3rem;
+}
+
+.container1 {
+    background-color: rgba(218, 238, 253, 1);
     display: flex;
     justify-content: center;
-    align-items: center; /* Align items at the top */
-    height: 80vh
+    align-items: center;
+    text-align: center;
+    height: auto;
 }
 
 .flexbox {
-    width: 800px; /* Adjust width as needed */
-    height: 400px; /* Adjust height as needed */
-    background-color: #ffffff; /* Adjust background color as needed */
-    border-radius: 5px; /* Adjust border radius for smooth corners */
+    width: 800px;
+    height: auto;
+    background-color: #ffffff;
+    border-radius: 5px;
     font-family: Helvetica, sans-serif;
     justify-content: space-between;
 
-
 }
+
+
 table {
     width: 100%;
+    border-collapse: collapse;
+
 }
 
 
@@ -33,7 +44,7 @@ tbody tr:nth-child(odd) {
 
 td {
     padding: 8px;
-
+    border-style: solid;
 }
 
 
@@ -53,9 +64,7 @@ form {
     transition-duration: 0.4s;
     cursor: pointer;
     border-radius: 5px;
-    position: fixed;
-    top: 300px;
-    left: 1000px;
+   margin-bottom: 20px;
 }
 
 .button:hover {
