@@ -62,8 +62,10 @@ public class CustomerRequestMapper {
                 "FROM customer_request cr " +
                 "JOIN customer c ON cr.customer_request_id = c.customer_request_id";
 
+
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
@@ -78,8 +80,8 @@ public class CustomerRequestMapper {
                     String lastName = rs.getString("last_name");
                     int customerId = rs.getInt("customer_id");
 
-
-                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);
+                    Customer customer = new Customer(customerId, firstName, lastName);
+                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status, customer);
                     customerRequests.add(customerRequest);
                 }
             }
@@ -89,6 +91,7 @@ public class CustomerRequestMapper {
         }
         return customerRequests;
     }
+
 
     /**
      * Getting a customer request from the database based on the customer request id

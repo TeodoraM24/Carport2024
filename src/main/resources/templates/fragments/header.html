@@ -25,13 +25,23 @@
     </div>
 
     <div class="header-right">
-        <th:block th:if="${#strings.equals(user,'customer') || #strings.equals(user,'')}">
-        <div class="fog-konto">
-            <a href="../login-page.html" th:href="@{/login-page}">
-                <img src="/public/images/fog-konto.png" th:src="@{../images/fog-konto.png}" alt="Fog Konto">
-                <span>Fog Konto</span>
-            </a>
-        </div>
+        <th:block th:if="${#strings.equals(user,'')}">
+            <div class="fog-konto">
+                <a href="../login-page.html" th:href="@{/login-page}">
+                    <img src="/public/images/fog-konto.png" th:src="@{../images/fog-konto.png}" alt="Fog Konto">
+                    <span>Fog Konto</span>
+                </a>
+            </div>
+        </th:block>
+
+
+        <th:block th:if="${#strings.equals(user,'customer')}">
+            <div class="fog-konto">
+                <a href="../customer-info-frontpage.html" th:href="@{/customerinfo}">
+                    <img src="/public/images/fog-konto.png" th:src="@{../images/fog-konto.png}" alt="Fog Konto">
+                    <span>Fog Konto</span>
+                </a>
+            </div>
         </th:block>
 
         <th:block th:if="${#strings.equals(user,'customer') || #strings.equals(user,'admin')}">
@@ -53,7 +63,7 @@
             <th:block th:if="${#strings.equals(user,'admin')}">
                 <div class="dropdown-content">
                     <a th:href="@{/loginpage-admin}">Forside</a>
-                    <a href="#">Forespørgsler</a>
+                    <a th:href="@{/admininquiries}">Forespørgsler</a>
                     <a th:href="@{/awaitingcustomers}">Afventer Kunder</a>
                     <a th:href="@{/material}">Materialer</a>
                     <a th:href="@{/logout}">Log ud</a>
