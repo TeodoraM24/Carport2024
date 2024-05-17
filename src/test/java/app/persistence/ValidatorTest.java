@@ -1,5 +1,6 @@
 package app.persistence;
 
+import app.validators.CityValidator;
 import app.validators.EmailValidator;
 import app.validators.PasswordValidator;
 import org.junit.jupiter.api.Test;
@@ -77,6 +78,38 @@ public class ValidatorTest {
         String email = "@gmail.com";
         boolean actual = EmailValidator.isValidEmail(email);
         boolean expected = false;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void capitalizeCustom_Correct(){
+        String city = "København NV";
+        String expected = "København NV";
+        String actual = CityValidator.capitalizeCustom(city);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void capitalizeCustom_allUppercase() {
+        String city = "KØBENHAVN NV";
+        String expected = "København NV";
+        String actual = CityValidator.capitalizeCustom(city);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void capitalizeCustom_allLowercase() {
+        String city = "københavn nv";
+        String expected = "København NV";
+        String actual = CityValidator.capitalizeCustom(city);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void capitalizeCustom_mixedUpLow() {
+        String city = "købEnHAvN Nv";
+        String expected = "København NV";
+        String actual = CityValidator.capitalizeCustom(city);
         assertEquals(expected, actual);
     }
 }
