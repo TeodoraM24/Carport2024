@@ -19,7 +19,7 @@ public class Main {
         }).start(7070);
 
         // Routing
-        app.get("/", ctx -> ctx.render("carport-index.html"));
+        //app.get("/", ctx -> ctx.render("carport-index.html"));
         AdminController.addRoutes(app, ConnectionPool.getInstance());
         AdminCustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
         AdminRequestController.addRoutes(app, ConnectionPool.getInstance());
@@ -32,7 +32,7 @@ public class Main {
         SvgController.addRoutes(app, ConnectionPool.getInstance());
 
 
-        //app.get("/", ctx ->  ctx.render("admin-frontpage.html"));
+        app.get("/", ctx ->  ctx.render("admin-frontpage.html"));
         //app.get("/", ctx -> displaySvg(ctx, ConnectionPool.getInstance())); // uncomment this if want to try Svg
         // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
         // app.get("/", ctx ->  ctx.render("login-page.html")); // uncomment this is want to try login/createuser

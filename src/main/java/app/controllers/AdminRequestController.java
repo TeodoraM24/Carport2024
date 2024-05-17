@@ -4,6 +4,7 @@ import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.AdminRequestMapper;
+import app.persistence.CustomerRequestMapper;
 import app.services.PartsListCalculator;
 import app.services.PriceCalculator;
 import io.javalin.Javalin;
@@ -18,7 +19,7 @@ public class AdminRequestController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         //app.get("/", ctx -> ctx.redirect("/changethis"));
 
-        app.get("/changethis", ctx -> { //change
+        app.get("/chooseCustomer", ctx -> { //change
             //When admin is choosing a customer get their id from that page - missing in setSessionCurrentRequestId method
             setSessionCurrentRequestId(ctx, connectionPool);
             CustomerRequest customerRequest = getCustomerRequest(getSessionCurrentRequestId(ctx), connectionPool);
@@ -62,7 +63,7 @@ public class AdminRequestController {
     }
 
     private static void setSessionCurrentRequestId(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        int customerId = 1; //change this
+        int customerId = Integer.parseInt(ctx.queryParam("customerId"));
         int customerRequestId = getCustomerRequestId(customerId, connectionPool);
         ctx.sessionAttribute("currentCustomerRequestId", customerRequestId);
     }
@@ -174,7 +175,9 @@ public class AdminRequestController {
     }
 
     private static void displayChosenCustomerRequestPage(CustomerRequest customerRequest, Context ctx) {
-        ctx.attribute("customerName", "Jon Andersen"); //Change
+        String customerName = ctx.formParam("customerName");
+        System.out.println("Debug: "+customerName);
+        ctx.attribute("customerName", customerName);
         ctx.attribute("chosenCustomerRequest", customerRequest);
 
         ctx.render("process-customer-request.html");

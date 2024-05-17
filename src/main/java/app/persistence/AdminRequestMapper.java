@@ -31,6 +31,27 @@ public class AdminRequestMapper {
         }
     }
 
+    public static String getCustomerName(int customerId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM customer WHERE customer_id = ?;";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ){
+            ps.setInt(1, customerId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("full_name");
+            } else {
+                throw new DatabaseException("Failed at retrieving chosen customer's request id.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB: SQL SELECT error", e.getMessage());
+        }
+    }
+
+
     public static CustomerRequest getCustomerRequest(int requestId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT c.customer_request_id, length, width, height, tile_type, date, status " +
                 "FROM public.customer c INNER JOIN customer_request " +
