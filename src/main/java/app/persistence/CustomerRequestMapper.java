@@ -132,16 +132,23 @@ public class CustomerRequestMapper {
      * @return Returns a list the requested customer request
      * @throws DatabaseException Handles database error
      */
+   
     public static void makeCustomerRequest(Customer currentUser, int height, int width, int length, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
+        if (customerIdAlreadyHasRequest(connectionPool, currentUser.getCustomer_request_id())) {
+            throw new DatabaseException("Der findes allerede en forspørgsel");
+        }
+
+        // SQL queries
         String insertCustomerRequestQuery = "INSERT INTO customer_request (length, width, height, date) VALUES (?, ?, ?, ?)";
-        String insertAdminCustomerRequestQuery = "INSERT INTO admin_customer_request (customer_request_id) VALUES (?)";
-        String updateCustomerQuery = "UPDATE customer SET customer_request_id = ? WHERE customer_id = ?";
+        String insertAdminCustomerRequestQuery = "INSERT INTO admin_customer_request (admin_id, customer_request_id) VALUES (?, ?)";
+        String updateCustomerQuery = "UPDATE customer SET customer_request_id = ? WHERE customer_id = ? AND customer_request_id IS NULL";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement insertCustomerRequestStatement = connection.prepareStatement(insertCustomerRequestQuery, PreparedStatement.RETURN_GENERATED_KEYS);
              PreparedStatement insertAdminCustomerRequestStatement = connection.prepareStatement(insertAdminCustomerRequestQuery);
              PreparedStatement updateCustomerStatement = connection.prepareStatement(updateCustomerQuery)) {
 
+            // Insert new customer request
             insertCustomerRequestStatement.setInt(1, length);
             insertCustomerRequestStatement.setInt(2, width);
             insertCustomerRequestStatement.setInt(3, height);
@@ -149,27 +156,50 @@ public class CustomerRequestMapper {
             int rowsAffected = insertCustomerRequestStatement.executeUpdate();
 
             if (rowsAffected != 1) {
-                throw new DatabaseException("Failed to insert customer request");
+                throw new DatabaseException("Database fejl: forespørgsel blev ikke indsat rigtigt");
             }
+
 
             ResultSet rs = insertCustomerRequestStatement.getGeneratedKeys();
             if (!rs.next()) {
-                throw new DatabaseException("Failed to retrieve generated key for customer request");
+                throw new DatabaseException("Kunne ikke hente genereret nøgle til forespørgsel");
             }
 
             int customerRequestId = rs.getInt(1);
 
-            insertAdminCustomerRequestStatement.setInt(1, customerRequestId);
+
+            insertAdminCustomerRequestStatement.setInt(1, 1);
+            insertAdminCustomerRequestStatement.setInt(2, customerRequestId);
             insertAdminCustomerRequestStatement.executeUpdate();
+
 
             updateCustomerStatement.setInt(1, customerRequestId);
             updateCustomerStatement.setInt(2, currentUser.getCustomerId());
-            updateCustomerStatement.executeUpdate();
+            int updatedRows = updateCustomerStatement.executeUpdate();
+
+            if (updatedRows == 0) {
+                throw new DatabaseException("Fejl ved opdatering af forespørgsel eller der findes allerede en forespørgsel");
+            }
+
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to make customer request", e.getMessage());
+            throw new DatabaseException("Fejl under oprettelse", e.getMessage());
         }
     }
 
+    private static boolean customerIdAlreadyHasRequest(ConnectionPool connectionPool, int customerId) throws DatabaseException {
+        String sql = "SELECT customer_request_id FROM customer WHERE customer_id = ? AND customer_request_id IS NOT NULL";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, customerId);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl ved tjek om forespørgsel allerede findes", e.getMessage());
+        }
+    }
 
 
     /**
