@@ -1,5 +1,6 @@
 package app.persistence;
 
+import app.entities.Customer;
 import app.entities.Offer;
 import app.exceptions.DatabaseException;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,7 @@ public class OfferMapperTest {
             try (Statement stmt = testConnection.createStatement()) {
                 // Remove all rows from relevant tables
                 stmt.execute("DELETE FROM customer_invoice");
+                stmt.execute("DELETE FROM admin_customer_request");
                 stmt.execute("DELETE FROM customer");
                 stmt.execute("DELETE FROM invoice");
                 stmt.execute("DELETE FROM offer");
@@ -69,9 +71,6 @@ public class OfferMapperTest {
         }
     }
 
-
-
-
     @Test
     void testConnection() throws SQLException {
         assertNotNull(connectionPool.getConnection());
@@ -87,6 +86,7 @@ public class OfferMapperTest {
         assertEquals("blabla", offer.getRoofMaterials());
         //tilføj mere
     }
+
     @Test
     void testUpdateOfferStatus() throws DatabaseException, SQLException {
         OfferMapper.updateOfferStatus(1, "Godkend", connectionPool);
@@ -99,5 +99,15 @@ public class OfferMapperTest {
             String updatedStatus = rs.getString("status");
             assertEquals("Godkend", updatedStatus);
         }
+    }
+    @Test
+    void testUpdateCustomerOffer() {
+        try {
+            OfferMapper.updateCustomerOffer(1, 1, connectionPool);
+            assertTrue(true);
+        } catch (DatabaseException e) {
+            assertFalse(false);
+        }
+
     }
 }

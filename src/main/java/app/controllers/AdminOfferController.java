@@ -1,9 +1,6 @@
 package app.controllers;
 
-import app.entities.Material;
-import app.entities.PartsList;
-import app.entities.PartsListItem;
-import app.entities.Price;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.*;
 import io.javalin.Javalin;
@@ -58,13 +55,15 @@ public class AdminOfferController {
     private static void createOffer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int partsListId = partsList.getPartsListId();
         int priceId = partsList.getPriceId();
+        int customerId = AdminRequestController.getSessionCurrentId(ctx);
         int customerRequestId = AdminRequestController.getSessionCurrentRequestId(ctx);
         String rafterDescription = "Spær med rejsning";
         String supportBeamDescription = "Spærtræ 45x195 mm.";
         String tileType = "Plasttrapeztag";
         LocalDate currentDate = LocalDate.now();
 
-        AdminOfferMapper.addOffer(rafterDescription, supportBeamDescription, tileType, currentDate ,partsListId, priceId, customerRequestId, connectionPool);
+        int offerId = AdminOfferMapper.addOffer(rafterDescription, supportBeamDescription, tileType, currentDate ,partsListId, priceId, customerRequestId, connectionPool);
+        OfferMapper.updateCustomerOffer(offerId, customerId, connectionPool);
     }
 
     private static Price getPriceOffer(Context ctx) {

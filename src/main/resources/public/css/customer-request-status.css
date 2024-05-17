@@ -311,7 +311,10 @@ a {
     text-align: right;
 }
 
-.offer-sent-title {
-    font-size: 2em;
-    margin-bottom: 2em;
+.button:hover {
+    background-color: #29E818;
+    }
+
+.offer-number-title {
+    width: 200px;
 }

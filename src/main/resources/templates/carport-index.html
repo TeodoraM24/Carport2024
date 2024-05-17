@@ -9,7 +9,12 @@
 </head>
 
 <body>
-<div th:replace="~{fragments/header :: div.main-header}"></div>
+<th:block th:if="${#ctx.session.currentUser != null}" >
+    <div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+</th:block>
+<th:block th:if="${#ctx.session.currentUser == null}" >
+    <div th:replace="~{fragments/header :: main-header('')}"></div>
+</th:block>
 
 <div class="body-background">
     <div class="container">
