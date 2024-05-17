@@ -27,7 +27,7 @@ public class CustomerRequestController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/carport-form", ctx -> ctx.render("carport-form.html"));
-        app.get("/index", ctx -> ctx.render("index.html"));
+        app.get("/index", ctx -> ctx.render("carport-standard.html"));
         app.get("/customer-request-status", ctx -> getAllCustomerRequests(ctx, connectionPool));
         app.get("/carport-index", ctx -> ctx.render("carport-index.html"));
         app.get("/customer-info-page", ctx -> ctx.render("customer-info-page.html"));
