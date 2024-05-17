@@ -83,8 +83,6 @@ public class CustomerRequestMapper {
                     customerRequests.add(customerRequest);
                 }
             }
-
-            System.out.println("Retrieved " + customerRequests.size() + " customer requests from the database.");//Skal fjernes bruges kun til debug
         } catch (SQLException e) {
             String msg = "Fejl i getAllCustomerRequest()!";
             throw new DatabaseException(msg, e.getMessage());
