@@ -2,6 +2,7 @@ package app.controllers;
 
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.validators.CityValidator;
 import app.validators.EmailValidator;
 import app.validators.PasswordValidator;
 import io.javalin.Javalin;
