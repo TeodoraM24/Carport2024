@@ -12,8 +12,7 @@ import app.persistence.CustomerMapper;
 public class CustomerController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("loginpage-customer", ctx -> ctx.render("carport-index.html"));
-        app.get("logout", ctx -> logout(ctx));
+        app.get("/loginpage-customer", ctx -> ctx.render("carport-index.html"));
         app.get("createuser", ctx -> ctx.render("create-user-page.html"));
         app.post("createuser", ctx -> {
             createCustomer(ctx, connectionPool);
@@ -64,10 +63,5 @@ public class CustomerController {
             ctx.attribute("message", "Den indtastede mail er ikke gyldig. Prøv igen.");
         }
         ctx.render("create-user-page.html");
-    }
-
-    private static void logout(Context ctx) {
-        ctx.req().getSession().invalidate();
-        ctx.redirect("/");
     }
 }

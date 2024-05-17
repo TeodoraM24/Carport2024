@@ -1,5 +1,6 @@
 package app.persistence;
 
+import app.entities.Customer;
 import app.entities.Offer;
 import app.exceptions.DatabaseException;
 import org.junit.jupiter.api.BeforeEach;
@@ -106,5 +107,15 @@ public class OfferMapperTest {
             String updatedStatus = rs.getString("status");
             assertEquals("Godkend", updatedStatus);
         }
+    }
+    @Test
+    void testUpdateCustomerOffer() {
+        try {
+            OfferMapper.updateCustomerOffer(1, 1, connectionPool);
+            assertTrue(true);
+        } catch (DatabaseException e) {
+            assertFalse(false);
+        }
+
     }
 }

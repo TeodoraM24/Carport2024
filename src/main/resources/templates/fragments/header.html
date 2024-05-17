@@ -10,42 +10,58 @@
 </head>
 
 <body>
-<div class="main-header">
+<div class="main-header" th:fragment="main-header(user)">
     <div class="header-left">
-        <a href="../carport-index.html" th:href="@{/carport-index}">
-        <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
-        </a>
+        <th:block th:if="${#strings.equals(user,'customer') || #strings.equals(user,'')}">
+            <a href="../carport-index.html" th:href="@{/carport-index}">
+                <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
+            </a>
+        </th:block>
+        <th:block th:if="${#strings.equals(user,'admin')}">
+            <a href="../carport-index.html" th:href="@{/loginpage-admin}">
+                <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
+            </a>
+        </th:block>
     </div>
 
     <div class="header-right">
+        <th:block th:if="${#strings.equals(user,'customer') || #strings.equals(user,'')}">
         <div class="fog-konto">
             <a href="../login-page.html" th:href="@{/login-page}">
                 <img src="/public/images/fog-konto.png" th:src="@{../images/fog-konto.png}" alt="Fog Konto">
                 <span>Fog Konto</span>
             </a>
         </div>
+        </th:block>
 
+        <th:block th:if="${#strings.equals(user,'customer') || #strings.equals(user,'admin')}">
         <div class="dropdown">
             <div class="dropdown-img">
                 <img src="/public/images/menu-icon.png" th:src="@{../images/menu-icon.png}" alt="Menu Icon">
                 <span>Menu</span>
             </div>
-            <div class="dropdown-content">
-                <a href="#">Konto</a>
-                <a href="#">Kontakt</a>
-                <a href="#">Log ud</a>
-            </div>
-            <!--
-            <th:block th:if="${#ctx.session.currentUser.role == 'admin'}">
+
+            <th:block th:if="${#strings.equals(user,'customer')}">
                 <div class="dropdown-content">
-                    <a href="#">Forside</a>
+                    <a th:href="@{/carport-index}">Forside</a>
                     <a href="#">Forespørgsler</a>
-                    <a href="#">Afventer Kunde</a>
-                    <a href="#">Afsluttede</a>
+                    <a href="#">Mine Ordre</a>
+                    <a th:href="@{/logout}">Log ud</a>
                 </div>
             </th:block>
-            -->
+
+            <th:block th:if="${#strings.equals(user,'admin')}">
+                <div class="dropdown-content">
+                    <a th:href="@{/loginpage-admin}">Forside</a>
+                    <a href="#">Forespørgsler</a>
+                    <a th:href="@{/awaitingcustomers}">Afventer Kunder</a>
+                    <a th:href="@{/material}">Materialer</a>
+                    <a th:href="@{/logout}">Log ud</a>
+                </div>
+            </th:block>
         </div>
+        </th:block>
+
     </div>
 </div>
 </body>

@@ -21,13 +21,13 @@ public class AdminRequestController {
 
         app.get("/chooseCustomer", ctx -> {
             //When admin is choosing a customer get their id from that page - missing in setSessionCurrentRequestId method
-            setSessionCurrentRequestId(ctx, connectionPool);
+            setSessionCurrentRequest(ctx, connectionPool);
             CustomerRequest customerRequest = getCustomerRequest(getSessionCurrentRequestId(ctx), connectionPool);
             displayChosenCustomerRequestPage(customerRequest, ctx);
         });
 
         app.get("/returnToAllRequests", ctx -> {
-            removeSessionCurrentCustomerId(ctx);
+            removeSessionCurrentCustomer(ctx);
             ctx.render("admin-frontpage.html");
         }); //change
 
@@ -58,19 +58,24 @@ public class AdminRequestController {
         app.get("/returnToCalculateRequest", ctx -> displayCalculateOfferPage(ctx, partsListItems, priceOffer));
     }
 
-    private static void removeSessionCurrentCustomerId(Context ctx) {
+    private static void removeSessionCurrentCustomer(Context ctx) {
+        ctx.req().removeAttribute("currentCustomerId");
         ctx.req().removeAttribute("currentCustomerRequestId");
     }
 
-    private static void setSessionCurrentRequestId(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static void setSessionCurrentRequest(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int customerId = Integer.parseInt(ctx.queryParam("customerId"));
-        System.out.println("Debug int: "+customerId);
+        ctx.sessionAttribute("currentCustomerId", customerId);
         int customerRequestId = getCustomerRequestId(customerId, connectionPool);
         ctx.sessionAttribute("currentCustomerRequestId", customerRequestId);
     }
 
     public static int getSessionCurrentRequestId(Context ctx) {
         return ctx.sessionAttribute("currentCustomerRequestId");
+    }
+
+    public static int getSessionCurrentId(Context ctx) {
+        return ctx.sessionAttribute("currentCustomerId");
     }
 
     public static List<PartsListItem> getAllPartsListItems(Context ctx) {

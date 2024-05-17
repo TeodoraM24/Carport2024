@@ -1,6 +1,7 @@
 package app.persistence;
 
 import app.entities.Customer;
+import app.entities.Offer;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
@@ -122,5 +123,59 @@ public class CustomerMapper {
         }
     }
 
+    public static int getCustomerIdByOfferId(int offerId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT customer_id FROM customer WHERE offer_id = ?";
 
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setInt(1, offerId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("customer_id");
+             } else {
+                throw new DatabaseException("Could not find customer_id by the offer id on customer.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl i DB connection", e.getMessage());
+        }
+    }
+
+    public static void deleteOfferId(int offerId, ConnectionPool connectionPool) throws DatabaseException{
+        String sql = "UPDATE customer SET offer_id = null WHERE offer_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, offerId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DatabaseException("Could not delete offer id from customer");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB: SQL UPDATE error when trying to update the offer_id on customer table", e.getMessage());
+        }
+    }
+
+    public static void deleteRequestId(int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE customer SET customer_request_id = null WHERE customer_request_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, customerRequestId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DatabaseException("Could not delete offer id from customer");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB: SQL UPDATE error when trying to update the customer_request_id on customer table");
+        }
+    }
 }
