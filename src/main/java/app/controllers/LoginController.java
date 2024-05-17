@@ -11,6 +11,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 public class LoginController {
+
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/", ctx -> ctx.render("carport-index.html"));
         app.get("/login-page", ctx -> ctx.render("login-page.html"));

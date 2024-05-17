@@ -4,8 +4,8 @@
     <title>Admin startside</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/css/customer-own-order-frontpage-style.css"
-          th:href="@{/css/customer-own-order-frontpage-style.css}" rel="stylesheet"/>
+    <link href="../public/css/customer-order-history.css"
+          th:href="@{/css/customer-order-history.css}" rel="stylesheet"/>
     <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
 </head>
 
@@ -35,19 +35,21 @@
                                     mere</a>
                             </td>
                         </tr>
-                        <tr th:unless="${not #lists.isEmpty(listOfInvoices)}">
-                            <td colspan="3">
-                                <p>Ingen kvittering blev fundet</p>
-                            </td>
-                            <a type="button" class="button" th:href="@{/backToInfoPage}">Tilbage</a>
                         </tr>
                     </th:block>
                     </tbody>
+                    <tr th:if="${#lists.isEmpty(listOfInvoices)}">
+                        <td colspan="3">
+                            <br>
+                            <p>Ingen kvittering blev fundet</p>
+                        </td>
+                    </tr>
                 </table>
             </div>
+            <br>
+            <a type="button" class="button2" th:href="@{/backToInfoPage}">Tilbage</a>
         </div>
     </div>
 </div>
-
 </body>
 </html>

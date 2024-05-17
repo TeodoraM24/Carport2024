@@ -90,6 +90,14 @@ public class CustomerRequest {
         this.status = status;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this)

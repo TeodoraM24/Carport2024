@@ -31,6 +31,7 @@ public class AdminRequestMapper {
         }
     }
 
+
     public static CustomerRequest getCustomerRequest(int requestId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT c.customer_request_id, length, width, height, tile_type, date, status " +
                 "FROM public.customer c INNER JOIN customer_request " +
