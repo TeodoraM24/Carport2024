@@ -10,6 +10,8 @@ import app.services.PriceCalculator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,24 +20,31 @@ public class AdminRequestController {
     private static Price priceOffer;
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         //app.get("/", ctx -> ctx.redirect("/changethis"));
+        app.get("/admininquiries", ctx -> displayCustomerRequests(ctx, connectionPool));
+
+        //app.post("/admininquiries", ctx -> displayCustomerRequests(ctx, connectionPool));
 
         app.get("/chooseCustomer", ctx -> {
             //When admin is choosing a customer get their id from that page - missing in setSessionCurrentRequestId method
             setSessionCurrentRequest(ctx, connectionPool);
+            ctx.redirect("/showRequestForCustomer");
+        });
+
+        app.get("/showRequestForCustomer", ctx -> {
             CustomerRequest customerRequest = getCustomerRequest(getSessionCurrentRequestId(ctx), connectionPool);
             displayChosenCustomerRequestPage(customerRequest, ctx);
         });
 
         app.get("/returnToAllRequests", ctx -> {
             removeSessionCurrentCustomer(ctx);
-            ctx.render("admin-frontpage.html");
+            ctx.redirect("/admininquiries");
         }); //change
 
-        app.get("/cancelRequestChanges", ctx -> ctx.redirect("/changethis")); //change
+        app.get("/cancelRequestChanges", ctx -> ctx.redirect("/showRequestForCustomer")); //change
 
         app.post("/saveRequestChanges", ctx -> {
             saveRequestChanges(ctx, connectionPool);
-            ctx.redirect("/changethis"); //change
+            ctx.redirect("/showRequestForCustomer"); //change
         });
 
         app.post("/calculateRequest", ctx -> {
@@ -60,12 +69,15 @@ public class AdminRequestController {
 
     private static void removeSessionCurrentCustomer(Context ctx) {
         ctx.req().removeAttribute("currentCustomerId");
+        ctx.req().removeAttribute("currentCustomerName");
         ctx.req().removeAttribute("currentCustomerRequestId");
     }
 
     private static void setSessionCurrentRequest(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int customerId = Integer.parseInt(ctx.queryParam("customerId"));
         ctx.sessionAttribute("currentCustomerId", customerId);
+        String customerName = ctx.queryParam("customerName");
+        ctx.sessionAttribute("currentCustomerName", customerName);
         int customerRequestId = getCustomerRequestId(customerId, connectionPool);
         ctx.sessionAttribute("currentCustomerRequestId", customerRequestId);
     }
@@ -97,6 +109,19 @@ public class AdminRequestController {
         return partsListItemsToSave;
     }
 
+    private static void displayCustomerRequests(Context ctx, ConnectionPool connectionPool) {
+        List<CustomerRequest> customerRequestList;
+
+        try {
+            customerRequestList = CustomerRequestMapper.getAllCustomerRequest(connectionPool);
+            ctx.attribute("customerRequests", customerRequestList);
+
+            ctx.render("admininquiries.html");
+        } catch (DatabaseException e) {
+            ctx.result("Der skete en fejl mens programmet hentede kundeforespørgsler");
+        }
+    }
+
     private static Price calculateNewPriceOffer(Context ctx) {
         String price = (ctx.formParam("new-price"));
         double newPrice = (!price.isEmpty()) ? Double.parseDouble(price) : priceOffer.getSalesPrice();
@@ -104,8 +129,8 @@ public class AdminRequestController {
         if (newPrice == priceOffer.getSalesPrice()) {
             return calculatePriceOfferForChosenCustomer(partsListItems);
         } else {
-            double priceDifference = newPrice - priceOffer.getSalesPrice();
-            ctx.attribute("priceDifference", priceDifference);
+            BigDecimal priceDifference = new BigDecimal(newPrice - priceOffer.getSalesPrice()).setScale(2, RoundingMode.HALF_UP);
+            ctx.attribute("priceDifference", priceDifference.doubleValue());
             return calculatePriceOfferForChosenCustomer(partsListItems, newPrice);
         }
     }
@@ -173,7 +198,7 @@ public class AdminRequestController {
     }
 
     private static void displayCalculateOfferPage(Context ctx, List<PartsListItem> partsListItems, Price priceOffer) {
-        String customerName = ctx.queryParam("customerName");
+        String customerName = ctx.sessionAttribute("currentCustomerName");
         ctx.attribute("customerName", customerName);
         ctx.attribute("priceOffer", priceOffer);
         ctx.attribute("partsListItems", partsListItems);
@@ -182,7 +207,7 @@ public class AdminRequestController {
     }
 
     private static void displayChosenCustomerRequestPage(CustomerRequest customerRequest, Context ctx) {
-        String customerName = ctx.queryParam("customerName");
+        String customerName = ctx.sessionAttribute("currentCustomerName");
         ctx.attribute("customerName", customerName);
         ctx.attribute("chosenCustomerRequest", customerRequest);
 

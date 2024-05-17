@@ -33,9 +33,8 @@ public class AdminRequestMapper {
 
 
     public static CustomerRequest getCustomerRequest(int requestId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT c.customer_request_id, length, width, height, tile_type, date, status " +
-                "FROM public.customer c INNER JOIN customer_request " +
-                "ON c.customer_request_id = ?";
+        String sql = "SELECT c.customer_request_id, length, width, height, tile_type, date, status  FROM customer c " +
+                "INNER JOIN customer_request USING(customer_request_id) WHERE customer_request_id = ?";
 
         try (
                 Connection connection = connectionPool.getConnection();

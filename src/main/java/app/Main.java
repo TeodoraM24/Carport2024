@@ -20,7 +20,7 @@ public class Main {
 
         // Routing
         AdminController.addRoutes(app, ConnectionPool.getInstance());
-        AdminCustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
+        AdminOfferController.addRoutes(app,ConnectionPool.getInstance());
         AdminRequestController.addRoutes(app, ConnectionPool.getInstance());
         AdminAwaitingCustomerController.addRoutes(app, ConnectionPool.getInstance());
         CustomerController.addRoutes(app, ConnectionPool.getInstance());

@@ -18,6 +18,8 @@ public class CustomerController {
             createCustomer(ctx, connectionPool);
             ctx.redirect("/login-page");
         });
+
+        app.get("/customerinfo", ctx -> ctx.render("customer-info-frontpage.html"));
     }
 
     private static void createCustomer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
