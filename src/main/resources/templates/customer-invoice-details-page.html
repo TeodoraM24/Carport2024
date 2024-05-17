@@ -26,13 +26,13 @@
                             <td>Beskrivelse</td>
                         </tr>
 
-                        <tr th:each="partlist :${listOfPartlists}">
-                            <td th:object="${partlist.materialDescription}"></td>
-                            <td th:object="${partlist.length}"></td>
-                            <td th:object="${partlist.amount}"></td>
-                            <td th:object="${partlist.unit}"></td>
-                            <td th:object="${partlist.instructionDescription}"></td>
-                        </tr>
+                        <th:block th:each="partlist :${listOfPartlists}">
+                            <td th:text="${partlist.materialDescription}"></td>
+                            <td th:text="${partlist.length}"></td>
+                            <td th:text="${partlist.amount}"></td>
+                            <td th:text="${partlist.unit}"></td>
+                            <td th:text="${partlist.instructionDescription}"></td>
+                        </th:block>
                         </tbody>
                     </table>
                 </div>

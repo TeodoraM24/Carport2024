@@ -4,7 +4,8 @@
     <title>Admin startside</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/css/customer-own-order-frontpage-style.css" th:href="@{/css/customer-own-order-frontpage-style.css}" rel="stylesheet"/>
+    <link href="../public/css/customer-own-order-frontpage-style.css"
+          th:href="@{/css/customer-own-order-frontpage-style.css}" rel="stylesheet"/>
     <link href="../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
 </head>
 
@@ -24,22 +25,23 @@
                     </tr>
                     </tbody>
                     <tbody>
-                    <tr th:if="${not #lists.isEmpty(listOfInvoices)}">
-                        <td th:text="${invoice.localDate}"></td>
-                        <td th:text="${invoice.invoiceID}" ></td>
-                        <td>
-                            <a type="button" class="button" th:href="@{/viewInvoiceDetails/{invoiceid}(invoiceid=${invoice.getInvoiceID()})}">Læs mere</a>
-                        </td>
-                        <!-- Tilføj almindelig tilbage knap, selvom listen ikke er top-->
-                    </tr>
-                    <tr th:unless="${not #lists.isEmpty(listOfInvoices)}">
-                        <td colspan="3">
-                            <p>Ingen kvittering blev fundet</p>
+                    <th:block th:each="invoice : ${listOfInvoices}">
+                        <tr th:if="${!#lists.isEmpty(listOfInvoices)}">
+                            <td th:text="${invoice.getLocalDate()}"></td>
+                            <td th:text="${invoice.invoiceID}"></td>
+                            <td>
+                                <a type="button" class="button"
+                                   th:href="@{/viewInvoiceDetails/{invoiceid}(invoiceid=${invoice.getInvoiceID()})}">Læs
+                                    mere</a>
+                            </td>
+                        </tr>
+                        <tr th:unless="${not #lists.isEmpty(listOfInvoices)}">
+                            <td colspan="3">
+                                <p>Ingen kvittering blev fundet</p>
+                            </td>
                             <a type="button" class="button" th:href="@{/backToInfoPage}">Tilbage</a>
-                        </td>
-                        <!-- Tilføj routes tilbage til Info page-->
-
-                    </tr>
+                        </tr>
+                    </th:block>
                     </tbody>
                 </table>
             </div>
