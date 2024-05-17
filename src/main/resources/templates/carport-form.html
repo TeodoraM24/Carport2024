@@ -20,14 +20,13 @@
             <p>Udfyld formularen omhyggeligt og klik på "Bestil tilbud".<br>Felter markeret med * SKAL udfyldes!</p>
 
             <label for="carport-width">Carport bredde*</label>
-            <input type="text" class="measurement" id="carport-width" name="width" required>
+            <input id="carport-width"  name="width" type="number" class="measurement"  placeholder="Skal være mellem 240 og 600 cm" min="240" max="780" required>
 
             <label for="carport-length">Carport længde*</label>
-            <input type="text" class="measurement" id="carport-length" name="length" required>
+            <input id="carport-length" name="length" type="number" class="measurement" placeholder="Skal være mellem 240 og 780 cm" min="240" max="780" required>
 
             <label for="carport-height">Carport højde*</label>
-            <input type="text" class="measurement" id="carport-height" name="height" required>
-
+            <input id="carport-height" name="height"  type="number" class="measurement" placeholder="Skal være mellem 180 og 300 cm" min="180" max="300" required>
 
             <button type="submit" class="order-offer">Bestil tilbud</button>
         </form>
