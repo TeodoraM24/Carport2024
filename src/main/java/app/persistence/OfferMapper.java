@@ -31,6 +31,7 @@ public class OfferMapper {
                 String status = rs.getString("status");
 
                 return new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status);
+
             } else {
                 throw new DatabaseException("Could not get offer for given customer id.");
             }

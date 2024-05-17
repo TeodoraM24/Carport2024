@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public class CustomerRequestMapper {
                 int height = rs.getInt("height");
                 int width = rs.getInt("width");
                 String tileType = rs.getString("tile_type");
-                java.sql.Date sqlDate = rs.getDate("date");
+                Date sqlDate = rs.getDate("date");
                 LocalDate date = sqlDate.toLocalDate();
                 String status = rs.getString("status");
 
@@ -77,9 +78,8 @@ public class CustomerRequestMapper {
                     String lastName = rs.getString("last_name");
                     int customerId = rs.getInt("customer_id");
 
-                    Customer customer = new Customer(customerId, firstName, lastName);
 
-                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status, customer);
+                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);
                     customerRequests.add(customerRequest);
                 }
             }

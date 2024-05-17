@@ -18,7 +18,7 @@ public class OfferMapperTest {
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "carport_test";
+    private static final String DB = "carport_test_2";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
     @BeforeEach
     void setUp() {
@@ -27,6 +27,10 @@ public class OfferMapperTest {
                 // Remove all rows from relevant tables
                 stmt.execute("DELETE FROM customer_invoice");
                 stmt.execute("DELETE FROM admin_customer_request");
+                stmt.execute("DELETE FROM admin_invoice");
+                stmt.execute("DELETE FROM admin_offer");
+                stmt.execute("DELETE FROM admin_parts_list");
+
                 stmt.execute("DELETE FROM customer");
                 stmt.execute("DELETE FROM invoice");
                 stmt.execute("DELETE FROM offer");
@@ -57,6 +61,8 @@ public class OfferMapperTest {
                 stmt.execute("INSERT INTO parts_list_item (material_id, amount, instruction_description, unit, total_price) VALUES " +
                         "(1, 6, 'test', 'Stk.', 100)");
                 stmt.execute("INSERT INTO parts_list (parts_list_id, price_id) VALUES (1,1)");
+                // Update customer_request_id in the customer table
+                stmt.execute("UPDATE customer SET customer_request_id = 1 WHERE customer_id = 1");
                 // Insert rows in the correct order: first offer, then customer
                 stmt.execute("INSERT INTO offer (offer_id, tool_shed_size, cladding_desc, rafter_type_desc, support_beam_desc_size, roof_materials, date, parts_list_id, price_id, customer_request_id) VALUES " +
                         "(1, '20', 'fkfk', 'eddd', 'Campusvdaej', 'blabla', '2024-05-14', 1, 1, 1)");
@@ -70,6 +76,9 @@ public class OfferMapperTest {
             fail("Database connection failed");
         }
     }
+
+
+
 
     @Test
     void testConnection() throws SQLException {
@@ -86,7 +95,6 @@ public class OfferMapperTest {
         assertEquals("blabla", offer.getRoofMaterials());
         //tilføj mere
     }
-
     @Test
     void testUpdateOfferStatus() throws DatabaseException, SQLException {
         OfferMapper.updateOfferStatus(1, "Godkend", connectionPool);

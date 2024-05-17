@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
     <title>Kunde-info forside</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,7 @@
             <div class="flexbox1">
                 <div class="flexbox2">
                     <!--Add CustomerRequestPag th: href -->
-                    <a class="reference-format" href="customer-own-request-page.html">
+                    <a class="reference-format" th:href="@{/showRequest}">
                         <div class="top-half">
                             <h2>Forespørgsler</h2>
                         </div>
