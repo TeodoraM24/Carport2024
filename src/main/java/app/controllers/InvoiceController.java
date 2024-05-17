@@ -43,11 +43,13 @@ public class InvoiceController {
 
     private static void displayCustomerOrderHistory(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
-        Customer customer = new Customer(1, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
+        Customer customer = new Customer(2, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
         ctx.sessionAttribute("currentCustomer", customer);
         List<Invoice> listOfInvoices = null;
-        listOfInvoices = InvoiceMapper.getCustomersOrderHistory(1, connectionPool);
+        listOfInvoices = InvoiceMapper.getCustomersOrderHistory(2, connectionPool);
+
         ctx.attribute("listOfInvoices", listOfInvoices);
+        System.out.println(listOfInvoices);
 
         ctx.render("customer-order-history-page.html");
     }
@@ -63,7 +65,7 @@ public class InvoiceController {
 
 
     private static void displayInvoiceDetails(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Customer customer = new Customer(1, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
+        Customer customer = new Customer(2, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
         ctx.sessionAttribute("currentCustomerId");
         ctx.attribute("currentCustomerId", customer.getCustomerId());
 
