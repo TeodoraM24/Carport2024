@@ -30,12 +30,5 @@ public class Main {
         MaterialController.addRoutes(app, ConnectionPool.getInstance());
         OfferController.addRoutes(app, ConnectionPool.getInstance());
         SvgController.addRoutes(app, ConnectionPool.getInstance());
-
-
-        //app.get("/", ctx ->  ctx.render("admin-frontpage.html"));
-        //app.get("/", ctx -> displaySvg(ctx, ConnectionPool.getInstance())); // uncomment this if want to try Svg
-        // app.get("/", ctx ->  ctx.render("admin-frontpage.html")); // uncomment this if want to try materials
-        // app.get("/", ctx ->  ctx.render("login-page.html")); // uncomment this is want to try login/createuser
-
     }
 }
