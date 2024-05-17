@@ -20,14 +20,14 @@ public class AdminCustomerRequestController {
     }
 
     private static void displayCustomerRequests(Context ctx, ConnectionPool connectionPool) {
-        List<CustomerRequest> customerRequestList; // Initialize to empty list
+        List<CustomerRequest> customerRequestList;
 
         try {
             customerRequestList = CustomerRequestMapper.getAllCustomerRequest(connectionPool);
 
             ctx.attribute("customerRequests", customerRequestList);
 
-            ctx.render("customer-request-admin.html");
+            ctx.render("admininquiries.html");
         } catch (DatabaseException e) {
             ctx.result("Der skete en fejl mens programmet hentede kundeforespørgsler");
         }

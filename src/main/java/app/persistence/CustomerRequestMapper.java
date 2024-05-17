@@ -138,7 +138,6 @@ public class CustomerRequestMapper {
             throw new DatabaseException("Der findes allerede en forspørgsel");
         }
 
-        // SQL queries
         String insertCustomerRequestQuery = "INSERT INTO customer_request (length, width, height, date) VALUES (?, ?, ?, ?)";
         String insertAdminCustomerRequestQuery = "INSERT INTO admin_customer_request (admin_id, customer_request_id) VALUES (?, ?)";
         String updateCustomerQuery = "UPDATE customer SET customer_request_id = ? WHERE customer_id = ? AND customer_request_id IS NULL";
@@ -148,7 +147,6 @@ public class CustomerRequestMapper {
              PreparedStatement insertAdminCustomerRequestStatement = connection.prepareStatement(insertAdminCustomerRequestQuery);
              PreparedStatement updateCustomerStatement = connection.prepareStatement(updateCustomerQuery)) {
 
-            // Insert new customer request
             insertCustomerRequestStatement.setInt(1, length);
             insertCustomerRequestStatement.setInt(2, width);
             insertCustomerRequestStatement.setInt(3, height);

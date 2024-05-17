@@ -4,6 +4,7 @@ import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.AdminRequestMapper;
+import app.persistence.CustomerRequestMapper;
 import app.services.PartsListCalculator;
 import app.services.PriceCalculator;
 import io.javalin.Javalin;
@@ -18,7 +19,7 @@ public class AdminRequestController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         //app.get("/", ctx -> ctx.redirect("/changethis"));
 
-        app.get("/changethis", ctx -> { //change
+        app.get("/chooseCustomer", ctx -> {
             //When admin is choosing a customer get their id from that page - missing in setSessionCurrentRequestId method
             setSessionCurrentRequestId(ctx, connectionPool);
             CustomerRequest customerRequest = getCustomerRequest(getSessionCurrentRequestId(ctx), connectionPool);
@@ -62,7 +63,8 @@ public class AdminRequestController {
     }
 
     private static void setSessionCurrentRequestId(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        int customerId = 1; //change this
+        int customerId = Integer.parseInt(ctx.queryParam("customerId"));
+        System.out.println("Debug int: "+customerId);
         int customerRequestId = getCustomerRequestId(customerId, connectionPool);
         ctx.sessionAttribute("currentCustomerRequestId", customerRequestId);
     }
@@ -166,7 +168,8 @@ public class AdminRequestController {
     }
 
     private static void displayCalculateOfferPage(Context ctx, List<PartsListItem> partsListItems, Price priceOffer) {
-        ctx.attribute("customerName", "Jon Andersen"); //Change
+        String customerName = ctx.queryParam("customerName");
+        ctx.attribute("customerName", customerName);
         ctx.attribute("priceOffer", priceOffer);
         ctx.attribute("partsListItems", partsListItems);
 
@@ -174,7 +177,8 @@ public class AdminRequestController {
     }
 
     private static void displayChosenCustomerRequestPage(CustomerRequest customerRequest, Context ctx) {
-        ctx.attribute("customerName", "Jon Andersen"); //Change
+        String customerName = ctx.queryParam("customerName");
+        ctx.attribute("customerName", customerName);
         ctx.attribute("chosenCustomerRequest", customerRequest);
 
         ctx.render("process-customer-request.html");
