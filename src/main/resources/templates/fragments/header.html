@@ -17,7 +17,6 @@
         </a>
     </div>
 
-
     <div class="header-right">
         <th:block th:if="${#strings.equals(user,'customer') || #strings.equals(user,'')}">
         <div class="fog-konto">
@@ -40,7 +39,7 @@
                     <a th:href="@{/carport-index}">Forside</a>
                     <a href="#">Forespørgsler</a>
                     <a href="#">Mine Ordre</a>
-                    <a href="#">Log ud</a>
+                    <a th:href="@{/logout}">Log ud</a>
                 </div>
             </th:block>
 
@@ -49,13 +48,13 @@
                     <a th:href="@{/loginpage-admin}">Forside</a>
                     <a href="#">Forespørgsler</a>
                     <a href="#">Afventer Kunder</a>
-                    <a href="#">Materialer</a>
-                    <a href="#">Log ud</a>
+                    <a th:href="@{/material}">Materialer</a>
+                    <a th:href="@{/logout}">Log ud</a>
                 </div>
             </th:block>
-
         </div>
         </th:block>
+
     </div>
 </div>
 </body>

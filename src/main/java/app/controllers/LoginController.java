@@ -12,8 +12,10 @@ import io.javalin.http.Context;
 
 public class LoginController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("/", ctx -> ctx.render("carport-index.html"));
         app.get("/login-page", ctx -> ctx.render("login-page.html"));
         app.post("/login", ctx -> login(ctx, connectionPool));
+        app.get("/logout", ctx -> logout(ctx));
     }
 
     private static void login(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
@@ -33,5 +35,11 @@ public class LoginController {
             ctx.attribute("message", "Du er nu logget ind");
             ctx.redirect("/loginpage-customer");
         }
+    }
+
+    private static void logout(Context ctx)
+    {
+        ctx.req().getSession().invalidate();
+        ctx.redirect("/");
     }
 }
