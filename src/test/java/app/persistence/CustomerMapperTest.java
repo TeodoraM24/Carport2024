@@ -69,7 +69,7 @@ public class CustomerMapperTest {
         String password = "1234";
 
         try {
-            Customer actualCustomer = CustomerMapper.logInd(email, password, connectionPool);
+            Customer actualCustomer = CustomerMapper.login(email, password, connectionPool);
 
             assertNotNull(actualCustomer, "Customer doesn't exist(null)");
 
@@ -87,7 +87,7 @@ public class CustomerMapperTest {
 
     @Test
     void testLogInInvalidCredentials() {
-        assertThrows(DatabaseException.class, () -> CustomerMapper.logInd("invalid@gmail.com", "password", connectionPool));
+        assertThrows(DatabaseException.class, () -> CustomerMapper.login("invalid@gmail.com", "password", connectionPool));
     }
 
 }

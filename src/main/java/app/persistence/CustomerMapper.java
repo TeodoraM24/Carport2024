@@ -1,13 +1,14 @@
 package app.persistence;
 
-import app.entities.Admin;
 import app.entities.Customer;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerMapper {
-    public static Customer logInd(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
+    public static Customer login(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM customer WHERE email=? AND password=?";
 
         try (
@@ -71,4 +72,34 @@ public class CustomerMapper {
             throw new DatabaseException(msg, e.getMessage());
         }
     }
+
+    // For future work when need to search through customers
+    public static List<Customer> getAllCustomers(ConnectionPool connectionPool) throws DatabaseException {
+        List<Customer> userList = new ArrayList<>();
+        String sql = "SELECT * FROM customer";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("customer_id");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                int phonenumber = rs.getInt("phonenumber");
+                String address = rs.getString("address");
+                int zip = rs.getInt("zip");
+                String role = rs.getString("role");
+
+                userList.add(new Customer(id, email, password, phonenumber, firstName, lastName, address, zip, role));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl!!!!", e.getMessage());
+        }
+        return userList;
+    }
+
 }
