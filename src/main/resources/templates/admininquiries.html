@@ -35,9 +35,10 @@
                     <td>
                         <form id="chooseCustomerForm" action="/chooseCustomer" method="get">
                             <input type="hidden" name="customerId" th:value="${request.customer.getCustomerId()}"/>
-                            <input type="hidden" name="customerName" th:value="${request.customer.getFirstName() + ' ' + request.customer.getLastName}"/>
+                            <input type="hidden" name="customerName" th:value="${request.customer.getFirstName() + ' ' + request.customer.getLastName()}"/>
                             <button type="submit">Behandle</button>
                         </form>
+
                     </td>
                 </tr>
                 </tbody>
