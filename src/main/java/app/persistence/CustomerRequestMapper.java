@@ -168,7 +168,7 @@ public class CustomerRequestMapper {
             int customerRequestId = rs.getInt(1);
 
 
-            insertAdminCustomerRequestStatement.setInt(1, 1); // Assuming admin_id is 1
+            insertAdminCustomerRequestStatement.setInt(1, 1);
             insertAdminCustomerRequestStatement.setInt(2, customerRequestId);
             insertAdminCustomerRequestStatement.executeUpdate();
 
