@@ -14,7 +14,7 @@ body, html{
 
 .standard-carport, .design-carport {
     width: calc((100% - 50px) / 2);
-    height: 800px;
+    height: 100%;
     display: flex;
 }
 
@@ -62,5 +62,14 @@ body, html{
 .carport-button:hover{
     background-color: rgb(47, 75, 184);
 }
+
+.flexbox-carports {
+    margin-top: 30px;
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    width: 80%;
+}
+
 
 
