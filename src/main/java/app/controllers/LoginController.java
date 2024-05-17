@@ -28,7 +28,7 @@ public class LoginController {
             ctx.attribute("message", "Du er nu logget ind");
             ctx.redirect("loginpage-admin");
         } else {
-            Customer customer = CustomerMapper.logInd(email, password, connectionPool);
+            Customer customer = CustomerMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("currentUser", customer);
             ctx.attribute("message", "Du er nu logget ind");
             ctx.redirect("loginpage-customer");

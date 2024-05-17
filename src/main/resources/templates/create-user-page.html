@@ -21,7 +21,7 @@
             <div class="flex-row">
                 <div class="flex-col">
                     <input type="email" name="email" placeholder="E-mail*" />
-                    <input type="email" name="repeatEmail" placeholder="Gentag e-mail*" />
+                    <input type="email" name="email2" placeholder="Gentag e-mail*" />
                 </div>
                 <div class="flex-col">
                     <input type="password" name="password1" placeholder="Kodeord*" />
@@ -53,6 +53,7 @@
 
             <div class="form-group">
                 <input type="submit" value="Opret">
+                <div style="font-weight: bolder"><p th:text="${message}"></p></div>
             </div>
         </form>
     </div>
