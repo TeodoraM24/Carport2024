@@ -67,13 +67,6 @@ public class CustomerRequestController {
             return;
         }
 
-        if (currentUser.isHaveRequest()) {
-            ctx.render("customer-info-frontpage.html");
-            ctx.attribute("message", "Du har allerede bestilt en forespørgsel, vent venligst på vi vender tilbage");
-            return;
-        }
-
-
         try {
             LocalDate date = LocalDate.now();
             int height = Integer.parseInt(ctx.formParam("height"));
@@ -81,7 +74,7 @@ public class CustomerRequestController {
             int length = Integer.parseInt(ctx.formParam("length"));
 
             CustomerRequestMapper.makeCustomerRequest(currentUser, height, width, length, date, connectionPool);
-            currentUser.setHaveRequest(true);
+
             ctx.render("carport-offer-sent.html");
 
         } catch (DatabaseException e) {

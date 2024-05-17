@@ -1,13 +1,12 @@
 package app.persistence;
 
+import app.entities.Customer;
 import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,8 +22,8 @@ public class CustomerRequestMapperTest {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);*/
 
     private static final String USER ="postgres";
-    private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
+    private static final String PASSWORD = "HigAbt60ig";
+    private static final String URL = "jdbc:postgresql://161.35.195.156/%s?currentSchema=public";
     private static final String DB = "carport_test";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
@@ -32,9 +31,11 @@ public class CustomerRequestMapperTest {
     void setup() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
-                stmt.execute("DELETE FROM public.admin_customer_request");
+                stmt.execute("DELETE FROM customer_parts_list");
+                stmt.execute("DELETE FROM admin_customer_request");
                 stmt.execute("DELETE FROM customer_request");
                 stmt.execute("DELETE FROM admin");
+                stmt.execute("DELETE FROM customer");
 
                 // Reset sequence number for customer_request_id (assuming it's an auto-incremented sequence)
                 stmt.executeUpdate("ALTER SEQUENCE customer_request_customer_request_id_seq RESTART WITH 1");
@@ -110,27 +111,52 @@ public class CustomerRequestMapperTest {
         CustomerRequestMapper.deleteCustomerRequest(1, connectionPool);
         assertEquals(1, new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size());
     }
-/*
+
     @Test
     void makeCustomerRequest() throws DatabaseException {
-        // 1. Prepare Data
-        LocalDate localDate = LocalDate.now();
-        int initialSize = new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size();
+        Customer currentCustomer = new Customer(0, "test@email.live.dk", "123", 87654321, "Johny", "Deluxe", "test", 2770,"customer");
+ 
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement insertCustomerStatement = connection.prepareStatement("INSERT INTO customer (email, password, phonenumber, first_name, last_name, address, zip) VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
 
-        // 2. Invoke the Method
-        Customer currentCustomer = new Customer(1, "test", "123", 1234, "first", "last", "test", 2770, "Customer");
-        LocalDate date = LocalDate.now();
-        int height = 300;
-        int width = 400;
-        int length = 600;
-        CustomerRequestMapper.makeCustomerRequest(currentCustomer, height, width, length, date, connectionPool);
+            insertCustomerStatement.setString(1, currentCustomer.getEmail());
+            insertCustomerStatement.setString(2, currentCustomer.getPassword());
+            insertCustomerStatement.setInt(3, currentCustomer.getPhoneNumber());
+            insertCustomerStatement.setString(4, currentCustomer.getFirstName());
+            insertCustomerStatement.setString(5, currentCustomer.getLastName());
+            insertCustomerStatement.setString(6, currentCustomer.getAddress());
+            insertCustomerStatement.setInt(7, currentCustomer.getZip());
 
-        // 3. Assertion
-        int updatedSize = new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size();
-        assertEquals(initialSize + 1, updatedSize);
+            int rowsAffected = insertCustomerStatement.executeUpdate();
+
+            if (rowsAffected != 1) {
+                fail("Failed to insert customer");
+            }
+
+            ResultSet generatedKeys = insertCustomerStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int customerId = generatedKeys.getInt(1);
+
+                LocalDate date = LocalDate.now();
+                int height = 300;
+                int width = 400;
+                int length = 600;
+
+                int initialSize = new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size();
+                CustomerRequestMapper.makeCustomerRequest(currentCustomer, height, width, length, date, connectionPool);
+                int updatedSize = new CustomerRequestMapper().getAllCustomerRequest(connectionPool).size();
+
+                assertEquals(initialSize + 1, updatedSize);
+            } else {
+                fail("Failed to retrieve generated key for customer");
+            }
+        } catch (SQLException e) {
+            fail("Database error: " + e.getMessage());
+        }
     }
 
- */
+
+
 
 
     @Test
