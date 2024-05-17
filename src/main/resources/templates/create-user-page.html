@@ -12,7 +12,7 @@
         <header class="header">
             <div class="header-content">
                 <h2>Oplysninger</h2>
-                <img alt="logo" th:src="@{/images/fog-logo.png}" />
+                <img alt="logo" th:src="@{/images/fog-logo.png}"/>
             </div>
         </header>
         <h4>Indtast dine oplysninger her</h4>
@@ -20,41 +20,43 @@
         <form class="generic-form" action="/createuser" method="post">
             <div class="flex-row">
                 <div class="flex-col">
-                    <input type="email" name="email" placeholder="E-mail*" />
-                    <input type="email" name="email2" placeholder="Gentag e-mail*" />
+                    <input type="email" name="email" placeholder="E-mail*"/>
+                    <input type="email" name="email2" placeholder="Gentag e-mail*"/>
                 </div>
                 <div class="flex-col">
-                    <input type="password" name="password1" placeholder="Kodeord*" />
-                    <input type="password" name="password2" placeholder="Gentag kodeord*" />
+                    <input type="password" name="password1" placeholder="Kodeord*"/>
+                    <input type="password" name="password2" placeholder="Gentag kodeord*"/>
                 </div>
                 <div class="flex-col">
-                    <input type="text" name="firstName" placeholder="Fornavn*" />
-                    <input type="text" name="lastName" placeholder="Efternavn*" />
+                    <input type="text" name="firstName" placeholder="Fornavn*"/>
+                    <input type="text" name="lastName" placeholder="Efternavn*"/>
                 </div>
             </div>
             <div class="flex-row">
                 <div class="flex-col">
-                    <input type="text" name="zip" placeholder="Postnr.*" />
+                    <input type="number" name="zip" placeholder="Postnr.*" min="0" max="9999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-9999.')"/>
                 </div>
                 <div class="flex-col">
-                    <input type="text" name="cityName" placeholder="By*" />
-                </div>
-            </div>
-            <div class="flex-row">
-                <div class="flex-col full-width">
-                    <input type="text" name="address" placeholder="Adresse*" />
+                    <input type="text" name="cityName" placeholder="By*"/>
                 </div>
             </div>
             <div class="flex-row">
                 <div class="flex-col full-width">
-                    <input type="text" name="phoneNumber" placeholder="Telefonnr*" />
+                    <input type="text" name="address" placeholder="Adresse*"/>
+                </div>
+            </div>
+            <div class="flex-row">
+                <div class="flex-col full-width">
+                    <input type="number" name="phoneNumber" placeholder="Telefonnr*" min="11111111" max="99999999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 11111111-99999999.')"/>
                 </div>
             </div>
 
+            <div style="font-family: Helvetica, sans-serif; font-weight: bolder"><p th:text="${message}"></p></div>
+
             <div class="form-group">
                 <input type="submit" value="Opret">
-                <div style="font-weight: bolder"><p th:text="${message}"></p></div>
             </div>
+            <p style="font-family: Helvetica, sans-serif">Har du allerede en konto? <a th:href="@{/login-page}">Gå til login</a></p>
         </form>
     </div>
 </div>

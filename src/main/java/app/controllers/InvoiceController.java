@@ -14,14 +14,6 @@ import java.util.List;
 public class InvoiceController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        /*app.get("/", ctx -> {
-            ctx.render("customer-info-frontpage.html");
-        });*/
-
-        app.get("backToInfoPage", ctx -> {
-            ctx.redirect("customer-info-frontpage.html");
-        });
-
         app.get("viewOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
 
         app.get("viewInvoiceDetails/{invoiceid}", ctx -> {
@@ -30,6 +22,11 @@ public class InvoiceController {
             System.out.println(id);
             displayInvoiceDetails(ctx, connectionPool);
         });
+        app.get("backToOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
+        app.get("backToInfoPage", ctx -> {
+            ctx.render("customer-info-frontpage.html");
+        });
+
     }
 
     /***
@@ -43,11 +40,13 @@ public class InvoiceController {
 
     private static void displayCustomerOrderHistory(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
-        Customer customer = new Customer(1, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
+        Customer customer = new Customer(2, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
         ctx.sessionAttribute("currentCustomer", customer);
         List<Invoice> listOfInvoices = null;
-        listOfInvoices = InvoiceMapper.getCustomersOrderHistory(1, connectionPool);
+        listOfInvoices = InvoiceMapper.getCustomersOrderHistory(2, connectionPool);
+
         ctx.attribute("listOfInvoices", listOfInvoices);
+        System.out.println(listOfInvoices);
 
         ctx.render("customer-order-history-page.html");
     }
@@ -63,7 +62,7 @@ public class InvoiceController {
 
 
     private static void displayInvoiceDetails(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Customer customer = new Customer(1, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
+        Customer customer = new Customer(2, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
         ctx.sessionAttribute("currentCustomerId");
         ctx.attribute("currentCustomerId", customer.getCustomerId());
 
@@ -71,8 +70,9 @@ public class InvoiceController {
         int id = Integer.parseInt(ctx.pathParam("invoiceid"));
 
         List<InvoiceDetails> listOfPartlists = null;
-        listOfPartlists = InvoiceMapper.getCustomerInvoiceDetails(customer.getCustomerId(),id, connectionPool);
+        listOfPartlists = InvoiceMapper.getCustomerInvoiceDetails(customer.getCustomerId(), id, connectionPool);
         ctx.attribute("listOfPartlists", listOfPartlists);
+        SvgController.displaySvg(ctx, connectionPool);
 
         ctx.render("customer-invoice-details-page.html");
 

@@ -44,7 +44,7 @@ public class MaterialController {
             ctx.render("materials-page.html");
         } catch (DatabaseException | NumberFormatException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("index.html");
+            ctx.render("materials-page.html");
         }
     }
 
@@ -64,7 +64,7 @@ public class MaterialController {
             ctx.render("edit-materials-page.html");
         } catch (DatabaseException | NumberFormatException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("index.html");
+            ctx.render("materials-page.html");
         }
     }
 
@@ -132,7 +132,7 @@ public class MaterialController {
             ctx.render("materials-page.html");
         } catch (DatabaseException | NumberFormatException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("index.html");
+            ctx.render("materials-page.html");
         }
     }
 }

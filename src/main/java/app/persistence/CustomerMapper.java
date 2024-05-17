@@ -14,8 +14,7 @@ public class CustomerMapper {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
-        )
-        {
+        ) {
             ps.setString(1, email);
             ps.setString(2, password);
 
@@ -42,7 +41,7 @@ public class CustomerMapper {
     }
 
     public static int createUser(String email, String password, String firstName, String lastName, int zip, String address, int phoneNumber, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO customer (email, password, first_name, last_name, zip, address, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO customer (email, password, first_name, last_name, zip, address, phonenumber) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -101,5 +100,27 @@ public class CustomerMapper {
         }
         return userList;
     }
+
+    public static boolean cityChecker(int zip, String cityName, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT * FROM city WHERE zip=? AND city_name=?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, zip);
+            ps.setString(2, cityName);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB fejl", e.getMessage());
+        }
+    }
+
 
 }
