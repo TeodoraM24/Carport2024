@@ -19,17 +19,17 @@ public class Main {
         }).start(7070);
 
         // Routing
-        app.get("/", ctx -> ctx.render("carport-index.html"));
-        AdminController.addRoutes(app, ConnectionPool.getInstance());
-        AdminCustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
-        AdminRequestController.addRoutes(app, ConnectionPool.getInstance());
-        CustomerController.addRoutes(app, ConnectionPool.getInstance());
-        CustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
+        app.get("/", ctx -> ctx.render("customer-info-frontpage"));
+//        AdminController.addRoutes(app, ConnectionPool.getInstance());
+//        AdminCustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
+//        AdminRequestController.addRoutes(app, ConnectionPool.getInstance());
+//        CustomerController.addRoutes(app, ConnectionPool.getInstance());
+//        CustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
         InvoiceController.addRoutes(app, ConnectionPool.getInstance());
-        LoginController.addRoutes(app, ConnectionPool.getInstance());
-        MaterialController.addRoutes(app, ConnectionPool.getInstance());
-        OfferController.addRoutes(app, ConnectionPool.getInstance());
-        SvgController.addRoutes(app, ConnectionPool.getInstance());
+//        LoginController.addRoutes(app, ConnectionPool.getInstance());
+//        MaterialController.addRoutes(app, ConnectionPool.getInstance());
+//        OfferController.addRoutes(app, ConnectionPool.getInstance());
+//        SvgController.addRoutes(app, ConnectionPool.getInstance());
 
 
         //app.get("/", ctx ->  ctx.render("admin-frontpage.html"));
