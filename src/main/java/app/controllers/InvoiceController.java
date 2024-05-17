@@ -14,14 +14,6 @@ import java.util.List;
 public class InvoiceController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        /*app.get("/", ctx -> {
-            ctx.render("customer-info-frontpage.html");
-        });*/
-
-        app.get("backToInfoPage", ctx -> {
-            ctx.redirect("customer-info-frontpage.html");
-        });
-
         app.get("viewOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
 
         app.get("viewInvoiceDetails/{invoiceid}", ctx -> {
@@ -30,6 +22,11 @@ public class InvoiceController {
             System.out.println(id);
             displayInvoiceDetails(ctx, connectionPool);
         });
+        app.get("backToOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
+        app.get("backToInfoPage", ctx -> {
+            ctx.render("customer-info-frontpage.html");
+        });
+
     }
 
     /***
@@ -73,8 +70,9 @@ public class InvoiceController {
         int id = Integer.parseInt(ctx.pathParam("invoiceid"));
 
         List<InvoiceDetails> listOfPartlists = null;
-        listOfPartlists = InvoiceMapper.getCustomerInvoiceDetails(customer.getCustomerId(),id, connectionPool);
+        listOfPartlists = InvoiceMapper.getCustomerInvoiceDetails(customer.getCustomerId(), id, connectionPool);
         ctx.attribute("listOfPartlists", listOfPartlists);
+        SvgController.displaySvg(ctx, connectionPool);
 
         ctx.render("customer-invoice-details-page.html");
 
