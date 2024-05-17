@@ -26,10 +26,10 @@ public class InvoiceMapper {
 
     public static List<Invoice> getCustomersOrderHistory(int customerId, ConnectionPool connectionPool) throws DatabaseException {
         List<Invoice> listOfCustomersInvoices = new ArrayList<>();
-        String sql = "SELECT customer_invoice.customer_id, invoice.invoice_id, invoice.date AS invoice_date\n" +
+        String sql = "SELECT customer_invoice.customer_id, invoice.invoice_id, invoice.date\n" +
                 "FROM public.customer_invoice\n" +
-                "JOIN public.invoice ON customer_invoice.invoice_id = invoice.invoice_id\n" +
-                "WHERE customer_invoice.customer_id = ?";
+                "INNER JOIN public.invoice ON customer_invoice.invoice_id = invoice.invoice_id\n" +
+                "WHERE customer_invoice.customer_id =?";
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
@@ -37,9 +37,9 @@ public class InvoiceMapper {
             ps.setInt(1, customerId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                LocalDate date = rs.getDate("invoice_date").toLocalDate();
+                Date date = rs.getDate("date");
                 int invoiceId = rs.getInt("invoice_id");
-                Invoice invoice = new Invoice(customerId, invoiceId, date);
+                Invoice invoice = new Invoice(customerId, invoiceId, date.toLocalDate());
                 listOfCustomersInvoices.add(invoice);
             }
         } catch (SQLException e) {

@@ -1,31 +1,22 @@
-.h1 {
-    color: #369;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 3rem;
-}
 .container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 80vh;
-    text-align: center;
+    align-items: center; /* Align items at the top */
+    height: 80vh
 }
 
 .flexbox {
-    width: 800px;
-    height: auto;
-    background-color: #ffffff;
-    border-radius: 5px;
+    width: 800px; /* Adjust width as needed */
+    height: 400px; /* Adjust height as needed */
+    background-color: #ffffff; /* Adjust background color as needed */
+    border-radius: 5px; /* Adjust border radius for smooth corners */
     font-family: Helvetica, sans-serif;
     justify-content: space-between;
 
+
 }
-
-
 table {
     width: 100%;
-    border-collapse: collapse;
-
 }
 
 
@@ -42,7 +33,7 @@ tbody tr:nth-child(odd) {
 
 td {
     padding: 8px;
-    border-style: solid;
+
 }
 
 
@@ -62,7 +53,19 @@ form {
     transition-duration: 0.4s;
     cursor: pointer;
     border-radius: 5px;
-   margin-bottom: 20px;
+}
+.button2 {
+    background-color: #203ba5; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 11px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 .button:hover {
