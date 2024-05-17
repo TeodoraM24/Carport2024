@@ -22,6 +22,7 @@ public class Main {
         AdminController.addRoutes(app, ConnectionPool.getInstance());
         AdminCustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
         AdminRequestController.addRoutes(app, ConnectionPool.getInstance());
+        AdminAwaitingCustomerController.addRoutes(app, ConnectionPool.getInstance());
         CustomerController.addRoutes(app, ConnectionPool.getInstance());
         CustomerRequestController.addRoutes(app, ConnectionPool.getInstance());
         InvoiceController.addRoutes(app, ConnectionPool.getInstance());

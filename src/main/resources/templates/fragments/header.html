@@ -12,9 +12,16 @@
 <body>
 <div class="main-header" th:fragment="main-header(user)">
     <div class="header-left">
-        <a href="../carport-index.html" th:href="@{/carport-index}">
-        <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
-        </a>
+        <th:block th:if="${#strings.equals(user,'customer') || #strings.equals(user,'')}">
+            <a href="../carport-index.html" th:href="@{/carport-index}">
+                <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
+            </a>
+        </th:block>
+        <th:block th:if="${#strings.equals(user,'admin')}">
+            <a href="../carport-index.html" th:href="@{/loginpage-admin}">
+                <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
+            </a>
+        </th:block>
     </div>
 
     <div class="header-right">
@@ -47,7 +54,7 @@
                 <div class="dropdown-content">
                     <a th:href="@{/loginpage-admin}">Forside</a>
                     <a href="#">Forespørgsler</a>
-                    <a href="#">Afventer Kunder</a>
+                    <a th:href="@{/awaitingcustomers}">Afventer Kunder</a>
                     <a th:href="@{/material}">Materialer</a>
                     <a th:href="@{/logout}">Log ud</a>
                 </div>
