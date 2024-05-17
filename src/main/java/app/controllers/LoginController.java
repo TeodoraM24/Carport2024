@@ -19,24 +19,29 @@ public class LoginController {
         app.get("/logout", ctx -> logout(ctx));
     }
 
-    private static void login(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    public static void login(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
-        boolean isAdmin= LoginMapper.isAdmin(email, connectionPool);
-
-        if (isAdmin){
-            Admin admin = AdminMapper.logInd(email, password, connectionPool);
-            ctx.sessionAttribute("currentUser", admin);
-            ctx.attribute("message", "Du er nu logget ind");
-            ctx.redirect("/loginpage-admin");
-        } else {
-            Customer customer = CustomerMapper.login(email, password, connectionPool);
-            ctx.sessionAttribute("currentUser", customer);
-            ctx.attribute("message", "Du er nu logget ind");
-            ctx.redirect("/loginpage-customer");
+        try {
+            boolean isAdmin = LoginMapper.isAdmin(email, connectionPool);
+            if (isAdmin) {
+                Admin admin = AdminMapper.logInd(email, password, connectionPool);
+                ctx.sessionAttribute("currentUser", admin);
+                ctx.attribute("message", "Du er nu logget ind");
+                ctx.redirect("/loginpage-admin");
+            } else {
+                Customer customer = CustomerMapper.login(email, password, connectionPool);
+                ctx.sessionAttribute("currentUser", customer);
+                ctx.attribute("message", "Du er nu login");
+                ctx.redirect("/loginpage-customer");
+            }
+        } catch (DatabaseException e) {
+            ctx.attribute("message", e.getMessage());
+            ctx.render("login-page.html");
         }
     }
+
 
     private static void logout(Context ctx)
     {
