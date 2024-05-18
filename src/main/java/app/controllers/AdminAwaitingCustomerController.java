@@ -12,15 +12,29 @@ import java.util.List;
 
 public class AdminAwaitingCustomerController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/awaitingcustomers", ctx -> {
+        app.get("/awaitingCustomers", ctx -> {
             List<Offer> allCustomerOffers = getAllCustomerOffers(connectionPool);
             displayAwaitingCustomer(allCustomerOffers, ctx);
         });
 
         app.get("/sendInvoice/{offerId}", ctx -> {
            createInvoice(ctx, connectionPool);
-           ctx.redirect("/awaitingcustomers");
+           ctx.redirect("/awaitingCustomers");
         });
+
+        app.get("/deleteOffer/{offerId}",  ctx -> {
+            deleteOfferAndRequest(ctx, connectionPool);
+            ctx.redirect("/awaitingCustomers");
+        });
+    }
+
+    private static void deleteOfferAndRequest(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int offerId = Integer.parseInt(ctx.pathParam("offerId"));
+        Offer offer = OfferMapper.getOfferById(offerId, connectionPool);
+        CustomerMapper.deleteOfferId(offerId, connectionPool);
+        CustomerMapper.deleteRequestId(offer.getCustomerRequestId(), connectionPool);
+        OfferMapper.deleteOffer(offer.getOfferId(), connectionPool);
+        CustomerRequestMapper.deleteCustomerRequest(offer.getCustomerRequestId(), connectionPool);
     }
 
     private static void createInvoice(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
