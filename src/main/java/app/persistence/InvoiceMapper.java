@@ -1,12 +1,10 @@
 package app.persistence;
 
-import app.entities.InvoiceDetails;
-import app.entities.Invoice;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
@@ -109,6 +107,34 @@ public class InvoiceMapper {
         return listOfInvoiceDetails;
     }
 
+
+    public static Carport getCarport(int invoiceId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT carport_id, width, height, length, price_id, purchase_price, salesprice_with_tax, coverage_ratio FROM public.invoice " +
+                "INNER JOIN carport USING(carport_id) INNER JOIN price USING(price_id)";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, invoiceId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int carportId = rs.getInt("carport_id");
+                int width = rs.getInt("width");
+                int height = rs.getInt("height");
+                int length = rs.getInt("length");
+                int priceId = rs.getInt("price_id");
+                double purchasePrice = rs.getDouble("purchase_price");
+                double salesPrice = rs.getDouble("salesprice_with_tax");
+                double coverage = rs.getDouble("coverage_ratio");
+
+                return new Carport(carportId, width, height, length, new Price(priceId, purchasePrice, salesPrice, coverage));
+            } else {
+                throw new DatabaseException("Offer not found for given offer id.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB: SQL SELECT error when trying to select an offer from offer table");
+        }
+    }
 }
 
 

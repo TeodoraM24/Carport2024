@@ -23,7 +23,7 @@ public class CustomerRequest {
         this.status = status;
     }
 
-    public CustomerRequest(int customerRequestId, int requestLength, int requestHeight, int requestWidth, String requestTileType, LocalDate date, String status, Customer customer) {
+    public CustomerRequest(int customerRequestId, int requestLength, int requestWidth, int requestHeight, String requestTileType, LocalDate date, String status, Customer customer) {
         this.customerRequestId = customerRequestId;
         this.requestLength = requestLength;
         this.requestHeight = requestHeight;

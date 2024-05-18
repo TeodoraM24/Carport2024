@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.entities.Carport;
 import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
 import app.persistence.AdminRequestMapper;
@@ -14,11 +15,9 @@ import java.util.Locale;
 public class SvgController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/Svg", ctx -> displaySvg(ctx, connectionPool));
+        //app.get("/Svg", ctx -> displaySvg(ctx, connectionPool));
 
-        app.post("/showDrawing", ctx -> {
-            displayDrawing(ctx, connectionPool);
-        });
+        app.post("/showDrawing", ctx -> displayDrawing(ctx, connectionPool));
     }
 
     private static void displayDrawing(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
@@ -40,12 +39,11 @@ public class SvgController {
      * Renders the SVG page with top down and side view of carport with chosen width, length and height
      *
      * @param ctx            Context parameter used to obtain information related to the page
-     * @param connectionPool ConnectionPool used to retrieve data from database
      */
-    public static void displaySvg(Context ctx, ConnectionPool connectionPool) {
+    public static void displaySvg(Carport carport, Context ctx) {
         Locale.setDefault(new Locale("US"));
-        CarportSvgTopDownView svgTopDownView = new CarportSvgTopDownView(780, 600);
-        CarportSvgSideView svgSideView = new CarportSvgSideView(780, 230);
+        CarportSvgTopDownView svgTopDownView = new CarportSvgTopDownView(carport.getLength(), carport.getWidth());
+        CarportSvgSideView svgSideView = new CarportSvgSideView(carport.getLength(), carport.getHeight());
         ctx.attribute("svgTopDownView", svgTopDownView.toString());
         ctx.attribute("svgSideView", svgSideView.toString());
         ctx.render("Svg-page.html");

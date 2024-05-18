@@ -70,9 +70,9 @@ public class CustomerRequestMapper {
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
                     int customerRequestId = rs.getInt("customer_request_id");
-                    int length = rs.getInt("length");
-                    int width = rs.getInt("width");
-                    int height = rs.getInt("height");
+                    int requestLength = rs.getInt("length");
+                    int requestWidth = rs.getInt("width");
+                    int requestHeight = rs.getInt("height");
                     LocalDate date = rs.getDate("date").toLocalDate();
                     String status = rs.getString("status");
                     String tileType = rs.getString("tile_type");
@@ -81,7 +81,7 @@ public class CustomerRequestMapper {
                     int customerId = rs.getInt("customer_id");
 
                     Customer customer = new Customer(customerId, firstName, lastName);
-                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status, customer);
+                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, requestLength, requestWidth, requestHeight, tileType, date, status, customer);
                     customerRequests.add(customerRequest);
                 }
             }
@@ -132,7 +132,6 @@ public class CustomerRequestMapper {
      * Handles the insert into the database
      *
      * @param connectionPool The connection to the database
-     * @return Returns a list the requested customer request
      * @throws DatabaseException Handles database error
      */
    
@@ -142,12 +141,12 @@ public class CustomerRequestMapper {
         }
 
         String insertCustomerRequestQuery = "INSERT INTO customer_request (length, width, height, date) VALUES (?, ?, ?, ?)";
-        String insertAdminCustomerRequestQuery = "INSERT INTO admin_customer_request (admin_id, customer_request_id) VALUES (?, ?)";
+        //String insertAdminCustomerRequestQuery = "INSERT INTO admin_customer_request (admin_id, customer_request_id) VALUES (?, ?)";
         String updateCustomerQuery = "UPDATE customer SET customer_request_id = ? WHERE customer_id = ? AND customer_request_id IS NULL";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement insertCustomerRequestStatement = connection.prepareStatement(insertCustomerRequestQuery, PreparedStatement.RETURN_GENERATED_KEYS);
-             PreparedStatement insertAdminCustomerRequestStatement = connection.prepareStatement(insertAdminCustomerRequestQuery);
+             //PreparedStatement insertAdminCustomerRequestStatement = connection.prepareStatement(insertAdminCustomerRequestQuery);
              PreparedStatement updateCustomerStatement = connection.prepareStatement(updateCustomerQuery)) {
 
             insertCustomerRequestStatement.setInt(1, length);
@@ -169,9 +168,9 @@ public class CustomerRequestMapper {
             int customerRequestId = rs.getInt(1);
 
 
-            insertAdminCustomerRequestStatement.setInt(1, 1);
-            insertAdminCustomerRequestStatement.setInt(2, customerRequestId);
-            insertAdminCustomerRequestStatement.executeUpdate();
+            //insertAdminCustomerRequestStatement.setInt(1, 1);
+            //insertAdminCustomerRequestStatement.setInt(2, customerRequestId);
+            //insertAdminCustomerRequestStatement.executeUpdate();
 
 
             updateCustomerStatement.setInt(1, customerRequestId);
@@ -208,7 +207,6 @@ public class CustomerRequestMapper {
      *
      * @param customerRequestId The ID of the customer request to delete
      * @param connectionPool    The connection to the database
-     * @return Returns a list the requested customer request
      * @throws DatabaseException Handles database error
      */
     public static void deleteCustomerRequest(int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {

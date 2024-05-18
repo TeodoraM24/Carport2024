@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.entities.Carport;
 import app.entities.Customer;
 import app.entities.InvoiceDetails;
 import app.entities.Invoice;
@@ -23,9 +24,7 @@ public class InvoiceController {
             displayInvoiceDetails(ctx, connectionPool);
         });
         app.get("backToOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
-        app.get("backToInfoPage", ctx -> {
-            ctx.render("customer-info-frontpage.html");
-        });
+        app.get("backToInfoPage", ctx -> ctx.render("customer-info-frontpage.html"));
 
     }
 
@@ -42,8 +41,7 @@ public class InvoiceController {
 
         Customer customer = new Customer(2, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
         ctx.sessionAttribute("currentCustomer", customer);
-        List<Invoice> listOfInvoices = null;
-        listOfInvoices = InvoiceMapper.getCustomersOrderHistory(2, connectionPool);
+        List<Invoice> listOfInvoices = InvoiceMapper.getCustomersOrderHistory(2, connectionPool);
 
         ctx.attribute("listOfInvoices", listOfInvoices);
         System.out.println(listOfInvoices);
@@ -67,12 +65,13 @@ public class InvoiceController {
         ctx.attribute("currentCustomerId", customer.getCustomerId());
 
         //get invoiceId
-        int id = Integer.parseInt(ctx.pathParam("invoiceid"));
+        int invoiceId = Integer.parseInt(ctx.pathParam("invoiceid"));
 
-        List<InvoiceDetails> listOfPartlists = null;
-        listOfPartlists = InvoiceMapper.getCustomerInvoiceDetails(customer.getCustomerId(), id, connectionPool);
+        List<InvoiceDetails> listOfPartlists = InvoiceMapper.getCustomerInvoiceDetails(customer.getCustomerId(), invoiceId, connectionPool);
         ctx.attribute("listOfPartlists", listOfPartlists);
-        SvgController.displaySvg(ctx, connectionPool);
+
+        Carport carport = InvoiceMapper.getCarport(invoiceId, connectionPool);
+        SvgController.displaySvg(carport, ctx);
 
         ctx.render("customer-invoice-details-page.html");
 
