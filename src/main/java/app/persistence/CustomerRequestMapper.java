@@ -19,7 +19,7 @@ import java.util.List;
 
 public class CustomerRequestMapper {
 
-    public static List<CustomerRequest> getAllCustomerRequests(int customerId, ConnectionPool connectionPool) throws DatabaseException {
+    public static List<CustomerRequest> getAllCustomerRequests(int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
         List<CustomerRequest> customerRequests = new ArrayList<>();
         String sql = "SELECT * FROM customer_request WHERE customer_request_id = ?";
 
@@ -27,11 +27,10 @@ public class CustomerRequestMapper {
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setInt(1, customerId);
+            ps.setInt(1, customerRequestId);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int customerRequestId = rs.getInt("customer_request_id");
                 int length = rs.getInt("length");
                 int height = rs.getInt("height");
                 int width = rs.getInt("width");
