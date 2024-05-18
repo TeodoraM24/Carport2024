@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
     <title>Kunde forespørgsler</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/css/customer-own-order-frontpage-style.css" th:href="@{/css/customer-own-order-frontpage-style.css}" rel="stylesheet"/>
-    <link href="../public/css/customer-request-admin.css" th:href="@{/css/admininquiries.css}" rel="stylesheet"/>
+    <link href="../public/css/awaiting-customer-style.css" th:href="@{/css/awaiting-customer-style.css}" rel="stylesheet"/>
 </head>
+
 <body>
 <div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
 <div class="container">
@@ -16,9 +16,8 @@
             <div th:if="${#lists.isEmpty(customerRequests)}">
                 <p>Der er ikke nogle kunde forespørgsler.</p>
             </div>
+            
             <th:block th:if="${!#lists.isEmpty(customerRequests)}">
-
-
                 <table>
                     <thead>
                     <tr>
@@ -40,7 +39,7 @@
                             <form id="chooseCustomerForm" action="/chooseCustomer" method="get">
                                 <input type="hidden" name="customerId" th:value="${request.customer.getCustomerId()}"/>
                                 <input type="hidden" name="customerName" th:value="${request.customer.getFirstName() + ' ' + request.customer.getLastName()}"/>
-                                <button type="submit">Behandle</button>
+                                <button type="submit" class="select-customer">Behandle</button>
                             </form>
                         </td>
                         </th:block>
@@ -50,6 +49,7 @@
 
             </th:block>
         </th:block>
+        <a th:href="@{/loginpage-admin}" class="return-button" style="width: 100px">Gå tilbage</a>
     </div>
 </div>
 </body>

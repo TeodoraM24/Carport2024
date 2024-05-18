@@ -38,7 +38,7 @@ public class AdminOfferController {
             PartsListMapper.addPartsListItem(partsListId, partsListItemId, connectionPool);
         }
 
-        partsList = new PartsList(partsListId,priceId);
+        partsList = new PartsList(partsListId, new Price(priceId, price.getPurchasePrice(), price.getSalesPrice(), price.getCoverage()));
     }
 
     private static int getPartsListItemId(PartsListItem partsListItem, ConnectionPool connectionPool) throws DatabaseException {
@@ -54,7 +54,7 @@ public class AdminOfferController {
 
     private static void createOffer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int partsListId = partsList.getPartsListId();
-        int priceId = partsList.getPriceId();
+        int priceId = partsList.getPrice().getPriceId();
         int customerId = AdminRequestController.getSessionCurrentId(ctx);
         int customerRequestId = AdminRequestController.getSessionCurrentRequestId(ctx);
         String rafterDescription = "Spær med rejsning";

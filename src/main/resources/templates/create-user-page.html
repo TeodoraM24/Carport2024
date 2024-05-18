@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>CreateUser</title>
     <meta charset="UTF-8">
@@ -20,34 +20,54 @@
         <form class="generic-form" action="/createuser" method="post">
             <div class="flex-row">
                 <div class="flex-col">
-                    <input type="email" name="email" placeholder="E-mail*"/>
-                    <input type="email" name="email2" placeholder="Gentag e-mail*"/>
+                    <label>
+                        <input type="email" name="email" placeholder="E-mail*"/>
+                    </label>
+                    <label>
+                        <input type="email" name="email2" placeholder="Gentag e-mail*"/>
+                    </label>
                 </div>
                 <div class="flex-col">
-                    <input type="password" name="password1" placeholder="Kodeord*"/>
-                    <input type="password" name="password2" placeholder="Gentag kodeord*"/>
+                    <label>
+                        <input type="password" name="password1" placeholder="Kodeord*"/>
+                    </label>
+                    <label>
+                        <input type="password" name="password2" placeholder="Gentag kodeord*"/>
+                    </label>
                 </div>
                 <div class="flex-col">
-                    <input type="text" name="firstName" placeholder="Fornavn*"/>
-                    <input type="text" name="lastName" placeholder="Efternavn*"/>
+                    <label>
+                        <input type="text" name="firstName" placeholder="Fornavn*"/>
+                    </label>
+                    <label>
+                        <input type="text" name="lastName" placeholder="Efternavn*"/>
+                    </label>
                 </div>
             </div>
             <div class="flex-row">
                 <div class="flex-col">
-                    <input type="number" name="zip" placeholder="Postnr.*" min="0" max="9999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-9999.')"/>
+                    <label>
+                        <input type="number" name="zip" placeholder="Postnr.*" min="0" max="9999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-9999.')"/>
+                    </label>
                 </div>
                 <div class="flex-col">
-                    <input type="text" name="cityName" placeholder="By*"/>
+                    <label>
+                        <input type="text" name="cityName" placeholder="By*"/>
+                    </label>
                 </div>
             </div>
             <div class="flex-row">
                 <div class="flex-col full-width">
-                    <input type="text" name="address" placeholder="Adresse*"/>
+                    <label>
+                        <input type="text" name="address" placeholder="Adresse*"/>
+                    </label>
                 </div>
             </div>
             <div class="flex-row">
                 <div class="flex-col full-width">
-                    <input type="number" name="phoneNumber" placeholder="Telefonnr*" min="11111111" max="99999999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 11111111-99999999.')"/>
+                    <label>
+                        <input type="number" name="phoneNumber" placeholder="Telefonnr*" min="10000000" max="99999999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 11111111-99999999.')"/>
+                    </label>
                 </div>
             </div>
 

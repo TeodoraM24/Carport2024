@@ -2,11 +2,11 @@ package app.entities;
 
 public class PartsList {
     private int partsListId;
-    private int priceId;
+    private Price price;
 
-    public PartsList(int partsListId, int priceId) {
+    public PartsList(int partsListId, Price price) {
         this.partsListId = partsListId;
-        this.priceId = priceId;
+        this.price = price;
     }
 
     public int getPartsListId() {
@@ -16,20 +16,19 @@ public class PartsList {
     public void setPartsListId(int partsListId) {
         this.partsListId = partsListId;
     }
-
-    public int getPriceId() {
-        return priceId;
+    public Price getPrice() {
+        return price;
     }
 
-    public void setPriceId(int priceId) {
-        this.priceId = priceId;
+    public void setPrice(Price price) {
+        this.price = price;
     }
 
     @Override
     public String toString() {
         return "PartsList{" +
                 "partsListId=" + partsListId +
-                ", priceId=" + priceId +
+                ", price=" + price +
                 '}';
     }
 }

@@ -58,7 +58,7 @@ public class OfferMapper {
     public static List<Offer> getAllCustomerOffers(ConnectionPool connectionPool) throws DatabaseException {
         List<Offer> offers = new ArrayList<>();
 
-        String sql = "SELECT o.offer_id, c.customer_id, cq.length, cq.width, cq.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax, o.status FROM offer o INNER JOIN customer c USING(customer_request_id) INNER JOIN customer_request cq USING(customer_request_id) INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id)";
+        String sql = "SELECT o.offer_id, c.customer_id, cr.customer_request_id, pl.parts_list_id, p.price_id, cr.length, cr.width, cr.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax, o.status FROM offer o INNER JOIN customer c USING(customer_request_id) INNER JOIN customer_request cr USING(customer_request_id) INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -75,8 +75,11 @@ public class OfferMapper {
                 String roofMaterials = rs.getString("roof_materials");
                 double totalPriceWithTax = rs.getDouble("salesprice_with_tax");
                 String status = rs.getString("status");
+                int partsListId = rs.getInt("parts_list_id");
+                int priceId = rs.getInt("price_id");
+                int customerRequestId = rs.getInt("customer_request_id");
 
-                offers.add(new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status));
+                offers.add(new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status, partsListId, priceId, customerRequestId));
             }
         } catch (SQLException e) {
             throw new DatabaseException("DB: SQL SELECT error when trying to select an offer from offer table");

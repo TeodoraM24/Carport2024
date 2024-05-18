@@ -7,11 +7,10 @@ public class Price {
     private double priceWithoutTax;
     private double coverage;
 
-    public Price(int priceId, double purchasePrice, double salesPrice, double priceWithoutTax, double coverage) {
+    public Price(int priceId, double purchasePrice, double salesPrice, double coverage) {
         this.priceId = priceId;
         this.purchasePrice = purchasePrice;
         this.salesPrice = salesPrice;
-        this.priceWithoutTax = priceWithoutTax;
         this.coverage = coverage;
     }
 
