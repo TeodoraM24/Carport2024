@@ -30,9 +30,9 @@ public class CustomerMapper {
                 int zip = rs.getInt("zip");
                 int phoneNumber = rs.getInt("phonenumber");
                 String role = rs.getString("role");
+                int customerRequestId = rs.getInt("customer_request_id");
 
-
-                return new Customer(customerId, email, password, phoneNumber, firstName, lastName, address, zip, role);
+                return new Customer(customerId, email, password, phoneNumber, firstName, lastName, address, zip, role, customerRequestId);
             } else {
                 throw new DatabaseException("Fejl i login. Prøv igen");
             }
@@ -135,7 +135,7 @@ public class CustomerMapper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt("customer_id");
-             } else {
+            } else {
                 throw new DatabaseException("Could not find customer_id by the offer id on customer.");
             }
         } catch (SQLException e) {
@@ -143,7 +143,7 @@ public class CustomerMapper {
         }
     }
 
-    public static void deleteOfferId(int offerId, ConnectionPool connectionPool) throws DatabaseException{
+    public static void deleteOfferId(int offerId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "UPDATE customer SET offer_id = null WHERE offer_id = ?";
 
         try (

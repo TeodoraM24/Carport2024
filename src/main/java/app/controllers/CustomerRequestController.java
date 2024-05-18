@@ -5,6 +5,7 @@ import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 
+import app.persistence.CustomerMapper;
 import app.persistence.CustomerRequestMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -44,7 +45,7 @@ public class CustomerRequestController {
         currentUser.getCustomerId();
 
 
-        List<CustomerRequest> customerRequests = CustomerRequestMapper.getAllCustomerRequests(currentUser.getCustomerId(), connectionPool);
+        List<CustomerRequest> customerRequests = CustomerRequestMapper.getAllCustomerRequests(currentUser.getCustomer_request_id(), connectionPool);
             ctx.attribute("customerRequests", customerRequests);
 
             ctx.render("customer-request-status.html");

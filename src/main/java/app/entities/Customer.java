@@ -14,6 +14,19 @@ public class Customer {
     private int customer_request_id;
     private int offer_id;
 
+    public Customer(int customerId, String email, String password, int phoneNumber, String firstName, String lastName, String address, int zip, String role, int customer_request_id) {
+        this.customerId = customerId;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.zip = zip;
+        this.role = role;
+        this.customer_request_id = customer_request_id;
+    }
+
     public Customer(int customerId, String email, String password, int phoneNumber, String firstName, String lastName, String address, int zip, String role) {
         this.customerId = customerId;
         this.email = email;

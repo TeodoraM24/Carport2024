@@ -54,8 +54,8 @@
             <th:block th:if="${#strings.equals(user,'customer')}">
                 <div class="dropdown-content">
                     <a th:href="@{/carport-index}">Forside</a>
-                    <a href="#">Forespørgsler</a>
-                    <a href="#">Mine Ordre</a>
+                    <a th:href="@{/customer-request-status}">Forespørgsler</a>
+                    <a th:href="@{/viewOrderHistory}">Mine Ordre</a>
                     <a th:href="@{/logout}">Log ud</a>
                 </div>
             </th:block>
