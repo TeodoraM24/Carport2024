@@ -36,6 +36,12 @@
                 </tr>
             </th:block>
             </tbody>
+            <tr th:if="${#lists.isEmpty(customerRequests)}">
+                <td colspan="3">
+                    <br>
+                    <p>Ingen forespørgsler blev fundet.</p>
+                </td>
+            </tr>
         </table>
     </div>
 </div>

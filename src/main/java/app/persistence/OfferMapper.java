@@ -111,7 +111,7 @@ public class OfferMapper {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int id = rs.getInt("offer_id");
+                //int id = rs.getInt("offer_id");
                 int length= rs.getInt("length");
                 int height= rs.getInt("height");
                 int width=rs.getInt("width");
@@ -125,7 +125,9 @@ public class OfferMapper {
                 int partsListId = rs.getInt("parts_list_id");
                 int customerRequestId = rs.getInt("customer_request_id");
 
-                return new Offer(id, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status, partsListId, priceId, customerRequestId);
+                System.out.println("Retrieved Offer ID: " + offerId);
+
+                return new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status, partsListId, priceId, customerRequestId);
             } else {
                 throw new DatabaseException("Offer not found for given offer id.");
             }
