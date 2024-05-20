@@ -1,4 +1,4 @@
-package app.persistence.admin;
+package app.persistence;
 
 
 import app.entities.Material;

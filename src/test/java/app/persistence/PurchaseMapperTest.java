@@ -1,7 +1,7 @@
-package app.persistence.admin;
+package app.persistence;
 
 import app.exceptions.DatabaseException;
-import app.persistence.ConnectionPool;
+import app.persistence.admin.PurchaseMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PurchaseMapperTest {
 
     private static final String USER = "postgres";
-    private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "carport";
+    private static final String PASSWORD = "HigAbt60ig";
+    private static final String URL = "jdbc:postgresql://161.35.195.156/%s?currentSchema=public";
+    private static final String DB = "carport_test";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
     @BeforeEach
     void setUp() {
