@@ -1,8 +1,8 @@
-package app.persistence.admin;
+package app.persistence;
 
 import app.entities.Admin;
 import app.exceptions.DatabaseException;
-import app.persistence.ConnectionPool;
+import app.persistence.admin.AdminMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,14 +15,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AdminMapperTest {
     private static final String USER = "postgres";
-    private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
+    private static final String PASSWORD = "HigAbt60ig";
+    private static final String URL = "jdbc:postgresql://161.35.195.156/%s?currentSchema=public";
     private static final String DB = "carport_test";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
     @BeforeEach
     void setUp() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
+                stmt.execute("DELETE FROM customer_invoice");
+                stmt.execute("DELETE FROM admin_customer_request");
+                stmt.execute("DELETE FROM admin_invoice");
+                stmt.execute("DELETE FROM admin_offer");
+                stmt.execute("DELETE FROM admin_parts_list");
+                stmt.execute("DELETE FROM customer");
+                stmt.execute("DELETE FROM invoice");
+                stmt.execute("DELETE FROM offer");
+                stmt.execute("DELETE FROM parts_list_parts_list_item");
+                stmt.execute("DELETE FROM parts_list");
+                stmt.execute("DELETE FROM parts_list_item");
+                stmt.execute("DELETE FROM material");
+                stmt.execute("DELETE FROM carport");
+                stmt.execute("DELETE FROM price");
+                stmt.execute("DELETE FROM customer_request");
                 stmt.execute("DELETE FROM admin");
                 // Reset the sequence number for customer_id
                 stmt.execute("SELECT setval('public.customer_customer_id_seq', 1, false)");
