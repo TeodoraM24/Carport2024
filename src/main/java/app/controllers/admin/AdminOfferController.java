@@ -77,6 +77,6 @@ public class AdminOfferController {
     }
 
     private static void displayOfferSent(Context ctx) {
-        ctx.render("offer-sent-result-page.html");
+        ctx.render("admin/offer-sent-result-page.html");
     }
 }

@@ -25,7 +25,7 @@ public class OfferController {
 
             Offer offer = OfferMapper.getOfferByCustomerId(currentUser.getCustomerId(), connectionPool);
             ctx.attribute("offer", offer);
-            ctx.render("accept-or-deny-offer-customer.html");
+            ctx.render("customer/accept-or-deny-offer-customer.html");
         } catch (NumberFormatException e) {
             ctx.status(400).result("Invalid offer ID");
         } catch (DatabaseException e) {
@@ -37,7 +37,7 @@ public class OfferController {
         try {
             int offerId = Integer.parseInt(ctx.pathParam("offerId"));
             OfferMapper.updateOfferStatus(offerId, "Godkend", connectionPool);
-            ctx.render("/offer-acceptance.html");
+            ctx.render("customer/offer-acceptance.html");
         } catch (NumberFormatException e) {
             ctx.status(400).result("Invalid offer ID");
         } catch (DatabaseException e) {
@@ -49,7 +49,7 @@ public class OfferController {
         try {
             int offerId = Integer.parseInt(ctx.pathParam("offerId"));
             OfferMapper.updateOfferStatus(offerId, "Afvist", connectionPool);
-            ctx.render("/deny-offer-page.html");
+            ctx.render("customer/deny-offer-page.html");
         } catch (NumberFormatException e) {
             ctx.status(400).result("Invalid offer ID");
         } catch (DatabaseException e) {

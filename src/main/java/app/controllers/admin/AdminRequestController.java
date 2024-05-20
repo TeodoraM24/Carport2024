@@ -114,7 +114,7 @@ public class AdminRequestController {
             customerRequestList = CustomerRequestMapper.getAllCustomerRequest(connectionPool);
             ctx.attribute("customerRequests", customerRequestList);
 
-            ctx.render("admininquiries.html");
+            ctx.render("admin/admininquiries.html");
         } catch (DatabaseException e) {
             ctx.result("Der skete en fejl mens programmet hentede kundeforespørgsler");
         }
@@ -192,7 +192,7 @@ public class AdminRequestController {
         ctx.attribute("tileType", tileType);
         ctx.attribute("offerPrice", priceOffer.getSalesPrice());
 
-        ctx.render("offer-information-page.html");
+        ctx.render("admin/offer-information-page.html");
     }
 
     private static void displayCalculateOfferPage(Context ctx, List<PartsListItem> partsListItems, Price priceOffer) {
@@ -201,7 +201,7 @@ public class AdminRequestController {
         ctx.attribute("priceOffer", priceOffer);
         ctx.attribute("partsListItems", partsListItems);
 
-        ctx.render("calculate-offer.html");
+        ctx.render("admin/calculate-offer.html");
     }
 
     private static void displayChosenCustomerRequestPage(CustomerRequest customerRequest, Context ctx) {
@@ -209,6 +209,6 @@ public class AdminRequestController {
         ctx.attribute("customerName", customerName);
         ctx.attribute("chosenCustomerRequest", customerRequest);
 
-        ctx.render("process-customer-request.html");
+        ctx.render("admin/process-customer-request.html");
     }
 }

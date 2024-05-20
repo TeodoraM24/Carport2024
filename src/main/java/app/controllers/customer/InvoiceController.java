@@ -25,7 +25,7 @@ public class InvoiceController {
             displayInvoiceDetails(ctx, connectionPool);
         });
         app.get("backToOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
-        app.get("backToInfoPage", ctx -> ctx.render("customer-info-frontpage.html"));
+        app.get("backToInfoPage", ctx -> ctx.render("customer/customer-info-frontpage.html"));
 
     }
 
@@ -47,7 +47,7 @@ public class InvoiceController {
         ctx.attribute("listOfInvoices", listOfInvoices);
         System.out.println(listOfInvoices);
 
-        ctx.render("customer-order-history-page.html");
+        ctx.render("customer/customer-order-history-page.html");
     }
 
     /***
@@ -74,7 +74,7 @@ public class InvoiceController {
         Carport carport = InvoiceMapper.getCarport(invoiceId, connectionPool);
         SvgController.displaySvg(carport, ctx);
 
-        ctx.render("customer-invoice-details-page.html");
+        ctx.render("customer/customer-invoice-details-page.html");
 
     }
 }

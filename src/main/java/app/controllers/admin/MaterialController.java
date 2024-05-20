@@ -41,10 +41,10 @@ public class MaterialController {
 
             List<Material> materialList = MaterialMapper.getAllMaterials(connectionPool);
             ctx.attribute("materialList", materialList);
-            ctx.render("materials-page.html");
+            ctx.render("admin/materials-page.html");
         } catch (DatabaseException | NumberFormatException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("materials-page.html");
+            ctx.render("admin/materials-page.html");
         }
     }
 
@@ -61,10 +61,10 @@ public class MaterialController {
             int materialId = Integer.parseInt(ctx.formParam("materialId"));
             Material material = MaterialMapper.getMaterialById(materialId, connectionPool);
             ctx.attribute("material", material);
-            ctx.render("edit-materials-page.html");
+            ctx.render("admin/edit-materials-page.html");
         } catch (DatabaseException | NumberFormatException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("materials-page.html");
+            ctx.render("admin/materials-page.html");
         }
     }
 
@@ -85,7 +85,7 @@ public class MaterialController {
             throw new RuntimeException(e);
         }
         ctx.attribute("materialList", materialList);
-        ctx.render("materials-page.html");
+        ctx.render("admin/materials-page.html");
     }
 
     /**
@@ -107,10 +107,10 @@ public class MaterialController {
             MaterialMapper.addMaterial(description, height, width, length, price, connectionPool);
             List<Material> materialList = MaterialMapper.getAllMaterials(connectionPool);
             ctx.attribute("materialList", materialList);
-            ctx.render("materials-page.html");
+            ctx.render("admin/materials-page.html");
         } catch (DatabaseException e) {
             ctx.attribute("message", "Something went wrong. Try again.");
-            ctx.render("materials-page.html");
+            ctx.render("admin/materials-page.html");
         }
     }
 
@@ -129,10 +129,10 @@ public class MaterialController {
             MaterialMapper.deleteMaterial(materialId, connectionPool);
             List<Material> materialList = MaterialMapper.getAllMaterials(connectionPool);
             ctx.attribute("materialList", materialList);
-            ctx.render("materials-page.html");
+            ctx.render("admin/materials-page.html");
         } catch (DatabaseException | NumberFormatException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("materials-page.html");
+            ctx.render("admin/materials-page.html");
         }
     }
 }

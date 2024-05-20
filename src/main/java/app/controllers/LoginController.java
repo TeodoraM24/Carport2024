@@ -13,10 +13,10 @@ import io.javalin.http.Context;
 public class LoginController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.render("carport-index.html"));
-        app.get("/login-page", ctx -> ctx.render("login-page.html"));
-        app.get("/loginpage-customer", ctx -> ctx.render("carport-index.html"));
-        app.get("/loginpage-admin", ctx -> ctx.render("admin-frontpage.html"));
+        app.get("/", ctx -> ctx.render("customer/carport-index.html"));
+        app.get("/login-page", ctx -> ctx.render("login/login-page.html"));
+        app.get("/loginpage-customer", ctx -> ctx.render("customer/carport-index.html"));
+        app.get("/loginpage-admin", ctx -> ctx.render("admin/admin-frontpage.html"));
         app.get("/admin/logout", ctx -> logout(ctx));
         app.post("/login", ctx -> login(ctx, connectionPool));
         app.get("/logout", ctx -> logout(ctx));
@@ -41,7 +41,7 @@ public class LoginController {
             }
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("login-page.html");
+            ctx.render("login/login-page.html");
         }
     }
 

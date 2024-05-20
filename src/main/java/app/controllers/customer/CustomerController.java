@@ -12,13 +12,13 @@ import app.persistence.customer.CustomerMapper;
 public class CustomerController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("createuser", ctx -> ctx.render("create-user-page.html"));
+        app.get("createuser", ctx -> ctx.render("login/create-user-page.html"));
         app.post("createuser", ctx -> {
             createCustomer(ctx, connectionPool);
             ctx.redirect("/login-page");
         });
 
-        app.get("/customerinfo", ctx -> ctx.render("customer-info-frontpage.html"));
+        app.get("/customerinfo", ctx -> ctx.render("customer/customer-info-frontpage.html"));
     }
 
     private static void createCustomer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
@@ -43,10 +43,10 @@ public class CustomerController {
                             try {
                                 CustomerMapper.createUser(email, password1, firstName, lastName, zip, address, phoneNumber, connectionPool);
                                 ctx.attribute("message", "Du er hermed oprettet med e-mail: " + email + ". Nu skal du logge på.");
-                                ctx.render("create-user-page.html");
+                                ctx.render("login/create-user-page.html");
                             } catch (DatabaseException e) {
                                 ctx.attribute("message", "Den angivne e-mail findes allerede. Prøv igen, eller log ind");
-                                ctx.render("login-page.html");
+                                ctx.render("login/login-page.html");
                             }
                         } else {
                             ctx.attribute("message", "Postnummer og by matcher ikke. Prøv igen.");
@@ -63,6 +63,6 @@ public class CustomerController {
         } else {
             ctx.attribute("message", "Den indtastede mail er ikke gyldig. Prøv igen.");
         }
-        ctx.render("create-user-page.html");
+        ctx.render("login/create-user-page.html");
     }
 }

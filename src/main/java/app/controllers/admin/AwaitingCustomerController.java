@@ -62,6 +62,6 @@ public class AwaitingCustomerController {
 
     private static void displayAwaitingCustomers(List<Offer> allCustomerOffers, Context ctx) {
         ctx.attribute("awaitingOffers", allCustomerOffers);
-        ctx.render("admin-awaiting-customer.html");
+        ctx.render("admin/admin-awaiting-customer.html");
     }
 }

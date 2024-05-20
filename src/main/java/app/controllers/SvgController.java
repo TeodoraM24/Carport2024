@@ -33,7 +33,7 @@ public class SvgController {
         CarportSvgSideView svgSideView = new CarportSvgSideView(carportLength, carportHeight);
         ctx.attribute("svgTopDownView", svgTopDownView.toString());
         ctx.attribute("svgSideView", svgSideView.toString());
-        ctx.render("Svg-page.html");
+        ctx.render("svg/Svg-page.html");
     }
 
     /**
@@ -47,6 +47,6 @@ public class SvgController {
         CarportSvgSideView svgSideView = new CarportSvgSideView(carport.getLength(), carport.getHeight());
         ctx.attribute("svgTopDownView", svgTopDownView.toString());
         ctx.attribute("svgSideView", svgSideView.toString());
-        ctx.render("Svg-page.html");
+        ctx.render("svg/Svg-page.html");
     }
 }
