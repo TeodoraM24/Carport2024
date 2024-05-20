@@ -16,7 +16,6 @@ public class CustomerController {
         app.get("createuser", ctx -> ctx.render("create-user-page.html"));
         app.post("createuser", ctx -> {
             createCustomer(ctx, connectionPool);
-            ctx.redirect("/login-page");
         });
 
         app.get("/customerinfo", ctx -> ctx.render("customer-info-frontpage.html"));
