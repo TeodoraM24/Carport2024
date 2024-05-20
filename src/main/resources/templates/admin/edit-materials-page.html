@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+    <title>Ændre Materialer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/edit-materials-style.css" th:href="@{/css/edit-materials-style.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+
+<div class="body-background">
+    <div class="container" style="font-family: Helvetica, sans-serif">
+        <h2>Opdatering af materiale</h2>
+        <div class="flexbox1">
+            <form method="POST">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Beskrivelse</th>
+                        <th>Højde</th>
+                        <th>Bredde</th>
+                        <th>Længde</th>
+                        <th>Pris</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><label>
+                            <input type="text" name="description" placeholder="Rediger beskrivelse" th:value="${material.description}">
+                        </label></td>
+                        <td><label>
+                            <input type="number" name="height" placeholder="Rediger højde" th:value="${material.height}" min="0" max="9999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-9999 cm.')">
+                        </label></td>
+                        <td><label>
+                            <input type="number" name="width" placeholder="Rediger bredde" th:value="${material.width}" min="0" max="9999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-9999 cm.')">
+                        </label></td>
+                        <td><label>
+                            <input type="number" name="length" placeholder="Rediger længde" th:value="${material.length}" min="0" max="9999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-9999 cm.')">
+                        </label></td>
+                        <td><label>
+                            <input type="number" name="price" placeholder="Rediger pris" th:value="${material.price}" min="0" max="999999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-999.999 kr.')">
+                        </label></td>
+                        <td>
+                            <button type="submit" name="materialId" th:value="${material.materialId}" formaction="/updatematerial">Opdater</button>
+                            <button type="submit" formaction="/material">Fortryd</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

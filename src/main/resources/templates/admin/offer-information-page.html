@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <meta charset="UTF-8">
+    <title>Tilbud Beskrivelse</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/customer-request-style.css" th:href="@{/css/customer-request-style.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+
+<div class="body-background">
+    <div class="container">
+        <div class="flexbox">
+            <h2>Forespørgsel #<span th:text="${requestId}"></span></h2>
+            <h3>Carport: <span th:text="${carportWidth} + 'x' + ${carportLength} + 'x' + ${carportHeight}"></span> mtr.</h3>
+            <h3>Tag:</h3>
+            <h4>Spærtype: <span th:text="${rafterDescription}"></span></h4>
+            <h4>Remtype: <span th:text="${beamDescription}"></span></h4>
+            <h4>Tagmateriale: <span th:text="${tileType}"></span></h4>
+            <h2>Salgspris: <span th:text="${offerPrice}"></span> kr.</h2>
+            <a th:href="@{/returnToCalculateRequest}" class="return-button" style="width: 100px">Gå tilbage</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

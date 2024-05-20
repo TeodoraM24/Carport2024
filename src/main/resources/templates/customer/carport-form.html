@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Designede carporte</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/carport-index.css" th:href="@{/css/carport-form.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<th:block th:if="${#ctx.session.currentUser != null}" >
+    <div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+</th:block>
+<th:block th:if="${#ctx.session.currentUser == null}" >
+    <div th:replace="~{fragments/header :: main-header('')}"></div>
+</th:block>
+
+<div class="body-background">
+    <div class="container">
+        <div class="flexbox">
+            <div class="body-text">
+                <h1 style="font-size: 25px">Bestil Quick-byg tilbud - carport med fladt tag</h1>
+                <form action="/make-customer-request" method="post">
+                    <p>Udfyld formularen omhyggeligt og klik på "Bestil tilbud".<br>Felter markeret med * SKAL udfyldes!
+                    </p>
+
+                    <div style="margin: 0 250px 0 250px">
+                        <label for="carport-width">Carport bredde*</label>
+                        <input id="carport-width" name="width" type="number" class="measurement"
+                               placeholder="Skal være mellem 240 og 600 cm" min="240" max="600" required>
+                    </div>
+
+                    <div style="margin: 0 250px 0 250px">
+                        <label for="carport-length">Carport længde*</label>
+                        <input id="carport-length" name="length" type="number" class="measurement"
+                               placeholder="Skal være mellem 240 og 780 cm" min="240" max="780" required>
+                    </div>
+
+                    <div style="margin: 0 250px 0 250px">
+                        <label for="carport-height">Carport højde*</label>
+                        <input id="carport-height" name="height" type="number" class="measurement"
+                               placeholder="Skal være mellem 180 og 300 cm" min="180" max="300" required>
+                    </div>
+
+                    <button style="margin-top: 20px" type="submit" class="order-offer">Bestil tilbud</button>
+                    <button class="order-offer" style="margin-top: 15px"
+                            onclick="window.location.href='/carport-index'">Gå tilbage</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

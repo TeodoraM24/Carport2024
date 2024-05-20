@@ -12,16 +12,6 @@ public class Offer {
     private int priceId;
     private int customerRequestId;
 
-    public Offer(int offerId, String carportSize, String rafterTypeDesc, String supportBeamDescSize, String roofMaterials, double totalPriceWithTax, String status) {
-        this.offerId = offerId;
-        this.carportSize = carportSize;
-        this.rafterTypeDesc = rafterTypeDesc;
-        this.supportBeamDescSize = supportBeamDescSize;
-        this.roofMaterials = roofMaterials;
-        this.totalPriceWithTax = totalPriceWithTax;
-        this.status = status;
-    }
-
     public Offer(int offerId, String carportSize, String rafterTypeDesc, String supportBeamDescSize, String roofMaterials, double totalPriceWithTax, String status, int partsListId, int priceId, int customerRequestId) {
         this.offerId = offerId;
         this.carportSize = carportSize;
@@ -34,7 +24,6 @@ public class Offer {
         this.priceId = priceId;
         this.customerRequestId = customerRequestId;
     }
-
 
     public int getOfferId() {
         return offerId;
