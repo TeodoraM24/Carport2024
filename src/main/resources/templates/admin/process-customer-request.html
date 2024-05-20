@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Kunde Forespørgsel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/customer-request-style.css" th:href="@{/css/customer-request-style.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+
+<div class="body-background">
+    <th:block th:object="${chosenCustomerRequest}">
+    <h1 class="customer-request-title">Forespørgsel: <span class="customer-name" th:text="${customerName}"></span></h1>
+    <div class="container">
+        <div class="flexbox">
+            <h2 class="carport-title">Carport med fladt tag</h2>
+            <form th:action="@{/calculateRequest}" method="post">
+                <div class="measurement-container">
+                    <h2 id="length-title">
+                        <label for="length">Længde:</label>
+                        <input id="length" name="length" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestLength}" min="240" max="780" onchange="setValidityRequest(this)" required oninvalid="this.setCustomValidity('Skal være imellem 240-780 cm.')">
+                        <span>cm.</span>
+                    </h2>
+                </div>
+                <div class="measurement-container">
+                    <h2 id="width-title">
+                        <label for="width">Bredde:</label>
+                        <input id="width" name="width" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestWidth}" min="240" max="600" onchange="setValidityRequest(this)" required oninvalid="this.setCustomValidity('Skal være imellem 240-600 cm.')">
+                        <span>cm.</span>
+                    </h2>
+                </div>
+                <div class="measurement-container">
+                    <h2 id="height-title">
+                        <label for="height">Højde:</label>
+                        <input id="height" name="height" type="number" class="input-measurement" th:value="${chosenCustomerRequest.requestHeight}" min="180" max="300" onchange="setValidityRequest(this)" required oninvalid="this.setCustomValidity('Skal være imellem 180-300 cm.')">
+                        <span>cm.</span>
+                    </h2>
+                </div>
+                <div class="roof-container">
+                    <h2>Tag: <span class="roof-title" th:text="${chosenCustomerRequest.requestTileType}"></span></h2>
+                </div>
+                <div class="button-container">
+                    <a th:href="@{/returnToAllRequests}" class="return-button">Gå tilbage</a>
+                    <a th:href="@{'/cancelRequestChanges'}" class="cancel-button" id="cancel" onclick="cancelSuccess()">Fortryd</a>
+                    <button type="submit" id="save" th:formaction="${'/saveRequestChanges'}" class="save-button" name="customer-request-id" th:value="${chosenCustomerRequest.customerRequestId}">Gem ændringer</button>
+                    <button type="submit" id="calculate" class="calculate-button" name="customer-request-id" th:value="${chosenCustomerRequest.customerRequestId}">Beregn tilbud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </th:block>
+</div>
+
+<script src="/js/button-script.js"></script>
+</body>
+</html>

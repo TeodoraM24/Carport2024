@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Admin startside</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/customer-order-history.css" th:href="@{/css/customer-order-history.css}" rel="stylesheet"/>
+    <link href="../../public/css/customer-request-status.css" th:href="@{/css/customer-request-status.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+<div class="container">
+    <div class="flexbox">
+        <h1>Forespørgsler</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Dato</th>
+                <th>Mål</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="request : ${customerRequests}">
+                <tr th:if="${!#lists.isEmpty(customerRequests)}">
+                    <td th:text="${request.getDate()}"></td>
+                    <td th:text="${request.requestHeight + ' x ' + request.requestLength + ' x ' + request.requestWidth}"></td>
+                    <td th:text="${request.status}"></td>
+                    <td th:if="${request.status == 'Klar'}">
+                        <form action="/offer" method="get">
+                            <input type="hidden" name="offerId" th:value="${request.customerRequestId}">
+                            <button type="submit" class="button" th:href="@{/offer}">Accepter/Afvis Tilbud</button>
+                        </form>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+            <tr th:if="${#lists.isEmpty(customerRequests)}">
+                <td colspan="3">
+                    <br>
+                    <p>Ingen forespørgsler blev fundet.</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+
+

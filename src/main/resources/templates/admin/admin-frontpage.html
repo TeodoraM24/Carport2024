@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Admin startside</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<link href="../public/css/admin-front-style.css" th:href="@{/css/admin-front-style.css}" rel="stylesheet"/>-->
+    <link href="../../public/css/customer-info-style.css" th:href="@{/css/customer-info-style.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+
+<div class="body-background">
+        <div class="container">
+
+            <div class="flexbox1">
+                <div class="flexbox2">
+                    <a class="reference-format" href="admininquiries.html" th:href="@{/admininquiries}">
+                        <div class="top-half">
+                            <h2>Forespørgsler</h2>
+                        </div>
+                        <div class="bottom-half">
+                            <img class="option-images" src="../../public/images/admin-inquiry-image.png" th:src="@{/images/admin-inquiry-image.png}"
+                                 alt="admin-inquiry-image">
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="flexbox1">
+                <div class="flexbox2">
+                    <a class="reference-format" href="admin-awaiting-customer.html" th:href="@{/awaitingCustomers}">
+                        <div class="top-half">
+                            <h2>Afventer kunder</h2>
+                        </div>
+                        <div class="bottom-half">
+                            <img class="option-images" src="../../public/images/awaiting-customer-image.png"
+                                 th:src="@{/images/awaiting-customer-image.png}"
+                                 alt="awaiting-customers">
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="flexbox1">
+                <div class="flexbox2">
+                    <a class="reference-format" href="materials-page.html" th:href="@{/material}">
+                        <div class="top-half">
+                            <h2>Materialer</h2>
+                        </div>
+                        <div class="bottom-half">
+                            <img class="option-images" src="../../public/images/materials-image.png"
+                                 th:src="@{/images/materials-image.png}"
+                                 alt="finished-inquiries">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+</div>
+</body>
+</html>

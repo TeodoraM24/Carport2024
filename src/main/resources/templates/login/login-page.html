@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>LogIn</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/login-style.css" th:href="@{/css/login-style.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="login-container">
+    <div class="logo-container">
+        <img alt="logo" src="../../public/images/fog-logo.png" th:src="@{/images/fog-logo.png}" />
+    </div>
+    <h2>Log på</h2>
+    <h4>Log på med din mailadresse</h4>
+    <form action="/login" method="post">
+        <div class="form-group">
+            <label>
+                <input type="email" name="email" placeholder="Mailadresse*"/>
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="password" name="password" placeholder="Adgangskode*"/>
+            </label>
+        </div>
+        <div style="font-weight: bolder; font-family: Helvetica, sans-serif"><p th:text="${message}"></p></div>
+        <div class="form-group">
+            <input type="submit" value="Log på">
+        </div>
+    </form>
+    <div>
+        <a href="/createuser">Opret en bruger</a>
+    </div>
+    <div style="margin-top: 10px">
+        <a href="/carport-index">Gå til forsiden</a>
+    </div>
+</div>
+</body>
+</html>

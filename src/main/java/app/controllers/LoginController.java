@@ -3,9 +3,9 @@ package app.controllers;
 import app.entities.Admin;
 import app.entities.Customer;
 import app.exceptions.DatabaseException;
-import app.persistence.AdminMapper;
+import app.persistence.admin.AdminMapper;
 import app.persistence.ConnectionPool;
-import app.persistence.CustomerMapper;
+import app.persistence.customer.CustomerMapper;
 import app.persistence.LoginMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -13,8 +13,11 @@ import io.javalin.http.Context;
 public class LoginController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/", ctx -> ctx.render("carport-index.html"));
-        app.get("/login-page", ctx -> ctx.render("login-page.html"));
+        app.get("/", ctx -> ctx.render("customer/carport-index.html"));
+        app.get("/login-page", ctx -> ctx.render("login/login-page.html"));
+        app.get("/loginpage-customer", ctx -> ctx.render("customer/carport-index.html"));
+        app.get("/loginpage-admin", ctx -> ctx.render("admin/admin-frontpage.html"));
+        app.get("/admin/logout", ctx -> logout(ctx));
         app.post("/login", ctx -> login(ctx, connectionPool));
         app.get("/logout", ctx -> logout(ctx));
     }
@@ -26,7 +29,7 @@ public class LoginController {
         try {
             boolean isAdmin = LoginMapper.isAdmin(email, connectionPool);
             if (isAdmin) {
-                Admin admin = AdminMapper.logInd(email, password, connectionPool);
+                Admin admin = AdminMapper.login(email, password, connectionPool);
                 ctx.sessionAttribute("currentUser", admin);
                 ctx.attribute("message", "Du er nu logget ind");
                 ctx.redirect("/loginpage-admin");
@@ -38,7 +41,7 @@ public class LoginController {
             }
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
-            ctx.render("login-page.html");
+            ctx.render("login/login-page.html");
         }
     }
 

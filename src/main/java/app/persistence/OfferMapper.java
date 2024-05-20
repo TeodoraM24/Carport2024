@@ -13,45 +13,42 @@ import java.util.List;
 public class OfferMapper {
 
     public static Offer getOfferByCustomerId(int customerId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT o.offer_id, c.customer_id, cq.length, cq.width, cq.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax, o.status FROM offer o INNER JOIN customer c USING(customer_request_id) INNER JOIN customer_request cq USING(customer_request_id) INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id) WHERE customer_id = ?";
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+        String sql = "SELECT o.offer_id, c.customer_id, o.parts_list_id, o.price_id, o.customer_request_id, cq.length, cq.width, cq.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax, o.status FROM offer o INNER JOIN customer c USING(customer_request_id) INNER JOIN customer_request cq USING(customer_request_id) INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id) WHERE customer_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setInt(1, customerId);
+
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int offerId = rs.getInt("offer_id");
-                int length= rs.getInt("length");
-                int height= rs.getInt("height");
-                int width=rs.getInt("width");
-                String carportSize = width + "x" + length + "x" + height;
-                String rafterTypeDesc = rs.getString("rafter_type_desc");
-                String supportBeamDescSize = rs.getString("support_beam_desc_size");
-                String roofMaterials = rs.getString("roof_materials");
-                double totalPriceWithTax = rs.getDouble("salesprice_with_tax");
-                String status = rs.getString("status");
-
-                return new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status);
-
+                return getOfferInformation(rs);
             } else {
-                throw new DatabaseException("Could not get offer for given customer id.");
+                throw new DatabaseException("Failed to retrieve offer for given customer id.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB: SQL SELECT error when trying to select an offer from offer table");
+            throw new DatabaseException("DB: SQL SELECT error in getOfferByCustomerId() in OfferMapper. ", e.getMessage());
         }
     }
 
-    public static void updateOfferStatus(int offerId, String status, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE offer SET status = ? WHERE offer_id = ?";
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, status);
-            ps.setInt(2, offerId);
-            int rowsUpdated = ps.executeUpdate();
-            if (rowsUpdated == 0) {
-                throw new DatabaseException("Could not set new status for given offer id.");
+    public static Offer getOfferById(int offerId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT o.offer_id, c.customer_id, o.parts_list_id, o.price_id, o.customer_request_id, cq.length, cq.width, cq.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax, o.status FROM offer o INNER JOIN customer c USING(customer_request_id) INNER JOIN customer_request cq USING(customer_request_id) INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id) WHERE o.offer_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql))
+        {
+            ps.setInt(1, offerId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return getOfferInformation(rs);
+            } else {
+                throw new DatabaseException("Failed to retrieve offer by offer id.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB: SQL UPDATE error when trying to update an offer from offer table");
+            throw new DatabaseException("DB: SQL SELECT error in getOfferById() in OfferMapper. ", e.getMessage());
         }
     }
 
@@ -65,74 +62,61 @@ public class OfferMapper {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int offerId = rs.getInt("offer_id");
-                int length= rs.getInt("length");
-                int height= rs.getInt("height");
-                int width=rs.getInt("width");
-                String carportSize = width + "x" + length + "x" + height;
-                String rafterTypeDesc = rs.getString("rafter_type_desc");
-                String supportBeamDescSize = rs.getString("support_beam_desc_size");
-                String roofMaterials = rs.getString("roof_materials");
-                double totalPriceWithTax = rs.getDouble("salesprice_with_tax");
-                String status = rs.getString("status");
-                int partsListId = rs.getInt("parts_list_id");
-                int priceId = rs.getInt("price_id");
-                int customerRequestId = rs.getInt("customer_request_id");
-
-                offers.add(new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status, partsListId, priceId, customerRequestId));
+                Offer offer = getOfferInformation(rs);
+                offers.add(offer);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB: SQL SELECT error when trying to select an offer from offer table");
+            throw new DatabaseException("DB: SQL SELECT error in getAllCustomerOffers() in OfferMapper. ", e.getMessage());
         }
         return offers;
+    }
+
+    private static Offer getOfferInformation(ResultSet rs) throws SQLException {
+        int offerId = rs.getInt("offer_id");
+        int length= rs.getInt("length");
+        int height= rs.getInt("height");
+        int width=rs.getInt("width");
+        String carportSize = width + "x" + length + "x" + height;
+        String rafterTypeDesc = rs.getString("rafter_type_desc");
+        String supportBeamDescSize = rs.getString("support_beam_desc_size");
+        String roofMaterials = rs.getString("roof_materials");
+        double totalPriceWithTax = rs.getDouble("salesprice_with_tax");
+        String status = rs.getString("status");
+        int priceId = rs.getInt("price_id");
+        int partsListId = rs.getInt("parts_list_id");
+        int customerRequestId = rs.getInt("customer_request_id");
+
+        return new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status, partsListId, priceId, customerRequestId);
+    }
+
+    public static void updateOfferStatus(int offerId, String status, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE offer SET status = ? WHERE offer_id = ?";
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, offerId);
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated == 0) {
+                throw new DatabaseException("Failed to update status in offer table for given offer id.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB: SQL UPDATE error in updateOfferStatus() in OfferMapper. ", e.getMessage());
+        }
     }
 
     public static void updateCustomerOffer(int offerId, int customerId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "UPDATE customer SET offer_id = ? WHERE customer_id = ?";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-             ps.setInt(1, offerId);
-             ps.setInt(2, customerId);
+            ps.setInt(1, offerId);
+            ps.setInt(2, customerId);
 
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated == 0) {
-                throw new DatabaseException("Could not update customer's offer id.");
+                throw new DatabaseException("Failed to update offer id in customer table with given customer id.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB: SQL UPDATE error when trying to update the offer_id from customer table");
-        }
-    }
-
-    public static Offer getOfferById(int offerId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT o.offer_id, c.customer_id, o.parts_list_id, o.price_id, o.customer_request_id, cq.length, cq.width, cq.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax, o.status FROM offer o INNER JOIN customer c USING(customer_request_id) INNER JOIN customer_request cq USING(customer_request_id) INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id) WHERE o.offer_id = ?";
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, offerId);
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                //int id = rs.getInt("offer_id");
-                int length= rs.getInt("length");
-                int height= rs.getInt("height");
-                int width=rs.getInt("width");
-                String carportSize = width + "x" + length + "x" + height;
-                String rafterTypeDesc = rs.getString("rafter_type_desc");
-                String supportBeamDescSize = rs.getString("support_beam_desc_size");
-                String roofMaterials = rs.getString("roof_materials");
-                double totalPriceWithTax = rs.getDouble("salesprice_with_tax");
-                String status = rs.getString("status");
-                int priceId = rs.getInt("price_id");
-                int partsListId = rs.getInt("parts_list_id");
-                int customerRequestId = rs.getInt("customer_request_id");
-
-                System.out.println("Retrieved Offer ID: " + offerId);
-
-                return new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status, partsListId, priceId, customerRequestId);
-            } else {
-                throw new DatabaseException("Offer not found for given offer id.");
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("DB: SQL SELECT error when trying to select an offer from offer table");
+            throw new DatabaseException("DB: SQL UPDATE error in updateCustomerOffer() in OfferMapper. ", e.getMessage());
         }
     }
 
@@ -147,10 +131,10 @@ public class OfferMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Could not delete offer from offer table");
+                throw new DatabaseException("Failed to delete offer in offer table.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB: SQL DELETE error when trying to delete an offer from offer table", e.getMessage());
+            throw new DatabaseException("DB: SQL DELETE error in deleteOffer() in OfferMapper. ", e.getMessage());
         }
     }
 }

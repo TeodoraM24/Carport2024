@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Admin forespørgslser</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/customer-order-history.css" th:href="@{/css/customer-order-history.css}" rel="stylesheet"/>
+    <link href="../../public/css/customer-request-admin.css" th:href="@{/css/customer-request-admin.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+<div class="container">
+    <div class="flexbox">
+        <h1>Forespørgsler</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Dato</th>
+                <th>Navn (ID)</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${customerRequests}">
+                <td th:text="${request.customerRequestId}"></td>
+                <td th:text="${request.date}"></td>
+                <td>
+                    <span th:text="${request.customer.getFirstName() + ' ' + request.customer.getLastName() + ' (' + request.customer.getCustomerId() + ')'}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

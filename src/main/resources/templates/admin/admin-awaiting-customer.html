@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Afventer Kunder</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/awaiting-customer-style.css" th:href="@{/css/awaiting-customer-style.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+
+<div class="container">
+    <div class="flexbox">
+        <h1>Afventer Kunder</h1>
+        <table>
+            <thead>
+            <tr>
+                <th class="offer-number-title">Forespørgsel Nr.</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="offer : ${awaitingOffers}">
+                <td th:text="${offer.getCustomerRequestId()}"></td>
+                <td th:if="${offer.status == 'Godkendt'}">
+                    <a type="button" class="send-invoice" th:href="@{/sendInvoice/{offerId}(offerId=${offer.offerId})}">Send Invoice</a>
+                </td>
+                <td th:if="${offer.status == 'Afvist'}">
+                    <a type="button" class="delete-offer" th:href="@{/deleteOffer/{offerId}(offerId=${offer.offerId})}">Slet Tilbud/Forespørgsel</a>
+                </td>
+                <td th:if="${offer.status == 'Afventer'}">
+                    <h3>Afventer</h3>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a th:href="@{/loginpage-admin}" class="return-button" style="width: 100px">Gå tilbage</a>
+    </div>
+</div>
+</body>
+</html>

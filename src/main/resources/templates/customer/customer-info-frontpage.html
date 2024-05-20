@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Kunde-info forside</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/customer-info-style.css" th:href="@{/css/customer-info-style.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="fragments/header :: main-header(${#ctx.session.currentUser.getRole()})"></div>
+
+<div class="body-background">
+    <form th:action="@{/customerinfo}" method="POST">
+        <div class="container">
+            <div class="flexbox1">
+                <div class="flexbox2">
+                    <!--Add CustomerRequestPag th: href -->
+                    <a class="reference-format" th:href="@{/showRequest}">
+                        <div class="top-half">
+                            <h2>Forespørgsler</h2>
+                        </div>
+                        <div class="bottom-half">
+                            <img class="option-images" src="../../public/images/customer-request-logo.png"
+                                 th:src="@{/images/customer-request-logo.png}"
+                                 alt="customer-request_logo">
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="flexbox1">
+                <div class="flexbox2">
+                    <a class="reference-format" th:href="@{/viewOrderHistory}">
+                        <div class="top-half">
+                            <h2>Mine Ordre </h2>
+                        </div>
+                        <div class="bottom-half">
+                            <img class="option-images" src="../../public/images/order-history-logo.png"
+                                 th:src="@{/images/order-history-logo.png}"
+                                 alt="order-history_logo">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

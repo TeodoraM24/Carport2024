@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Se Valgte ordre</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/customer-invoice-details.css" th:href="@{/css/customer-invoice-details.css}"
+          rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+<div class="container1">
+    <div>
+        <h2>Værebro</h2>
+        <div><h1>Carport</h1></div>
+        <div><h2>Husk at kontrollere materiale listen inden du går i gang.</h2></div>
+        <table>
+            <tbody>
+            <tr>
+                <td>Materiale beskrivelse</td>
+                <td>Længde</td>
+                <td>Antal</td>
+                <td>Enhed</td>
+                <td>Beskrivelse</td>
+            </tr>
+
+            <th:block th:each="partlist :${listOfPartlists}">
+                <td th:text="${partlist.materialDescription}"></td>
+                <td th:text="${partlist.length}"></td>
+                <td th:text="${partlist.amount}"></td>
+                <td th:text="${partlist.unit}"></td>
+                <td th:text="${partlist.instructionDescription}"></td>
+            </th:block>
+            </tbody>
+        </table> <br>
+
+
+        <div th:utext="${svgSideView}"></div>
+        <div th:utext="${svgTopDownView}"></div>
+        <span>
+                <a type="button" class="button" style="margin-top: 30px" th:href="@{/backToOrderHistory}">Tilbage til Ordre historik </a></span>
+    </div>
+</div>
+</body>
+</html>

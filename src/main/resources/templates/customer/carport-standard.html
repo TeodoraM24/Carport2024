@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Standard carporte</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/carport-index.css" th:href="@{/css/carport-index.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<th:block th:if="${#ctx.session.currentUser != null}" >
+    <div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+</th:block>
+<th:block th:if="${#ctx.session.currentUser == null}" >
+    <div th:replace="~{fragments/header :: main-header('')}"></div>
+</th:block>
+
+<div class="body-background">
+    <div class="container">
+        <div class="flexbox">
+            <h1 style="font-size: 35px"> Der er desværre ingen standard carporte på nuværende tidspunkt</h1>
+            <h1 style="font-size: 35px"> Vælg venligst en carport med egne mål</h1>
+            <button class="carport-button" onclick="window.location.href='/carport-index'">Gå tilbage</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

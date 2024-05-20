@@ -13,12 +13,12 @@
 <div class="main-header" th:fragment="main-header(user)">
     <div class="header-left">
         <th:block th:if="${#strings.equals(user,'customer') || #strings.equals(user,'')}">
-            <a href="../carport-index.html" th:href="@{/carport-index}">
+            <a href="../customer/carport-index.html" th:href="@{/carport-index}">
                 <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
             </a>
         </th:block>
         <th:block th:if="${#strings.equals(user,'admin')}">
-            <a href="../carport-index.html" th:href="@{/loginpage-admin}">
+            <a href="../customer/carport-index.html" th:href="@{/loginpage-admin}">
                 <img src="/public/images/fog-logo.png" th:src="@{../images/fog-logo.png}" alt="Fog Logo">
             </a>
         </th:block>
@@ -27,7 +27,7 @@
     <div class="header-right">
         <th:block th:if="${#strings.equals(user,'')}">
             <div class="fog-konto">
-                <a href="../login-page.html" th:href="@{/login-page}">
+                <a href="../login/login-page.html" th:href="@{/login-page}">
                     <img src="/public/images/fog-konto.png" th:src="@{../images/fog-konto.png}" alt="Fog Konto">
                     <span>Fog Konto</span>
                 </a>
@@ -37,7 +37,7 @@
 
         <th:block th:if="${#strings.equals(user,'customer')}">
             <div class="fog-konto">
-                <a href="../customer-info-frontpage.html" th:href="@{/customerinfo}">
+                <a href="../customer/customer-info-frontpage.html" th:href="@{/customerinfo}">
                     <img src="/public/images/fog-konto.png" th:src="@{../images/fog-konto.png}" alt="Fog Konto">
                     <span>Fog Konto</span>
                 </a>

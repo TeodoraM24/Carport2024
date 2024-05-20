@@ -1,12 +1,13 @@
 package app.controllers;
 
+import app.controllers.admin.AdminRequestController;
 import app.entities.Carport;
 import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
-import app.persistence.AdminRequestMapper;
+import app.persistence.admin.AdminRequestMapper;
 import app.persistence.ConnectionPool;
-import app.services.CarportSvgSideView;
-import app.services.CarportSvgTopDownView;
+import app.services.svg.CarportSvgSideView;
+import app.services.svg.CarportSvgTopDownView;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -30,7 +31,7 @@ public class SvgController {
         CarportSvgSideView svgSideView = new CarportSvgSideView(carportLength, carportHeight);
         ctx.attribute("svgTopDownView", svgTopDownView.toString());
         ctx.attribute("svgSideView", svgSideView.toString());
-        ctx.render("Svg-page.html");
+        ctx.render("svg/Svg-page.html");
     }
 
     /**
@@ -44,6 +45,6 @@ public class SvgController {
         CarportSvgSideView svgSideView = new CarportSvgSideView(carport.getLength(), carport.getHeight());
         ctx.attribute("svgTopDownView", svgTopDownView.toString());
         ctx.attribute("svgSideView", svgSideView.toString());
-        ctx.render("Svg-page.html");
+        ctx.render("svg/Svg-page.html");
     }
 }
