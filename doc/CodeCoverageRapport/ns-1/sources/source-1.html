@@ -1,0 +1,211 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ConnectionPool</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">app.persistence</a>
+</div>
+
+<h1>Coverage Summary for Class: ConnectionPool (app.persistence)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConnectionPool</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (5/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73.3%
+  </span>
+  <span class="absValue">
+    (22/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package app.persistence;
+&nbsp;
+&nbsp;import com.zaxxer.hikari.HikariConfig;
+&nbsp;import com.zaxxer.hikari.HikariDataSource;
+&nbsp;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.logging.Level;
+&nbsp;import java.util.logging.Logger;
+&nbsp;
+&nbsp;/***
+&nbsp; * Singleton pattern applied to handling a Hikari ConnectionPool
+&nbsp; */
+&nbsp;public class ConnectionPool
+&nbsp;{
+&nbsp;
+&nbsp;    private static final String USER = &quot;postgres&quot;;
+&nbsp;    private static final String PASSWORD = &quot;HigAbt60ig&quot;;
+&nbsp;    private static final String URL = &quot;jdbc:postgresql://161.35.195.156/%s?currentSchema=public&quot;;
+&nbsp;    private static final String DB = &quot;carport&quot;;
+<b class="fc">&nbsp;    public static ConnectionPool instance = null;</b>
+<b class="fc">&nbsp;    public static HikariDataSource ds = null;</b>
+&nbsp;
+&nbsp;    /***
+&nbsp;     * Empty and private constructor due to single pattern. Use getInstance methods to
+&nbsp;     * instantiate and get a connection pool.
+&nbsp;     */
+<b class="fc">&nbsp;    private ConnectionPool() {}</b>
+&nbsp;
+&nbsp;    public static ConnectionPool getInstance() {
+<b class="nc">&nbsp;        return getInstance(USER, PASSWORD, URL, DB);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /***
+&nbsp;     * Getting a singleton instance of a Hikari Connection Pool with specific credentials
+&nbsp;     * and connection string. If an environment variable &quot;DEPLOYED&quot; exists then local
+&nbsp;     * environment variables will be inserted with user credentials and DB connection string
+&nbsp;     * @param user for Postgresql database user
+&nbsp;     * @param password for Postgresql database user
+&nbsp;     * @param url connection string for postgresql database. Remember to add currentSchema to string
+&nbsp;     * @param db database name for connection
+&nbsp;     * @return A ConnectionPool object
+&nbsp;     */
+&nbsp;    public static ConnectionPool getInstance(String user, String password, String url, String db)
+&nbsp;    {
+<b class="fc">&nbsp;        if (instance == null)</b>
+&nbsp;        {
+<b class="fc">&nbsp;            if (System.getenv(&quot;DEPLOYED&quot;) != null)</b>
+&nbsp;            {
+<b class="nc">&nbsp;                ds = createHikariConnectionPool(</b>
+<b class="nc">&nbsp;                        System.getenv(&quot;JDBC_USER&quot;),</b>
+<b class="nc">&nbsp;                        System.getenv(&quot;JDBC_PASSWORD&quot;),</b>
+<b class="nc">&nbsp;                        System.getenv(&quot;JDBC_CONNECTION_STRING&quot;),</b>
+<b class="nc">&nbsp;                        System.getenv(&quot;JDBC_DB&quot;));</b>
+&nbsp;            } else
+&nbsp;            {
+<b class="fc">&nbsp;                ds = createHikariConnectionPool(user, password, url, db);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            instance = new ConnectionPool();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return instance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /***
+&nbsp;     * Getting a live connection from a Hikari Connection Pool
+&nbsp;     * @return a database connection to be used in sql requests
+&nbsp;     * @throws SQLException
+&nbsp;     */
+&nbsp;    public synchronized Connection getConnection() throws SQLException
+&nbsp;    {
+<b class="fc">&nbsp;        return ds.getConnection();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /***
+&nbsp;     * Closing a Hikari Connection Pool after use.
+&nbsp;     */
+&nbsp;    public synchronized void close()
+&nbsp;    {
+<b class="nc">&nbsp;        Logger.getLogger(&quot;web&quot;).log(Level.INFO, &quot;Shutting down connection pool&quot;);</b>
+<b class="nc">&nbsp;        ds.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /***
+&nbsp;     * Configuring a Hikari DataSource ConnectionPool. Default pool size is 3.
+&nbsp;     * @param user for Postgresql database user
+&nbsp;     * @param password for Postgresql database user
+&nbsp;     * @param url connection string for postgresql database. Remember to add currentSchema to string
+&nbsp;     * @param db database name for connection
+&nbsp;     * @return a Hikari DataSource
+&nbsp;     */
+&nbsp;    private static HikariDataSource createHikariConnectionPool(String user, String password, String url, String db)
+&nbsp;    {
+<b class="fc">&nbsp;        Logger.getLogger(&quot;web&quot;).log(Level.INFO,</b>
+<b class="fc">&nbsp;                String.format(&quot;Connection Pool created for: (%s, %s, %s, %s)&quot;, user, password, url, db));</b>
+<b class="fc">&nbsp;        HikariConfig config = new HikariConfig();</b>
+<b class="fc">&nbsp;        config.setDriverClassName(&quot;org.postgresql.Driver&quot;);</b>
+<b class="fc">&nbsp;        config.setJdbcUrl(String.format(url, db));</b>
+<b class="fc">&nbsp;        config.setUsername(user);</b>
+<b class="fc">&nbsp;        config.setPassword(password);</b>
+<b class="fc">&nbsp;        config.setMaximumPoolSize(3);</b>
+<b class="fc">&nbsp;        config.setPoolName(&quot;Postgresql Pool&quot;);</b>
+<b class="fc">&nbsp;        config.addDataSourceProperty(&quot;cachePrepStmts&quot;, &quot;true&quot;);</b>
+<b class="fc">&nbsp;        config.addDataSourceProperty(&quot;prepStmtCacheSize&quot;, &quot;250&quot;);</b>
+<b class="fc">&nbsp;        config.addDataSourceProperty(&quot;prepStmtCacheSqlLimit&quot;, &quot;2048&quot;);</b>
+<b class="fc">&nbsp;        return new HikariDataSource(config);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-20 18:37</div>
+</div>
+</body>
+</html>

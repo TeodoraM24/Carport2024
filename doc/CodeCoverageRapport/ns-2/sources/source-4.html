@@ -1,0 +1,305 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > MaterialMapper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">app.persistence.admin</a>
+</div>
+
+<h1>Coverage Summary for Class: MaterialMapper (app.persistence.admin)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MaterialMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (5/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.7%
+  </span>
+  <span class="absValue">
+    (65/99)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package app.persistence.admin;
+&nbsp;
+&nbsp;import app.entities.Material;
+&nbsp;import app.exceptions.DatabaseException;
+&nbsp;import app.persistence.ConnectionPool;
+&nbsp;
+&nbsp;import java.sql.*;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="nc">&nbsp;public class MaterialMapper {</b>
+&nbsp;
+&nbsp;    /***
+&nbsp;     * Gets all the materials (description, height, width, length and price) from the database table material and returns a List of Material
+&nbsp;     *
+&nbsp;     * @param connectionPool ConnectionPool used to execute sql for retrieving all materials
+&nbsp;     * @return list of object of type Material
+&nbsp;     * @throws DatabaseException Displays &quot;Fejl under indhentelse af materialer&quot; + system msg
+&nbsp;     */
+&nbsp;    public static List&lt;Material&gt; getAllMaterials(ConnectionPool connectionPool) throws DatabaseException {
+&nbsp;
+<b class="fc">&nbsp;        List&lt;Material&gt; materials = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        String sql = &quot;SELECT * FROM material&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="fc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql)</b>
+&nbsp;        ) {
+<b class="fc">&nbsp;            ResultSet rs = ps.executeQuery();</b>
+<b class="fc">&nbsp;            while (rs.next()) {</b>
+<b class="fc">&nbsp;                int materialId = rs.getInt(&quot;material_id&quot;);</b>
+<b class="fc">&nbsp;                String description = rs.getString(&quot;material_description&quot;);</b>
+<b class="fc">&nbsp;                int height = rs.getInt(&quot;height&quot;);</b>
+<b class="fc">&nbsp;                int width = rs.getInt(&quot;width&quot;);</b>
+<b class="fc">&nbsp;                int length = rs.getInt(&quot;length&quot;);</b>
+<b class="fc">&nbsp;                double price = rs.getDouble(&quot;price&quot;);</b>
+<b class="fc">&nbsp;                materials.add(new Material(materialId, description, height, width, length, price));</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;Fejl under indhentelse af materialer&quot;, e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return materials;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /***
+&nbsp;     * Gets a specific material by material id with all data (description, height, width,
+&nbsp;     * length and price) from the database table material and returns an object type of Material
+&nbsp;     *
+&nbsp;     * @param materialId used to get a specific material by id
+&nbsp;     * @param connectionPool ConnectionPool used to execute sql for retrieving a specific material
+&nbsp;     * @return an object type of Material
+&nbsp;     * @throws DatabaseException Displays &quot;Fejl ved indhentelse af task med id: (material id)&quot; + system msg
+&nbsp;     */
+&nbsp;    public static Material getMaterialById(int materialId, ConnectionPool connectionPool) throws DatabaseException {
+&nbsp;
+<b class="nc">&nbsp;        Material material = null;</b>
+&nbsp;
+<b class="nc">&nbsp;        String sql = &quot;SELECT * FROM material WHERE material_id = ?&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="nc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="nc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql)</b>
+&nbsp;        ) {
+<b class="nc">&nbsp;            ps.setInt(1, materialId);</b>
+<b class="nc">&nbsp;            ResultSet rs = ps.executeQuery();</b>
+<b class="nc">&nbsp;            if (rs.next())</b>
+&nbsp;            {
+<b class="nc">&nbsp;                int id = rs.getInt(&quot;material_id&quot;);</b>
+<b class="nc">&nbsp;                String description = rs.getString(&quot;material_description&quot;);</b>
+<b class="nc">&nbsp;                int height = rs.getInt(&quot;height&quot;);</b>
+<b class="nc">&nbsp;                int width = rs.getInt(&quot;width&quot;);</b>
+<b class="nc">&nbsp;                int length = rs.getInt(&quot;length&quot;);</b>
+<b class="nc">&nbsp;                double price = rs.getDouble(&quot;price&quot;);</b>
+<b class="nc">&nbsp;                material = new Material(id, description, height, width, length, price);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        catch (SQLException e)</b>
+&nbsp;        {
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;Fejl ved indhentelse af task med id: &quot; + materialId, e.getMessage());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return material;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds the user input Material to material table in database
+&nbsp;     *
+&nbsp;     * @param connectionPool  ConnectionPool used to insert cupcake id in database table basket
+&nbsp;     * @throws DatabaseException Displays &quot;Fejl under indsætning af materiale:&quot; + system msg and &quot;Fejl i DB connection&quot; + system msg
+&nbsp;     */
+&nbsp;    public static int addMaterial(String description, int height, int width, int length, double price, ConnectionPool connectionPool) throws DatabaseException {
+&nbsp;
+<b class="fc">&nbsp;        String sql = &quot;INSERT INTO material (material_description, height, width, length, price) VALUES (?,?,?,?,?)&quot; +</b>
+&nbsp;                &quot;ON CONFLICT (material_description, height, width, length, price) DO NOTHING&quot;;
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="fc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)</b>
+&nbsp;        ) {
+<b class="fc">&nbsp;            ps.setString(1, description);</b>
+<b class="fc">&nbsp;            ps.setInt(2, height);</b>
+<b class="fc">&nbsp;            ps.setInt(3, width);</b>
+<b class="fc">&nbsp;            ps.setInt(4, length);</b>
+<b class="fc">&nbsp;            ps.setDouble(5, price);</b>
+<b class="fc">&nbsp;            int rowsAffected = ps.executeUpdate();</b>
+<b class="fc">&nbsp;            if (rowsAffected == 1) {</b>
+<b class="fc">&nbsp;                ResultSet rs = ps.getGeneratedKeys();</b>
+<b class="fc">&nbsp;                rs.next();</b>
+<b class="fc">&nbsp;                return rs.getInt(1);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                return -1;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;Fejl i DB connection&quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /***
+&nbsp;     * Deletes the chosen material from material table in database
+&nbsp;     *
+&nbsp;     * @param materialId the material id used to specify which material needs to be deleted
+&nbsp;     * @param connectionPool  ConnectionPool used to delete material in material table in database
+&nbsp;     * @throws DatabaseException Displays &quot;Fejl i opdatering af materiale&quot; + system msg and &quot;Fejl ved sletning af materiale&quot; + system msg
+&nbsp;     */
+&nbsp;    public static void deleteMaterial(int materialId, ConnectionPool connectionPool) throws DatabaseException {
+&nbsp;
+<b class="fc">&nbsp;        String sql = &quot;DELETE FROM material WHERE material_id = ?&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="fc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql)</b>
+&nbsp;        ) {
+<b class="fc">&nbsp;            ps.setInt(1, materialId);</b>
+<b class="fc">&nbsp;            int rowsAffected = ps.executeUpdate();</b>
+<b class="fc">&nbsp;            if (rowsAffected != 1) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Fejl i opdatering af en materiale&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;Fejl ved sletning af en materiale&quot;, e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /***
+&nbsp;     * Updates the fields (materials_description, height, width, length and price) on a specified material in material table in database
+&nbsp;     *
+&nbsp;     * @param materialId used to specify which material will be updated
+&nbsp;     * The input used to replace the different column values on the specified material
+&nbsp;     * @param description
+&nbsp;     * @param height
+&nbsp;     * @param width
+&nbsp;     * @param length
+&nbsp;     * @param price
+&nbsp;     * @param connectionPool  ConnectionPool used to update material in material table in database
+&nbsp;     * @throws DatabaseException Displays &quot;Fejl i opdatering af en materiale&quot; + system msg
+&nbsp;     */
+&nbsp;    public static void updateMaterial(int materialId, String description, int height, int width, int length, double price, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        String sql = &quot;UPDATE material SET material_description = ?, height = ?, width = ?, length = ?, price = ? WHERE material_id = ?&quot;;</b>
+<b class="nc">&nbsp;        try (</b>
+<b class="fc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql)</b>
+&nbsp;        ) {
+<b class="fc">&nbsp;            ps.setString(1, description);</b>
+<b class="fc">&nbsp;            ps.setInt(2, height);</b>
+<b class="fc">&nbsp;            ps.setInt(3, width);</b>
+<b class="fc">&nbsp;            ps.setInt(4, length);</b>
+<b class="fc">&nbsp;            ps.setDouble(5, price);</b>
+<b class="fc">&nbsp;            ps.setInt(6, materialId);</b>
+<b class="fc">&nbsp;            int rowsAffected = ps.executeUpdate();</b>
+<b class="fc">&nbsp;            if (rowsAffected != 1) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Error updating material&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;Error updating material: &quot; + e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static int getMaterialIdByData(String description, int height, int width, int length, double price, ConnectionPool connectionPool) throws DatabaseException{
+<b class="fc">&nbsp;        String sql = &quot;SELECT material_id FROM material WHERE material_description = ? &quot; +</b>
+&nbsp;                &quot;AND height = ? AND width = ? AND length = ? AND price = ?;&quot;;
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="fc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql)</b>
+&nbsp;        ){
+<b class="fc">&nbsp;            ps.setString(1, description);</b>
+<b class="fc">&nbsp;            ps.setInt(2, height);</b>
+<b class="fc">&nbsp;            ps.setInt(3, width);</b>
+<b class="fc">&nbsp;            ps.setInt(4, length);</b>
+<b class="fc">&nbsp;            ps.setDouble(5, price);</b>
+&nbsp;
+<b class="fc">&nbsp;            ResultSet rs = ps.executeQuery();</b>
+<b class="fc">&nbsp;            if (rs.next()) {</b>
+<b class="fc">&nbsp;                return rs.getInt(&quot;material_id&quot;);</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return -1;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL SELECT error in getMaterialIdByData&quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-20 18:37</div>
+</div>
+</body>
+</html>
