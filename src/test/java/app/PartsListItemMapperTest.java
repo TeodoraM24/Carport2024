@@ -1,6 +1,7 @@
-package app.persistence;
+package app;
 
 import app.exceptions.DatabaseException;
+import app.persistence.ConnectionPool;
 import app.persistence.admin.PartsListItemMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +13,7 @@ import java.sql.Statement;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PartsListItemMapperTest {
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "HigAbt60ig";
-    private static final String URL = "jdbc:postgresql://161.35.195.156/%s?currentSchema=public";
-    private static final String DB = "carport_test";
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @BeforeEach
     void setUp() {

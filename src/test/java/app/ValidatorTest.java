@@ -1,4 +1,4 @@
-package app.persistence;
+package app;
 
 import app.validators.CityValidator;
 import app.validators.EmailValidator;

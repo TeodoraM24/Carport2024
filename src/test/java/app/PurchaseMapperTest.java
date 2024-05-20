@@ -1,29 +1,25 @@
-package app.persistence;
+package app;
 
-import app.entities.Offer;
 import app.exceptions.DatabaseException;
+import app.persistence.ConnectionPool;
+import app.persistence.admin.PurchaseMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+public class PurchaseMapperTest {
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-public class OfferMapperTest {
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "HigAbt60ig";
-    private static final String URL = "jdbc:postgresql://161.35.195.156/%s?currentSchema=public";
-    private static final String DB = "carport_test";
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
     @BeforeEach
     void setUp() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
-                // Remove all rows from relevant tables
                 stmt.execute("DELETE FROM customer_invoice");
                 stmt.execute("DELETE FROM admin_customer_request");
                 stmt.execute("DELETE FROM admin_invoice");
@@ -47,7 +43,10 @@ public class OfferMapperTest {
                 stmt.execute("SELECT setval('public.parts_list_item_parts_list_item_id_seq', 1, false)");
                 stmt.execute("SELECT setval('public.material_material_id_seq', 1, false)");
                 stmt.execute("SELECT setval('public.price_price_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.carport_carport_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.invoice_invoice_id_seq', 1, false)");
 
+                //Add data to tables
                 stmt.execute("INSERT INTO customer (customer_id, first_name, last_name, email, password, phonenumber, address, zip) VALUES " +
                         "(1, 'Jon', 'Andersen', 'jon@blabla.com', '1234', 12455, 'Campusvej', 2770)");
                 stmt.execute("INSERT INTO customer_request (customer_request_id, length, width, height, date) VALUES " +
@@ -59,12 +58,12 @@ public class OfferMapperTest {
                 stmt.execute("INSERT INTO parts_list_item (material_id, amount, instruction_description, unit, total_price) VALUES " +
                         "(1, 6, 'test', 'Stk.', 100)");
                 stmt.execute("INSERT INTO parts_list (parts_list_id, price_id) VALUES (1,1)");
-                // Update customer_request_id in the customer table
                 stmt.execute("UPDATE customer SET customer_request_id = 1 WHERE customer_id = 1");
-                // Insert rows in the correct order: first offer, then customer
                 stmt.execute("INSERT INTO offer (offer_id, tool_shed_size, cladding_desc, rafter_type_desc, support_beam_desc_size, roof_materials, date, parts_list_id, price_id, customer_request_id) VALUES " +
                         "(1, '20', 'fkfk', 'eddd', 'Campusvdaej', 'blabla', '2024-05-14', 1, 1, 1)");
                 stmt.execute("UPDATE customer SET offer_id = 1");
+                stmt.execute("INSERT INTO carport (width, height, length, price_id) VALUES (400, 300, 600, 1)");
+                stmt.execute("INSERT INTO invoice (parts_list_id, date, carport_id) VALUES (1, '2024-08-05', 1)");
                 // Set sequence to continue from the largest member_id
                 stmt.execute("SELECT setval('public.customer_customer_id_seq', COALESCE((SELECT MAX(customer_id)+1 FROM public.customer), 1), false)");
 
@@ -75,45 +74,36 @@ public class OfferMapperTest {
         }
     }
 
-
-
-
     @Test
     void testConnection() throws SQLException {
         assertNotNull(connectionPool.getConnection());
     }
 
     @Test
-    void testGetOfferByCustomerId() throws DatabaseException {
-        Offer offer = OfferMapper.getOfferByCustomerId(1, connectionPool);
-        assertNotNull(offer);
-        assertEquals(1, offer.getOfferId());
-        assertEquals("eddd", offer.getRafterTypeDesc());
-        assertEquals("Campusvdaej", offer.getSupportBeamDescSize());
-        assertEquals("blabla", offer.getRoofMaterials());
-        //tilføj mere
+    void testAddCarport() throws DatabaseException {
+        int expectedCarportId = 2;
+
+        int actualCarportId = PurchaseMapper.addCarport(400, 300, 500, 1, connectionPool);
+
+        assertEquals(expectedCarportId, actualCarportId);
     }
+
     @Test
-    void testUpdateOfferStatus() throws DatabaseException, SQLException {
-        OfferMapper.updateOfferStatus(1, "Godkend", connectionPool);
+    void testAddInvoice() throws DatabaseException {
+        int expectedInvoiceId = 2;
+        LocalDate date = LocalDate.now();
 
+        int actualInvoiceId = PurchaseMapper.addInvoice(1, date, 1, connectionPool);
 
-        try (Connection connection = connectionPool.getConnection();
-             Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT status FROM offer WHERE offer_id = 1")) {
-            rs.next();
-            String updatedStatus = rs.getString("status");
-            assertEquals("Godkend", updatedStatus);
-        }
+        assertEquals(expectedInvoiceId, actualInvoiceId);
     }
-    @Test
-    void testUpdateCustomerOffer() {
-        try {
-            OfferMapper.updateCustomerOffer(1, 1, connectionPool);
-            assertTrue(true);
-        } catch (DatabaseException e) {
-            assertFalse(false);
-        }
 
+    @Test
+    void testAddInvoiceToCustomer() throws DatabaseException {
+        int expectedCustomerId = 1;
+
+        int actualCustomerId = PurchaseMapper.addInvoiceToCustomer(1, 1, connectionPool);
+
+        assertEquals(expectedCustomerId, actualCustomerId);
     }
 }

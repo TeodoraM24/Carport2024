@@ -1,4 +1,4 @@
-package app.persistence;
+package app;
 
 import app.entities.Material;
 import app.entities.PartsListItem;
