@@ -1,0 +1,354 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > CustomerRequestMapper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">app.persistence.customer</a>
+</div>
+
+<h1>Coverage Summary for Class: CustomerRequestMapper (app.persistence.customer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CustomerRequestMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.9%
+  </span>
+  <span class="absValue">
+    (113/130)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package app.persistence.customer;
+&nbsp;
+&nbsp;import app.entities.Customer;
+&nbsp;import app.entities.CustomerRequest;
+&nbsp;import app.exceptions.DatabaseException;
+&nbsp;import app.persistence.ConnectionPool;
+&nbsp;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.sql.*;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * The CustomerRequestMapper class is used for interacting with the database
+&nbsp; */
+&nbsp;
+<b class="fc">&nbsp;public class CustomerRequestMapper {</b>
+&nbsp;
+&nbsp;    public static List&lt;CustomerRequest&gt; getAllCustomerRequests(int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        List&lt;CustomerRequest&gt; customerRequests = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        String sql = &quot;SELECT * FROM customer_request WHERE customer_request_id = ?&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;             PreparedStatement ps = connection.prepareStatement(sql)) {</b>
+&nbsp;
+<b class="fc">&nbsp;            ps.setInt(1, customerRequestId);</b>
+&nbsp;
+<b class="fc">&nbsp;            ResultSet rs = ps.executeQuery();</b>
+<b class="fc">&nbsp;            while (rs.next()) {</b>
+<b class="fc">&nbsp;                int length = rs.getInt(&quot;length&quot;);</b>
+<b class="fc">&nbsp;                int height = rs.getInt(&quot;height&quot;);</b>
+<b class="fc">&nbsp;                int width = rs.getInt(&quot;width&quot;);</b>
+<b class="fc">&nbsp;                String tileType = rs.getString(&quot;tile_type&quot;);</b>
+<b class="fc">&nbsp;                Date sqlDate = rs.getDate(&quot;date&quot;);</b>
+<b class="fc">&nbsp;                LocalDate date = sqlDate.toLocalDate();</b>
+<b class="fc">&nbsp;                String status = rs.getString(&quot;status&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                CustomerRequest customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);</b>
+<b class="fc">&nbsp;                customerRequests.add(customerRequest);</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;Error retrieving customer requests from the database&quot;, e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return customerRequests;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method retrives all customer requests from the database
+&nbsp;     *
+&nbsp;     * @param connectionPool The connection to the database
+&nbsp;     * @return Returns a list of Customer Requests
+&nbsp;     * @throws DatabaseException Handles database error
+&nbsp;     */
+&nbsp;    public static List&lt;CustomerRequest&gt; getAllCustomerRequest(ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        List&lt;CustomerRequest&gt; customerRequests = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        String sql = &quot;SELECT cr.customer_request_id, cr.length, cr.width, cr.height, cr.date, cr.status, cr.tile_type, c.first_name, c.last_name, c.customer_id &quot; +</b>
+&nbsp;                &quot;FROM customer_request cr &quot; +
+&nbsp;                &quot;JOIN customer c ON cr.customer_request_id = c.customer_request_id&quot;;
+&nbsp;
+<b class="fc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {</b>
+&nbsp;
+<b class="fc">&nbsp;            try (ResultSet rs = preparedStatement.executeQuery()) {</b>
+<b class="fc">&nbsp;                while (rs.next()) {</b>
+<b class="fc">&nbsp;                    int customerRequestId = rs.getInt(&quot;customer_request_id&quot;);</b>
+<b class="fc">&nbsp;                    int requestLength = rs.getInt(&quot;length&quot;);</b>
+<b class="fc">&nbsp;                    int requestWidth = rs.getInt(&quot;width&quot;);</b>
+<b class="fc">&nbsp;                    int requestHeight = rs.getInt(&quot;height&quot;);</b>
+<b class="fc">&nbsp;                    LocalDate date = rs.getDate(&quot;date&quot;).toLocalDate();</b>
+<b class="fc">&nbsp;                    String status = rs.getString(&quot;status&quot;);</b>
+<b class="fc">&nbsp;                    String tileType = rs.getString(&quot;tile_type&quot;);</b>
+<b class="fc">&nbsp;                    String firstName = rs.getString(&quot;first_name&quot;);</b>
+<b class="fc">&nbsp;                    String lastName = rs.getString(&quot;last_name&quot;);</b>
+<b class="fc">&nbsp;                    int customerId = rs.getInt(&quot;customer_id&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                    Customer customer = new Customer(customerId, firstName, lastName);</b>
+<b class="fc">&nbsp;                    CustomerRequest customerRequest = new CustomerRequest(customerRequestId, requestLength, requestWidth, requestHeight, tileType, date, status, customer);</b>
+<b class="fc">&nbsp;                    customerRequests.add(customerRequest);</b>
+<b class="fc">&nbsp;                }</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            String msg = &quot;Fejl i getAllCustomerRequest()!&quot;;</b>
+<b class="nc">&nbsp;            throw new DatabaseException(msg, e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return customerRequests;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getting a customer request from the database based on the customer request id
+&nbsp;     *
+&nbsp;     * @param customerRequestId The ID of the customer request to retrieve
+&nbsp;     * @param connectionPool    The connection to the database
+&nbsp;     * @return Returns a list the requested customer request
+&nbsp;     * @throws DatabaseException Handles database error
+&nbsp;     */
+&nbsp;    public CustomerRequest getCustomerRequestById(int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        String sql = &quot;SELECT * FROM customer_request WHERE customer_request_id = ?&quot;;</b>
+<b class="fc">&nbsp;        CustomerRequest customerRequest = null;</b>
+&nbsp;
+<b class="fc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {</b>
+&nbsp;
+<b class="fc">&nbsp;            preparedStatement.setInt(1, customerRequestId);</b>
+<b class="fc">&nbsp;            try (ResultSet rs = preparedStatement.executeQuery()) {</b>
+<b class="fc">&nbsp;                if (rs.next()) {</b>
+<b class="fc">&nbsp;                    int length = rs.getInt(&quot;length&quot;);</b>
+<b class="fc">&nbsp;                    int width = rs.getInt(&quot;width&quot;);</b>
+<b class="fc">&nbsp;                    int height = rs.getInt(&quot;height&quot;);</b>
+<b class="fc">&nbsp;                    LocalDate date = rs.getDate(&quot;date&quot;).toLocalDate();</b>
+<b class="fc">&nbsp;                    String status = rs.getString(&quot;status&quot;);</b>
+<b class="fc">&nbsp;                    String tileType = rs.getString(&quot;tile_type&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                    customerRequest = new CustomerRequest(customerRequestId, length, width, height, tileType, date, status);</b>
+&nbsp;                }
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            String msg = &quot;Fejl ved getCustomerRequestById. Prøv igen&quot;;</b>
+<b class="nc">&nbsp;            throw new DatabaseException(msg, e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return customerRequest;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles the insert into the database
+&nbsp;     *
+&nbsp;     * @param connectionPool The connection to the database
+&nbsp;     * @throws DatabaseException Handles database error
+&nbsp;     */
+&nbsp;
+&nbsp;    public static int makeCustomerRequest(Customer currentUser, int height, int width, int length, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        if (customerIdAlreadyHasRequest(connectionPool, currentUser.getCustomer_request_id())) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;Der findes allerede en forspørgsel&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        String insertCustomerRequestQuery = &quot;INSERT INTO customer_request (length, width, height, date) VALUES (?, ?, ?, ?)&quot;;</b>
+<b class="fc">&nbsp;        String updateCustomerQuery = &quot;UPDATE customer SET customer_request_id = ? WHERE customer_id = ? AND customer_request_id IS NULL&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;             PreparedStatement insertCustomerRequestStatement = connection.prepareStatement(insertCustomerRequestQuery, PreparedStatement.RETURN_GENERATED_KEYS);</b>
+<b class="fc">&nbsp;             PreparedStatement updateCustomerStatement = connection.prepareStatement(updateCustomerQuery)) {</b>
+&nbsp;
+<b class="fc">&nbsp;            insertCustomerRequestStatement.setInt(1, length);</b>
+<b class="fc">&nbsp;            insertCustomerRequestStatement.setInt(2, width);</b>
+<b class="fc">&nbsp;            insertCustomerRequestStatement.setInt(3, height);</b>
+<b class="fc">&nbsp;            insertCustomerRequestStatement.setDate(4, java.sql.Date.valueOf(date));</b>
+<b class="fc">&nbsp;            int rowsAffected = insertCustomerRequestStatement.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (rowsAffected != 1) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Database fejl: forespørgsel blev ikke indsat rigtigt&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            ResultSet rs = insertCustomerRequestStatement.getGeneratedKeys();</b>
+<b class="fc">&nbsp;            if (!rs.next()) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Kunne ikke hente genereret nøgle til forespørgsel&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            int customerRequestId = rs.getInt(1);</b>
+&nbsp;
+<b class="fc">&nbsp;            updateCustomerStatement.setInt(1, customerRequestId);</b>
+<b class="fc">&nbsp;            updateCustomerStatement.setInt(2, currentUser.getCustomerId());</b>
+<b class="fc">&nbsp;            int updatedRows = updateCustomerStatement.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (updatedRows == 0) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Fejl ved opdatering af forespørgsel eller der findes allerede en forespørgsel&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            return customerRequestId;</b>
+&nbsp;
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;Fejl under oprettelse&quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static boolean customerIdAlreadyHasRequest(ConnectionPool connectionPool, int customerId) throws DatabaseException {
+<b class="fc">&nbsp;        String sql = &quot;SELECT customer_request_id FROM customer WHERE customer_id = ? AND customer_request_id IS NOT NULL&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {</b>
+&nbsp;
+<b class="fc">&nbsp;            preparedStatement.setInt(1, customerId);</b>
+<b class="fc">&nbsp;            try (ResultSet rs = preparedStatement.executeQuery()) {</b>
+<b class="fc">&nbsp;                return rs.next();</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;Fejl ved tjek om forespørgsel allerede findes&quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles to delete of a customer request from the database
+&nbsp;     *
+&nbsp;     * @param customerRequestId The ID of the customer request to delete
+&nbsp;     * @param connectionPool    The connection to the database
+&nbsp;     * @throws DatabaseException Handles database error
+&nbsp;     */
+&nbsp;    public static void deleteCustomerRequest(int customerRequestId, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        String sql = &quot;DELETE FROM customer_request WHERE customer_request_id = ?&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {</b>
+<b class="fc">&nbsp;            preparedStatement.setInt(1, customerRequestId);</b>
+&nbsp;
+<b class="fc">&nbsp;            int rowsAffected = preparedStatement.executeUpdate();</b>
+<b class="fc">&nbsp;            if (rowsAffected != 1) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Fejl ved sletning af forespørgelsen&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            String msg = &quot;Fejl, prøv igen&quot;;</b>
+<b class="nc">&nbsp;            throw new DatabaseException(msg, e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Grant the ability to change the attribute of the customer request
+&nbsp;     *
+&nbsp;     * @param customerId     The ID of the customer request
+&nbsp;     * @param length         Length of the carport
+&nbsp;     * @param width          Width of the carport
+&nbsp;     * @param height         Height of the carport
+&nbsp;     * @param date           Date the request was made
+&nbsp;     * @param status         Status of the request
+&nbsp;     * @param connectionPool The connection to the database
+&nbsp;     * @throws DatabaseException Handles database error
+&nbsp;     */
+&nbsp;    public static void updateCustomerRequest(int customerId, int length, int width, int height, LocalDate date, String status, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        String sql = &quot;UPDATE customer_request SET length=?, width=?, height=?, date=?, status=? WHERE customer_request_id = ?&quot;;</b>
+<b class="fc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {</b>
+&nbsp;
+<b class="fc">&nbsp;            preparedStatement.setInt(1, length);</b>
+<b class="fc">&nbsp;            preparedStatement.setInt(2, width);</b>
+<b class="fc">&nbsp;            preparedStatement.setInt(3, height);</b>
+<b class="fc">&nbsp;            preparedStatement.setDate(4, java.sql.Date.valueOf(date));</b>
+<b class="fc">&nbsp;            preparedStatement.setString(5, status);</b>
+<b class="fc">&nbsp;            preparedStatement.setInt(6, customerId);</b>
+&nbsp;
+<b class="fc">&nbsp;            int rowsAffected = preparedStatement.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (rowsAffected != 1) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Fejl ved opdatering af kundeforespørgsel&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            String msg = &quot;Der er sket en fejl. Prøv igen (updateCustomerRequest)&quot;;</b>
+<b class="nc">&nbsp;            throw new DatabaseException(msg, e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-20 18:37</div>
+</div>
+</body>
+</html>

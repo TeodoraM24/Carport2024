@@ -1,0 +1,246 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > OfferMapper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">app.persistence</a>
+</div>
+
+<h1>Coverage Summary for Class: OfferMapper (app.persistence)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">OfferMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (4/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    48.2%
+  </span>
+  <span class="absValue">
+    (40/83)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package app.persistence;
+&nbsp;
+&nbsp;import app.entities.Offer;
+&nbsp;import app.exceptions.DatabaseException;
+&nbsp;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.PreparedStatement;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="nc">&nbsp;public class OfferMapper {</b>
+&nbsp;
+&nbsp;    public static Offer getOfferByCustomerId(int customerId, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        String sql = &quot;SELECT o.offer_id, c.customer_id, o.parts_list_id, o.price_id, o.customer_request_id, cq.length, cq.width, cq.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax, o.status FROM offer o INNER JOIN customer c USING(customer_request_id) INNER JOIN customer_request cq USING(customer_request_id) INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id) WHERE customer_id = ?&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="fc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql))</b>
+&nbsp;        {
+<b class="fc">&nbsp;            ps.setInt(1, customerId);</b>
+&nbsp;
+<b class="fc">&nbsp;            ResultSet rs = ps.executeQuery();</b>
+<b class="fc">&nbsp;            if (rs.next()) {</b>
+<b class="fc">&nbsp;                return getOfferInformation(rs);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Failed to retrieve offer for given customer id.&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL SELECT error in getOfferByCustomerId() in OfferMapper. &quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Offer getOfferById(int offerId, ConnectionPool connectionPool) throws DatabaseException {
+<b class="nc">&nbsp;        String sql = &quot;SELECT o.offer_id, c.customer_id, o.parts_list_id, o.price_id, o.customer_request_id, cq.length, cq.width, cq.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax, o.status FROM offer o INNER JOIN customer c USING(customer_request_id) INNER JOIN customer_request cq USING(customer_request_id) INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id) WHERE o.offer_id = ?&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="nc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="nc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql))</b>
+&nbsp;        {
+<b class="nc">&nbsp;            ps.setInt(1, offerId);</b>
+&nbsp;
+<b class="nc">&nbsp;            ResultSet rs = ps.executeQuery();</b>
+<b class="nc">&nbsp;            if (rs.next()) {</b>
+<b class="nc">&nbsp;                return getOfferInformation(rs);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Failed to retrieve offer by offer id.&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL SELECT error in getOfferById() in OfferMapper. &quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static List&lt;Offer&gt; getAllCustomerOffers(ConnectionPool connectionPool) throws DatabaseException {
+<b class="nc">&nbsp;        List&lt;Offer&gt; offers = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        String sql = &quot;SELECT o.offer_id, c.customer_id, cr.customer_request_id, pl.parts_list_id, p.price_id, cr.length, cr.width, cr.height, o.rafter_type_desc, o.support_beam_desc_size, o.roof_materials, p.salesprice_with_tax, o.status FROM offer o INNER JOIN customer c USING(customer_request_id) INNER JOIN customer_request cr USING(customer_request_id) INNER JOIN price p USING(price_id) INNER JOIN parts_list pl USING(parts_list_id)&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="nc">&nbsp;             PreparedStatement ps = connection.prepareStatement(sql)) {</b>
+&nbsp;
+<b class="nc">&nbsp;            ResultSet rs = ps.executeQuery();</b>
+<b class="nc">&nbsp;            while (rs.next()) {</b>
+<b class="nc">&nbsp;                Offer offer = getOfferInformation(rs);</b>
+<b class="nc">&nbsp;                offers.add(offer);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL SELECT error in getAllCustomerOffers() in OfferMapper. &quot;, e.getMessage());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return offers;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static Offer getOfferInformation(ResultSet rs) throws SQLException {
+<b class="fc">&nbsp;        int offerId = rs.getInt(&quot;offer_id&quot;);</b>
+<b class="fc">&nbsp;        int length= rs.getInt(&quot;length&quot;);</b>
+<b class="fc">&nbsp;        int height= rs.getInt(&quot;height&quot;);</b>
+<b class="fc">&nbsp;        int width=rs.getInt(&quot;width&quot;);</b>
+<b class="fc">&nbsp;        String carportSize = width + &quot;x&quot; + length + &quot;x&quot; + height;</b>
+<b class="fc">&nbsp;        String rafterTypeDesc = rs.getString(&quot;rafter_type_desc&quot;);</b>
+<b class="fc">&nbsp;        String supportBeamDescSize = rs.getString(&quot;support_beam_desc_size&quot;);</b>
+<b class="fc">&nbsp;        String roofMaterials = rs.getString(&quot;roof_materials&quot;);</b>
+<b class="fc">&nbsp;        double totalPriceWithTax = rs.getDouble(&quot;salesprice_with_tax&quot;);</b>
+<b class="fc">&nbsp;        String status = rs.getString(&quot;status&quot;);</b>
+<b class="fc">&nbsp;        int priceId = rs.getInt(&quot;price_id&quot;);</b>
+<b class="fc">&nbsp;        int partsListId = rs.getInt(&quot;parts_list_id&quot;);</b>
+<b class="fc">&nbsp;        int customerRequestId = rs.getInt(&quot;customer_request_id&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        return new Offer(offerId, carportSize, rafterTypeDesc, supportBeamDescSize, roofMaterials, totalPriceWithTax, status, partsListId, priceId, customerRequestId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void updateOfferStatus(int offerId, String status, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        String sql = &quot;UPDATE offer SET status = ? WHERE offer_id = ?&quot;;</b>
+<b class="fc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;             PreparedStatement ps = connection.prepareStatement(sql)) {</b>
+<b class="fc">&nbsp;            ps.setString(1, status);</b>
+<b class="fc">&nbsp;            ps.setInt(2, offerId);</b>
+<b class="fc">&nbsp;            int rowsUpdated = ps.executeUpdate();</b>
+<b class="fc">&nbsp;            if (rowsUpdated == 0) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Failed to update status in offer table for given offer id.&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL UPDATE error in updateOfferStatus() in OfferMapper. &quot;, e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void updateCustomerOffer(int offerId, int customerId, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        String sql = &quot;UPDATE customer SET offer_id = ? WHERE customer_id = ?&quot;;</b>
+<b class="fc">&nbsp;        try (Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;             PreparedStatement ps = connection.prepareStatement(sql)) {</b>
+<b class="fc">&nbsp;            ps.setInt(1, offerId);</b>
+<b class="fc">&nbsp;            ps.setInt(2, customerId);</b>
+&nbsp;
+<b class="fc">&nbsp;            int rowsUpdated = ps.executeUpdate();</b>
+<b class="fc">&nbsp;            if (rowsUpdated == 0) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Failed to update offer id in customer table with given customer id.&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL UPDATE error in updateCustomerOffer() in OfferMapper. &quot;, e.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void deleteOffer(int offerId, ConnectionPool connectionPool) throws DatabaseException{
+<b class="nc">&nbsp;        String sql = &quot;DELETE FROM offer WHERE offer_id = ?&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="nc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="nc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql)</b>
+&nbsp;        ) {
+<b class="nc">&nbsp;            ps.setInt(1, offerId);</b>
+&nbsp;
+<b class="nc">&nbsp;            int rowsAffected = ps.executeUpdate();</b>
+<b class="nc">&nbsp;            if (rowsAffected != 1) {</b>
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Failed to delete offer in offer table.&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL DELETE error in deleteOffer() in OfferMapper. &quot;, e.getMessage());</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-20 18:37</div>
+</div>
+</body>
+</html>

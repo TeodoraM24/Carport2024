@@ -1,0 +1,186 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PurchaseMapper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">app.persistence.admin</a>
+</div>
+
+<h1>Coverage Summary for Class: PurchaseMapper (app.persistence.admin)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PurchaseMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    78.3%
+  </span>
+  <span class="absValue">
+    (36/46)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package app.persistence.admin;
+&nbsp;
+&nbsp;import app.exceptions.DatabaseException;
+&nbsp;import app.persistence.ConnectionPool;
+&nbsp;
+&nbsp;import java.sql.*;
+&nbsp;import java.time.LocalDate;
+&nbsp;
+<b class="nc">&nbsp;public class PurchaseMapper {</b>
+&nbsp;    public static int addCarport(int requestWidth, int requestHeight, int requestLength, int priceId, ConnectionPool connectionPool) throws DatabaseException {
+&nbsp;
+<b class="fc">&nbsp;        String sql = &quot;INSERT INTO carport (width, height, length, price_id) VALUES (?, ?, ?, ?)&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="fc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)</b>
+&nbsp;        ) {
+<b class="fc">&nbsp;            ps.setInt(1, requestWidth);</b>
+<b class="fc">&nbsp;            ps.setInt(2, requestHeight);</b>
+<b class="fc">&nbsp;            ps.setInt(3, requestLength);</b>
+<b class="fc">&nbsp;            ps.setInt(4, priceId);</b>
+&nbsp;
+<b class="fc">&nbsp;            int rowsAffected = ps.executeUpdate();</b>
+<b class="fc">&nbsp;            if (rowsAffected == 1) {</b>
+<b class="fc">&nbsp;                ResultSet rs = ps.getGeneratedKeys();</b>
+<b class="fc">&nbsp;                rs.next();</b>
+<b class="fc">&nbsp;                return rs.getInt(1);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Failed to insert a new carport to carport table.&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL INSERT error in addCarport() in PurchaseMapper. &quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static int addInvoice(int partsListId, LocalDate currentDate, int carportId, ConnectionPool connectionPool) throws DatabaseException{
+<b class="fc">&nbsp;        String sql = &quot;INSERT INTO invoice (parts_list_id, date, carport_id) VALUES (?, ?, ?)&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="fc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)</b>
+&nbsp;        ) {
+<b class="fc">&nbsp;            ps.setInt(1, partsListId);</b>
+<b class="fc">&nbsp;            ps.setDate(2, Date.valueOf(currentDate));</b>
+<b class="fc">&nbsp;            ps.setInt(3, carportId);</b>
+&nbsp;
+<b class="fc">&nbsp;            int rowsAffected = ps.executeUpdate();</b>
+<b class="fc">&nbsp;            if (rowsAffected == 1) {</b>
+<b class="fc">&nbsp;                ResultSet rs = ps.getGeneratedKeys();</b>
+<b class="fc">&nbsp;                rs.next();</b>
+<b class="fc">&nbsp;                return rs.getInt(1);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Failed to insert a new invoice to invoice table.&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL INSERT error in addInvoice() in PurchaseMapper. &quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static int addInvoiceToCustomer(int customerId, int invoiceId, ConnectionPool connectionPool) throws DatabaseException {
+<b class="fc">&nbsp;        String sql = &quot;INSERT INTO customer_invoice (customer_id, invoice_id) VALUES (?, ?)&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        try (</b>
+<b class="fc">&nbsp;                Connection connection = connectionPool.getConnection();</b>
+<b class="fc">&nbsp;                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)</b>
+&nbsp;        ) {
+<b class="fc">&nbsp;            ps.setInt(1, customerId);</b>
+<b class="fc">&nbsp;            ps.setInt(2, invoiceId);</b>
+&nbsp;
+<b class="fc">&nbsp;            int rowsAffected = ps.executeUpdate();</b>
+<b class="fc">&nbsp;            if (rowsAffected == 1) {</b>
+<b class="fc">&nbsp;                ResultSet rs = ps.getGeneratedKeys();</b>
+<b class="fc">&nbsp;                rs.next();</b>
+<b class="fc">&nbsp;                return rs.getInt(1);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new DatabaseException(&quot;Failed to attach the invoice to the customer in customer invoice table.&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new DatabaseException(&quot;DB: SQL INSERT error in addInvoiceToCustomer() in PurchaseMapper. &quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-20 18:37</div>
+</div>
+</body>
+</html>
