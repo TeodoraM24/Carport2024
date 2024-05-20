@@ -28,7 +28,7 @@ public class InvoiceMapper {
         String sql = "SELECT customer_invoice.customer_id, invoice.invoice_id, invoice.date\n" +
                 "FROM public.customer_invoice\n" +
                 "INNER JOIN public.invoice ON customer_invoice.invoice_id = invoice.invoice_id\n" +
-                "WHERE customer_invoice.customer_id =?";
+                "WHERE customer_id = ?";
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
@@ -38,7 +38,7 @@ public class InvoiceMapper {
             while (rs.next()) {
                 Date date = rs.getDate("date");
                 int invoiceId = rs.getInt("invoice_id");
-                Invoice invoice = new Invoice(customerId, invoiceId, date.toLocalDate());
+                Invoice invoice = new Invoice(invoiceId, customerId, date.toLocalDate());
                 listOfCustomersInvoices.add(invoice);
             }
         } catch (SQLException e) {
@@ -59,7 +59,7 @@ public class InvoiceMapper {
      * @throws DatabaseException Thrown if there's an error in executing the SQL query
      */
 
-    public static List<InvoiceDetails> getCustomerInvoiceDetails(int invoiceId, int customerId, ConnectionPool connectionPool) throws DatabaseException {
+    public static List<InvoiceDetails> getCustomerInvoiceDetails(int customerId, int invoiceId, ConnectionPool connectionPool) throws DatabaseException {
         List<InvoiceDetails> listOfInvoiceDetails = new ArrayList<>();
         String sql = "SELECT\n" +
                 "    customer.customer_id,\n" +
@@ -110,11 +110,11 @@ public class InvoiceMapper {
 
 
     public static Carport getCarport(int invoiceId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT carport_id, width, height, length, price_id, purchase_price, salesprice_with_tax, coverage_ratio FROM public.invoice " +
-                "INNER JOIN carport USING(carport_id) INNER JOIN price USING(price_id)";
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+        String sql = "SELECT carport_id, invoice_id, width, height, length, price_id, purchase_price, salesprice_with_tax, coverage_ratio FROM public.invoice INNER JOIN carport USING(carport_id) INNER JOIN price USING(price_id) WHERE invoice_id = ?";
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setInt(1, invoiceId);
 
             ResultSet rs = ps.executeQuery();

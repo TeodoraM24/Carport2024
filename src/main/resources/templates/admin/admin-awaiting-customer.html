@@ -23,7 +23,7 @@
             <tbody>
             <tr th:each="offer : ${awaitingOffers}">
                 <td th:text="${offer.getCustomerRequestId()}"></td>
-                <td th:if="${offer.status == 'Godkend'}">
+                <td th:if="${offer.status == 'Godkendt'}">
                     <a type="button" class="send-invoice" th:href="@{/sendInvoice/{offerId}(offerId=${offer.offerId})}">Send Invoice</a>
                 </td>
                 <td th:if="${offer.status == 'Afvist'}">

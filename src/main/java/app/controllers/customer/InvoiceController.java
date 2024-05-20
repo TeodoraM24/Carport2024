@@ -19,9 +19,6 @@ public class InvoiceController {
         app.get("viewOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
 
         app.get("viewInvoiceDetails/{invoiceid}", ctx -> {
-            //get invoiceId
-            int id = Integer.parseInt(ctx.pathParam("invoiceid"));
-            System.out.println(id);
             displayInvoiceDetails(ctx, connectionPool);
         });
         app.get("backToOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
@@ -40,12 +37,15 @@ public class InvoiceController {
 
     private static void displayCustomerOrderHistory(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
-        Customer customer = new Customer(2, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
+        Customer customer = ctx.sessionAttribute("currentUser");
         ctx.sessionAttribute("currentCustomer", customer);
-        List<Invoice> listOfInvoices = InvoiceMapper.getCustomersOrderHistory(2, connectionPool);
+        List<Invoice> listOfInvoices = InvoiceMapper.getCustomersOrderHistory(customer.getCustomerId(), connectionPool);
 
         ctx.attribute("listOfInvoices", listOfInvoices);
-        System.out.println(listOfInvoices);
+        for (Invoice i: listOfInvoices)
+        {
+            System.out.println(i.getInvoiceID());
+        }
 
         ctx.render("customer/customer-order-history-page.html");
     }
@@ -61,12 +61,12 @@ public class InvoiceController {
 
 
     private static void displayInvoiceDetails(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Customer customer = new Customer(2, "jon@blabla.com", "1234", 12455, "Jon", "Andersen", "Campusvej", 2770, "customer");
+        Customer customer = ctx.sessionAttribute("currentUser");
         ctx.sessionAttribute("currentCustomerId");
         ctx.attribute("currentCustomerId", customer.getCustomerId());
 
-        //get invoiceId
         int invoiceId = Integer.parseInt(ctx.pathParam("invoiceid"));
+
 
         List<InvoiceDetails> listOfPartlists = InvoiceMapper.getCustomerInvoiceDetails(customer.getCustomerId(), invoiceId, connectionPool);
         ctx.attribute("listOfPartlists", listOfPartlists);

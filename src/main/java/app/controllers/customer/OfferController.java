@@ -36,7 +36,7 @@ public class OfferController {
     public static void acceptOffer(Context ctx, ConnectionPool connectionPool) {
         try {
             int offerId = Integer.parseInt(ctx.pathParam("offerId"));
-            OfferMapper.updateOfferStatus(offerId, "Godkend", connectionPool);
+            OfferMapper.updateOfferStatus(offerId, "Godkendt", connectionPool);
             ctx.render("customer/offer-acceptance.html");
         } catch (NumberFormatException e) {
             ctx.status(400).result("Invalid offer ID");
