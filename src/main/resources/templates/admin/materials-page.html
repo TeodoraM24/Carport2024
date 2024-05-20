@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments/header :: common_header(~{::title},~{::link})">
+    <title>Materialer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/materials-style.css" th:href="@{/css/materials-style.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+
+<div class="body-background">
+    <div class="container">
+        <h2 style="font-family: Helvetica, sans-serif; margin-bottom: 15px; margin-top: 35px">Materialeliste</h2>
+        <div class="flexbox1">
+            <form method="POST">
+                <table>
+                    <thead>
+                    <tr style="padding-right: 30px">
+                        <th style="padding-right: 110px">Beskrivelse</th>
+                        <th style="padding-right: 110px">Højde</th>
+                        <th style="padding-right: 110px">Bredde</th>
+                        <th style="padding-right: 110px">Længde</th>
+                        <th style="padding-right: 110px">Pris</th>
+                        <th style="padding-right: 110px"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="material: ${materialList}">
+                        <td th:text="${material.description}"></td>
+                        <td th:text="${material.height}"></td>
+                        <td th:text="${material.width}"></td>
+                        <td th:text="${material.length}"></td>
+                        <td th:text="${material.price}"></td>
+                        <td>
+                            <button type="submit" name="materialId" th:value="${material.materialId}"
+                                    formaction="editmaterial">Rediger
+                            </button>
+                            <button type="submit" name="materialId" th:value="${material.materialId}"
+                                    formaction="deletematerial">Slet
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+
+        <h2 style="font-family: Helvetica, sans-serif; margin-bottom: 0; margin-top: 40px">Tilføj materiale</h2>
+        <div class="flexbox2">
+            <form method="POST">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Beskrivelse</th>
+                        <th>Højde</th>
+                        <th>Bredde</th>
+                        <th>Længde</th>
+                        <th>Pris</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><label>
+                            <input type="text" name="description" placeholder="Indtast beskrivelse">
+                        </label></td>
+                        <td><label>
+                            <input type="number" name="height" placeholder="Indtast højde" min="0" max="9999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-9999 cm.')">
+                        </label></td>
+                        <td><label>
+                            <input type="number" name="width" placeholder="Indtast bredde" min="0" max="9999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-9999 cm.')">
+                        </label></td>
+                        <td><label>
+                            <input type="number" name="length" placeholder="Indtast længde" min="0" max="9999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-9999 cm.')">
+                        </label></td>
+                        <td><label>
+                            <input type="number" name="price" placeholder="Indtast pris" min="0" max="999999" onchange="this.setCustomValidity('')" required oninvalid="this.setCustomValidity('Skal være imellem 0-999.999 kr.')">
+                        </label></td>
+                        <td>
+                            <button type="submit" formaction="addmaterial">Tilføj</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

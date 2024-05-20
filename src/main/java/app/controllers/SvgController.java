@@ -1,12 +1,13 @@
 package app.controllers;
 
+import app.controllers.admin.AdminRequestController;
 import app.entities.Carport;
 import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
-import app.persistence.AdminRequestMapper;
+import app.persistence.admin.AdminRequestMapper;
 import app.persistence.ConnectionPool;
-import app.services.CarportSvgSideView;
-import app.services.CarportSvgTopDownView;
+import app.services.svg.CarportSvgSideView;
+import app.services.svg.CarportSvgTopDownView;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 

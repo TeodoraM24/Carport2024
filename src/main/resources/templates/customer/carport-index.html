@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Velkommen til Fog</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/carport-index.css" th:href="@{/css/carport-index.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<th:block th:if="${#ctx.session.currentUser != null}" >
+    <div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+</th:block>
+<th:block th:if="${#ctx.session.currentUser == null}" >
+    <div th:replace="~{fragments/header :: main-header('')}"></div>
+</th:block>
+
+<div class="body-background">
+    <div class="container">
+        <div class="flexbox-carports">
+            <div class="standard-carport">
+
+                <div class="standard-carport-button-side">
+                    <span style="margin-left: 20px">Standard carport</span>
+                    <br>
+                    <button class="carport-button" onclick="window.location.href='/index'">Se udvalget &#8594;</button>
+                </div>
+                <div class="standard-carport-img-side">
+                    <img src="../../public/images/standard_carport.png" th:src="@{/images/standard_carport.png}"
+                         alt="Standard Carport">
+                </div>
+            </div>
+
+
+            <div class="design-carport">
+                <div class="design-carport-button-side">
+                    <span style="margin-left: 20px">Design din carport</span>
+                    <br>
+                    <button class="carport-button" onclick="window.location.href='/carport-form'">Indtast mål &#8594;
+                    </button>
+                </div>
+
+                <div class="design-carport-img-side">
+                    <img src="../../public/images/design_carport.png" th:src="@{/images/design_carport.png}"
+                         alt="Design Carport">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

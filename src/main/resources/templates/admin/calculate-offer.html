@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <meta charset="UTF-8">
+    <title>Beregn Tilbud</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/customer-request-style.css" th:href="@{/css/customer-request-style.css}" rel="stylesheet"/>
+    <link href="../../public/css/basic-style.css" th:href="@{/css/basic-style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+
+<div class="body-background">
+    <h1 class="customer-request-title">Forespørgsel: <span class="customer-name" th:text="${customerName}"></span></h1>
+    <form action="/sendOffer" method="post">
+    <div class="container">
+        <div class="materials-table-container">
+            <table>
+                <thead>
+                <tr class="header">
+                    <th id="material-id">Nr.</th>
+                    <th id="material-desc">Vare Beskrivelse</th>
+                    <th id="additional-text">Hjælpe Tekst</th>
+                    <th class="material-size">Længde</th>
+                    <th class="material-size">Bredde</th>
+                    <th class="material-size">Højde</th>
+                    <th id="amount">Antal</th>
+                    <th id="total-price">Total Pris</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item, i: ${partsListItems}">
+                    <td>
+                        <label>
+                            <input type="hidden" th:text="${i.index+1}" th:name="|list-size|" th:value="${partsListItems.size}">
+                        </label>
+                    </td>
+                    <td><label>
+                        <input type="hidden" th:name="|partsListItems[${i.index}].material.description|" th:value="${item.material.description}" th:text="${item.material.description}">
+                    </label></td>
+                    <td><label>
+                        <textarea id="instruction" th:name="|partsListItems[${i.index}].instruction|" th:value="${item.instruction}" th:text="${item.instruction}" onchange="setValidityOffer(this)" required oninvalid="this.setCustomValidity('Mangler hjælpe tekst.')"></textarea>
+                    </label></td>
+                    <td>
+                        <div class="measurement-number">
+                            <input type="hidden" th:name="|partsListItems[${i.index}].material.length|" th:value="${item.material.length}" th:text="${item.material.length}"> cm
+                        </div>
+                    </td>
+                    <td>
+                        <div class="measurement-number">
+                        <input type="hidden" th:name="|partsListItems[${i.index}].material.width|" th:value="${item.material.width}" th:text="${item.material.width}"> mm
+                        </div>
+                    </td>
+                    <td>
+                        <div class="measurement-number">
+                        <input type="hidden" th:name="|partsListItems[${i.index}].material.height|" th:value="${item.material.height}" th:text="${item.material.height}"> mm
+                        </div>
+                    </td>
+                    <td><div class="measurement-number">
+                        <input type="hidden" th:name="|partsListItems[${i.index}].amount|" th:value="${item.amount}" th:text="${item.amount}">
+                        <input type="hidden" th:name="|partsListItems[${i.index}].unit|" th:value="${item.unit}" th:text="${item.unit}">
+                    </div>
+                    </td>
+                    <td>
+                        <div class="measurement-number">
+                        <label>
+                            <input type="number" id="material-price" class="input-price-size" th:name="|partsListItems[${i.index}].totalprice|" th:value="${item.totalprice}" onchange="setValidityOffer(this)" required oninvalid="this.setCustomValidity('Mangler en pris.')">
+                        </label>
+                        <span>kr.</span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="price-container">
+            <th:block th:object="${price}">
+            <div class="display-price-container">
+                <div class="display-coverage">
+                    <h2 class="display-title">Dækningsgrad efter prisforslag</h2>
+                    <h3 class="display-green-title">Ialt uden moms: <span th:text="${priceOffer.priceWithoutTax}"></span> kr.</h3>
+                    <h4 class="display-purchase-price">Samlet kostpris: <input type="hidden" th:text="${priceOffer.purchasePrice}" name="purchase-price" th:value="${priceOffer.purchasePrice}"> kr.</h4>
+                    <h1 class="display-coverage-amount">Dækningsgrad: <input type="hidden" th:text="${priceOffer.coverage}" name="coverage" th:value="${priceOffer.coverage}"> %</h1>
+                </div>
+                <div class="display-price-offer">
+                    <h2 class="display-title">Pris & Prisforslag</h2>
+                    <h4 class="display-price" style="border-bottom-style: double">Pris uden moms: <input type="hidden" th:text="${priceOffer.priceWithoutTax}" name="price-without-tax" th:value="${priceOffer.priceWithoutTax}"> kr.</h4>
+                    <h4 class="display-price">Pris med moms: <input type="hidden" th:text="${priceOffer.salesPrice}" name="sales-price" th:value="${priceOffer.salesPrice}"> kr.</h4>
+                    <h3 class="display-green-title" style="margin-top: 10px">Prisforslag ved salg:</h3>
+                    <label>
+                        <input class="input-new-price" type="number" id="new-price" onchange="setValidityOffer(this)" name="new-price" value="">
+                    </label> kr.
+                    <h4 class="display-price" style="color: red; margin-top: 3px">Prisændring: <span th:text="${priceDifference}"></span> kr.</h4>
+                </div>
+            </div>
+            <div class="display-buttons-container">
+                <button type="submit" formaction="/saveChanges" class="save-button" id="save" name="save-changes" value="Save" style="margin-right: 0">Gem ændringer</button>
+                <button type="submit" formaction="/showDescription" id="description" class="blue-button" name="show-description" value="Description" style="margin-right: 0">Se beskrivelse</button>
+                <button type="submit" formaction="/showDrawing" id="drawing" class="blue-button" name="show-drawing" value="Drawing" style="margin-right: 0">Se tegning</button>
+                <button type="submit" class="cautious-button" id="send" name="send-offer" value="Offer" style="margin-right: 0">Send tilbud</button>
+            </div>
+            </th:block>
+        </div>
+    </div>
+    </form>
+</div>
+
+<script src="/js/button-script.js"></script>
+</body>
+</html>

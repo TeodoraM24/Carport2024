@@ -10,15 +10,6 @@ public class PartsListItem {
     private String instruction;
     private double totalPrice;
 
-    public PartsListItem(int partsListItemId, Material material, int amount, String unit, String instruction, double totalPrice) {
-        this.partsListItemId = partsListItemId;
-        this.material = material;
-        this.amount = amount;
-        this.unit = unit;
-        this.instruction = instruction;
-        this.totalPrice = totalPrice;
-    }
-
     public PartsListItem(Material material, int amount, String unit, String instruction, double totalPrice) {
         this.material = material;
         this.amount = amount;

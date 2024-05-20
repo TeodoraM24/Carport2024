@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/header :: common_header(~{::title},~{::link})}">
+    <title>Kunde forespørgsler</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/awaiting-customer-style.css" th:href="@{/css/awaiting-customer-style.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: main-header(${#ctx.session.currentUser.getRole()})}"></div>
+<div class="container">
+    <div class="flexbox">
+        <h1>Forespørgsler</h1>
+        <th:block th:object="${chooseCustomer}">
+            <div th:if="${#lists.isEmpty(customerRequests)}">
+                <p>Der er ikke nogle kunde forespørgsler.</p>
+            </div>
+            
+            <th:block th:if="${!#lists.isEmpty(customerRequests)}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Nr.</th>
+                        <th>Dato</th>
+                        <th>Navn</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="request : ${customerRequests}">
+                        <th:block th:if="${request.status == 'Afventer'}">
+                        <td th:text="${request.customerRequestId}"></td>
+                        <td th:text="${request.date}"></td>
+                        <td>
+                            <span th:text="${request.customer.getFirstName() + ' ' + request.customer.getLastName()}"></span>
+                        </td>
+                        <td>
+                            <form id="chooseCustomerForm" action="/chooseCustomer" method="get">
+                                <input type="hidden" name="customerId" th:value="${request.customer.getCustomerId()}"/>
+                                <input type="hidden" name="customerName" th:value="${request.customer.getFirstName() + ' ' + request.customer.getLastName()}"/>
+                                <button type="submit" class="select-customer">Behandle</button>
+                            </form>
+                        </td>
+                        </th:block>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </th:block>
+        </th:block>
+        <a th:href="@{/loginpage-admin}" class="return-button" style="width: 100px">Gå tilbage</a>
+    </div>
+</div>
+</body>
+</html>
