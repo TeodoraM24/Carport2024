@@ -23,7 +23,6 @@ public class CustomerRequestMapper {
         List<CustomerRequest> customerRequests = new ArrayList<>();
         String sql = "SELECT * FROM customer_request WHERE customer_request_id = ?";
 
-
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -61,10 +60,8 @@ public class CustomerRequestMapper {
                 "FROM customer_request cr " +
                 "JOIN customer c ON cr.customer_request_id = c.customer_request_id";
 
-
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
@@ -90,7 +87,6 @@ public class CustomerRequestMapper {
         }
         return customerRequests;
     }
-
 
     /**
      * Getting a customer request from the database based on the customer request id
@@ -133,19 +129,17 @@ public class CustomerRequestMapper {
      * @param connectionPool The connection to the database
      * @throws DatabaseException Handles database error
      */
-   
-    public static void makeCustomerRequest(Customer currentUser, int height, int width, int length, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
+
+    public static int makeCustomerRequest(Customer currentUser, int height, int width, int length, LocalDate date, ConnectionPool connectionPool) throws DatabaseException {
         if (customerIdAlreadyHasRequest(connectionPool, currentUser.getCustomer_request_id())) {
             throw new DatabaseException("Der findes allerede en forspørgsel");
         }
 
         String insertCustomerRequestQuery = "INSERT INTO customer_request (length, width, height, date) VALUES (?, ?, ?, ?)";
-        //String insertAdminCustomerRequestQuery = "INSERT INTO admin_customer_request (admin_id, customer_request_id) VALUES (?, ?)";
         String updateCustomerQuery = "UPDATE customer SET customer_request_id = ? WHERE customer_id = ? AND customer_request_id IS NULL";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement insertCustomerRequestStatement = connection.prepareStatement(insertCustomerRequestQuery, PreparedStatement.RETURN_GENERATED_KEYS);
-             //PreparedStatement insertAdminCustomerRequestStatement = connection.prepareStatement(insertAdminCustomerRequestQuery);
              PreparedStatement updateCustomerStatement = connection.prepareStatement(updateCustomerQuery)) {
 
             insertCustomerRequestStatement.setInt(1, length);
@@ -158,19 +152,12 @@ public class CustomerRequestMapper {
                 throw new DatabaseException("Database fejl: forespørgsel blev ikke indsat rigtigt");
             }
 
-
             ResultSet rs = insertCustomerRequestStatement.getGeneratedKeys();
             if (!rs.next()) {
                 throw new DatabaseException("Kunne ikke hente genereret nøgle til forespørgsel");
             }
 
             int customerRequestId = rs.getInt(1);
-
-
-            //insertAdminCustomerRequestStatement.setInt(1, 1);
-            //insertAdminCustomerRequestStatement.setInt(2, customerRequestId);
-            //insertAdminCustomerRequestStatement.executeUpdate();
-
 
             updateCustomerStatement.setInt(1, customerRequestId);
             updateCustomerStatement.setInt(2, currentUser.getCustomerId());
@@ -179,6 +166,7 @@ public class CustomerRequestMapper {
             if (updatedRows == 0) {
                 throw new DatabaseException("Fejl ved opdatering af forespørgsel eller der findes allerede en forespørgsel");
             }
+            return customerRequestId;
 
         } catch (SQLException e) {
             throw new DatabaseException("Fejl under oprettelse", e.getMessage());
@@ -199,7 +187,6 @@ public class CustomerRequestMapper {
             throw new DatabaseException("Fejl ved tjek om forespørgsel allerede findes", e.getMessage());
         }
     }
-
 
     /**
      * Handles to delete of a customer request from the database
@@ -259,6 +246,4 @@ public class CustomerRequestMapper {
             throw new DatabaseException(msg, e.getMessage());
         }
     }
-
-
 }

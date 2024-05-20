@@ -42,9 +42,7 @@ public class LoginController {
         }
     }
 
-
-    private static void logout(Context ctx)
-    {
+    private static void logout(Context ctx) {
         ctx.req().getSession().invalidate();
         ctx.redirect("/");
     }

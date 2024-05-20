@@ -46,7 +46,6 @@ public class InvoiceMapper {
         return listOfCustomersInvoices;
     }
 
-
     /***
      * Retrieves the details of an invoice for a specific customer.
      * Retrieves a list of InvoiceDetails associated with the specified invoice ID and customer ID.
@@ -106,7 +105,6 @@ public class InvoiceMapper {
         }
         return listOfInvoiceDetails;
     }
-
 
     public static Carport getCarport(int invoiceId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT carport_id, width, height, length, price_id, purchase_price, salesprice_with_tax, coverage_ratio FROM public.invoice " +

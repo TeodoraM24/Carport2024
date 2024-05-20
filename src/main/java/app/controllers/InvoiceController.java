@@ -25,7 +25,6 @@ public class InvoiceController {
         });
         app.get("backToOrderHistory", ctx -> displayCustomerOrderHistory(ctx, connectionPool));
         app.get("backToInfoPage", ctx -> ctx.render("customer-info-frontpage.html"));
-
     }
 
     /***
@@ -64,7 +63,6 @@ public class InvoiceController {
         ctx.sessionAttribute("currentCustomerId");
         ctx.attribute("currentCustomerId", customer.getCustomerId());
 
-        //get invoiceId
         int invoiceId = Integer.parseInt(ctx.pathParam("invoiceid"));
 
         List<InvoiceDetails> listOfPartlists = InvoiceMapper.getCustomerInvoiceDetails(customer.getCustomerId(), invoiceId, connectionPool);
@@ -74,6 +72,5 @@ public class InvoiceController {
         SvgController.displaySvg(carport, ctx);
 
         ctx.render("customer-invoice-details-page.html");
-
     }
 }

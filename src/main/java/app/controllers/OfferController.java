@@ -22,7 +22,6 @@ public class OfferController {
             app.post("/offer/{offerId}/deny", ctx -> denyOffer(ctx, connectionPool));
         }
 
-
     public static void getOffer(Context ctx, ConnectionPool connectionPool) {
         try {
             Customer currentUser = ctx.sessionAttribute("currentUser");

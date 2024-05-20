@@ -75,7 +75,8 @@ public class CustomerRequestController {
             int width = Integer.parseInt(ctx.formParam("width"));
             int length = Integer.parseInt(ctx.formParam("length"));
 
-            CustomerRequestMapper.makeCustomerRequest(currentUser, height, width, length, date, connectionPool);
+            int customerRequestId = CustomerRequestMapper.makeCustomerRequest(currentUser, height, width, length, date, connectionPool);
+            currentUser.setCustomer_request_id(customerRequestId);
 
             ctx.render("carport-offer-sent.html");
 
