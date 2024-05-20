@@ -16,8 +16,6 @@ import java.util.Locale;
 public class SvgController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        //app.get("/Svg", ctx -> displaySvg(ctx, connectionPool));
-
         app.post("/showDrawing", ctx -> displayDrawing(ctx, connectionPool));
     }
 
