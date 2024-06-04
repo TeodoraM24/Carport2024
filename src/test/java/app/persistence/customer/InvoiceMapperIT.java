@@ -1,10 +1,12 @@
-package app;
+package app.persistence.customer;
 
 import app.entities.Invoice;
 import app.entities.InvoiceDetails;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.customer.InvoiceMapper;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,26 +17,39 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class InvoiceMapperTest {
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+public class InvoiceMapperIT {
+    private static ConnectionPool connectionPool;
+
+    @BeforeAll
+    static void setUpDB() {
+        connectionPool = ConnectionPool.getInstance();
+    }
 
     @BeforeEach
     void setUp() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
-                // Remove all rows from relevant tables
-                stmt.execute("DELETE FROM public.admin_customer_request");
-                stmt.execute("DELETE FROM public.customer_invoice");
-                stmt.execute("DELETE FROM public.invoice");
-                stmt.execute("DELETE FROM public.parts_list_parts_list_item");
-                stmt.execute("DELETE FROM public.parts_list_item");
-                stmt.execute("DELETE FROM public.parts_list");
-                stmt.execute("DELETE FROM public.carport");
-                stmt.execute("DELETE FROM public.price");
-                stmt.execute("DELETE FROM public.material");
-                stmt.execute("DELETE FROM public.customer");
-                stmt.execute("DELETE FROM public.customer_request");
+                stmt.execute("DELETE FROM customer_invoice");
+                stmt.execute("DELETE FROM customer");
+                stmt.execute("DELETE FROM invoice");
+                stmt.execute("DELETE FROM offer");
+                stmt.execute("DELETE FROM parts_list_parts_list_item");
+                stmt.execute("DELETE FROM parts_list");
+                stmt.execute("DELETE FROM parts_list_item");
+                stmt.execute("DELETE FROM material");
+                stmt.execute("DELETE FROM carport");
+                stmt.execute("DELETE FROM price");
+                stmt.execute("DELETE FROM customer_request");
 
+                stmt.execute("SELECT setval('public.customer_customer_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.invoice_invoice_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.offer_offer_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.parts_list_parts_list_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.parts_list_item_parts_list_item_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.material_material_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.carport_carport_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.price_price_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', 1, false)");
 
                 // Insert rows
                 stmt.execute("INSERT INTO public.customer_request( customer_request_id, length, width, height, tile_type, date, status) VALUES (2, 34, 45, 98, 'Trapez', '2025-03-07', 'Afsluttet');");
@@ -50,13 +65,27 @@ public class InvoiceMapperTest {
 
 
                 // Set sequence to continue from the largest invoice_id
+                stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', COALESCE((SELECT MAX(customer_request_id)+1 FROM public.customer_request), 1), false)");
+                stmt.execute("SELECT setval('public.customer_customer_id_seq', COALESCE((SELECT MAX(customer_id)+1 FROM public.customer), 1), false)");
+                stmt.execute("SELECT setval('public.price_price_id_seq', COALESCE((SELECT MAX(price_id)+1 FROM public.price), 1), false)");
+                stmt.execute("SELECT setval('public.carport_carport_id_seq', COALESCE((SELECT MAX(carport_id)+1 FROM public.carport), 1), false)");
+                stmt.execute("SELECT setval('public.parts_list_parts_list_id_seq', COALESCE((SELECT MAX(parts_list_id)+1 FROM public.parts_list), 1), false)");
                 stmt.execute("SELECT setval('public.invoice_invoice_id_seq', COALESCE((SELECT MAX(invoice_id)+1 FROM public.invoice), 1), false)");
+                stmt.execute("SELECT setval('public.material_material_id_seq', COALESCE((SELECT MAX(material_id)+1 FROM public.material), 1), false)");
+                stmt.execute("SELECT setval('public.parts_list_item_parts_list_item_id_seq', COALESCE((SELECT MAX(parts_list_item_id)+1 FROM public.parts_list_item), 1), false)");
             }
         } catch (SQLException throwables) {
             fail("Database setup failed: " + throwables.getMessage());
         }
     }
 
+    @AfterAll
+    static void tearDown() {
+        if (connectionPool != null) {
+            connectionPool.close();
+            ConnectionPool.instance = null;
+        }
+    }
     @Test
     void testConnection() {
         try {

@@ -1,8 +1,7 @@
-package app;
+package app.services.calculator;
 
 import app.entities.Material;
 import app.entities.PartsListItem;
-import app.services.calculator.PartsListCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -44,7 +44,27 @@ public class PartsListCalculator {
         String instruction = "Stolper nedgraves 90 cm. i jord";
         String unitType = "Stk.";
 
-        addToPartsListItems(post.getDescription(), post.getHeight(), post.getWidth(), post.getLength(), price, amount, unitType, instruction);
+        //ADDED
+        int postFullLength = calculatePostLength();
+        if (post.getLength() != postFullLength) {
+            instruction += " Skæres til " + post.getLength() + "cm.";
+        }
+
+        addToPartsListItems(post.getDescription(), post.getHeight(), post.getWidth(), postFullLength, price, amount, unitType, instruction);
+    }
+
+    //ADDED
+    public int calculatePostLength(){
+        int postLength = -1;
+
+        for (int length: lengthsOfBeamRafterPost) {
+            if (post.getLength() <= length) {
+                postLength = length;
+                break;
+            }
+        }
+
+        return postLength;
     }
 
     public int calcPostQuantity() {

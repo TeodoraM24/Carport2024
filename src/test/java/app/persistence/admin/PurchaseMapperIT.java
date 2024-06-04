@@ -1,8 +1,10 @@
-package app;
+package app.persistence.admin;
 
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.admin.PurchaseMapper;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,18 +15,19 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PurchaseMapperTest {
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+public class PurchaseMapperIT {
+    private static ConnectionPool connectionPool;
+
+    @BeforeAll
+    static void setUpDB() {
+        connectionPool = ConnectionPool.getInstance();
+    }
 
     @BeforeEach
     void setUp() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
                 stmt.execute("DELETE FROM customer_invoice");
-                stmt.execute("DELETE FROM admin_customer_request");
-                stmt.execute("DELETE FROM admin_invoice");
-                stmt.execute("DELETE FROM admin_offer");
-                stmt.execute("DELETE FROM admin_parts_list");
                 stmt.execute("DELETE FROM customer");
                 stmt.execute("DELETE FROM invoice");
                 stmt.execute("DELETE FROM offer");
@@ -36,15 +39,15 @@ public class PurchaseMapperTest {
                 stmt.execute("DELETE FROM price");
                 stmt.execute("DELETE FROM customer_request");
 
-                // Reset the sequence number for offer
                 stmt.execute("SELECT setval('public.customer_customer_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.invoice_invoice_id_seq', 1, false)");
                 stmt.execute("SELECT setval('public.offer_offer_id_seq', 1, false)");
                 stmt.execute("SELECT setval('public.parts_list_parts_list_id_seq', 1, false)");
                 stmt.execute("SELECT setval('public.parts_list_item_parts_list_item_id_seq', 1, false)");
                 stmt.execute("SELECT setval('public.material_material_id_seq', 1, false)");
-                stmt.execute("SELECT setval('public.price_price_id_seq', 1, false)");
                 stmt.execute("SELECT setval('public.carport_carport_id_seq', 1, false)");
-                stmt.execute("SELECT setval('public.invoice_invoice_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.price_price_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', 1, false)");
 
                 //Add data to tables
                 stmt.execute("INSERT INTO customer (customer_id, first_name, last_name, email, password, phonenumber, address, zip) VALUES " +
@@ -64,9 +67,17 @@ public class PurchaseMapperTest {
                 stmt.execute("UPDATE customer SET offer_id = 1");
                 stmt.execute("INSERT INTO carport (width, height, length, price_id) VALUES (400, 300, 600, 1)");
                 stmt.execute("INSERT INTO invoice (parts_list_id, date, carport_id) VALUES (1, '2024-08-05', 1)");
-                // Set sequence to continue from the largest member_id
-                stmt.execute("SELECT setval('public.customer_customer_id_seq', COALESCE((SELECT MAX(customer_id)+1 FROM public.customer), 1), false)");
 
+                // Set sequence to continue from the largest id
+                stmt.execute("SELECT setval('public.customer_customer_id_seq', COALESCE((SELECT MAX(customer_id)+1 FROM public.customer), 1), false)");
+                stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', COALESCE((SELECT MAX(customer_request_id)+1 FROM public.customer_request), 1), false)");
+                stmt.execute("SELECT setval('public.price_price_id_seq', COALESCE((SELECT MAX(price_id)+1 FROM public.price), 1), false)");
+                stmt.execute("SELECT setval('public.material_material_id_seq', COALESCE((SELECT MAX(material_id)+1 FROM public.material), 1), false)");
+                stmt.execute("SELECT setval('public.parts_list_item_parts_list_item_id_seq', COALESCE((SELECT MAX(parts_list_item_id)+1 FROM public.parts_list_item), 1), false)");
+                stmt.execute("SELECT setval('public.parts_list_parts_list_id_seq', COALESCE((SELECT MAX(parts_list_id)+1 FROM public.parts_list), 1), false)");
+                stmt.execute("SELECT setval('public.offer_offer_id_seq', COALESCE((SELECT MAX(offer_id)+1 FROM public.offer), 1), false)");
+                stmt.execute("SELECT setval('public.carport_carport_id_seq', COALESCE((SELECT MAX(carport_id)+1 FROM public.carport), 1), false)");
+                stmt.execute("SELECT setval('public.invoice_invoice_id_seq', COALESCE((SELECT MAX(invoice_id)+1 FROM public.invoice), 1), false)");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -74,6 +85,13 @@ public class PurchaseMapperTest {
         }
     }
 
+    @AfterAll
+    static void tearDown() {
+        if (connectionPool != null) {
+            connectionPool.close();
+            ConnectionPool.instance = null;
+        }
+    }
     @Test
     void testConnection() throws SQLException {
         assertNotNull(connectionPool.getConnection());

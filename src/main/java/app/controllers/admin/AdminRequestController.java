@@ -134,7 +134,7 @@ public class AdminRequestController {
     }
 
     private static List<PartsListItem> calculatePartsListForChosenCustomer(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        int customerRequestId = Integer.parseInt(ctx.formParam("customer-request-id"));
+        int customerRequestId = ctx.sessionAttribute("currentCustomerRequestId");
         CustomerRequest customerRequest = getCustomerRequest(customerRequestId, connectionPool);
         Material post = new Material("97x97 mm. trykimp. Stolpe", 97, 97);
         Material beam = new Material("45x195 mm. spærtræ ubh.", 195, 45);

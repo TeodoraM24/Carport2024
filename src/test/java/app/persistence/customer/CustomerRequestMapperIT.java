@@ -1,10 +1,12 @@
-package app;
+package app.persistence.customer;
 
 import app.entities.Customer;
 import app.entities.CustomerRequest;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.customer.CustomerRequestMapper;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,20 +17,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CustomerRequestMapperTest {
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+public class CustomerRequestMapperIT {
+    private static ConnectionPool connectionPool;
+
+    @BeforeAll
+    static void setUpDB() {
+        connectionPool = ConnectionPool.getInstance();
+    }
 
     @BeforeEach
-    void setup() {
+     void setUp() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
-
                 stmt.execute("DELETE FROM customer_invoice");
-                stmt.execute("DELETE FROM admin_customer_request");
-                stmt.execute("DELETE FROM admin_invoice");
-                stmt.execute("DELETE FROM admin_offer");
-                stmt.execute("DELETE FROM admin_parts_list");
-                stmt.execute("DELETE FROM admin");
                 stmt.execute("DELETE FROM customer");
                 stmt.execute("DELETE FROM invoice");
                 stmt.execute("DELETE FROM offer");
@@ -40,38 +41,41 @@ public class CustomerRequestMapperTest {
                 stmt.execute("DELETE FROM price");
                 stmt.execute("DELETE FROM customer_request");
 
-                // Reset sequence number for customer_request_id (assuming it's an auto-incremented sequence)
-                stmt.executeUpdate("ALTER SEQUENCE customer_request_customer_request_id_seq RESTART WITH 1");
-                stmt.execute("SELECT setval('public.admin_admin_id_seq', 1, false)");
-
-                // Delete all records from customer
-                stmt.executeUpdate("DELETE FROM customer");
-
-                // Reset sequence number for customer_id (assuming it's an auto-incremented sequence)
-                stmt.executeUpdate("ALTER SEQUENCE customer_customer_id_seq RESTART WITH 1");
+                stmt.execute("SELECT setval('public.customer_customer_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.invoice_invoice_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.offer_offer_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.parts_list_parts_list_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.parts_list_item_parts_list_item_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.material_material_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.carport_carport_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.price_price_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', 1, false)");
 
                 // Insert rows
-                stmt.execute("INSERT INTO admin(email, password) VALUES ('admin@admin.dk', 'admin')");
                 stmt.execute("INSERT INTO customer_request (length, width, height, date) VALUES " +
                         "(7, 5, 3, CURRENT_DATE)");
                 stmt.execute("INSERT INTO customer_request (length, width, height, date) VALUES " +
                         "(8, 4, 3, CURRENT_DATE)");
-                stmt.execute("INSERT INTO admin_customer_request (admin_id, customer_request_id) VALUES (1,2)");
-
                 stmt.execute("INSERT INTO customer (first_name, last_name, email, password, phonenumber, address, zip, customer_request_id) VALUES " +
                         "('Morten', 'Hvor blev du af', 'email@email.dk', '1234', 12345678, 'Vejen 2', 2770, 1)");
 
                 stmt.execute("INSERT INTO customer (first_name, last_name, email, password, phonenumber, address, zip) VALUES " +
                         "('Lars', 'Larsen', 'email@email.live.dk', '1234', 12345679, 'Vejen 3', 2770)");
 
-
-                // Set sequence to continue from the largest member_id
-                //stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', COALESCE((SELECT MAX(customer_request_id)+1 FROM public.customer_request), 1), false)");
-                //stmt.execute("SELECT setval('public.customer_customer_id_seq', COALESCE((SELECT MAX(customer_id)+1 FROM public.customer), 1), false))))");
+                stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', COALESCE((SELECT MAX(customer_request_id)+1 FROM public.customer_request), 1), false)");
+                stmt.execute("SELECT setval('public.customer_customer_id_seq', COALESCE((SELECT MAX(customer_id)+1 FROM public.customer), 1), false)");
             }
         } catch (SQLException throwables) {
             fail("Database connection failed" + throwables.getMessage());
 
+        }
+    }
+
+    @AfterAll
+    static void tearDown() {
+        if (connectionPool != null) {
+            connectionPool.close();
+            ConnectionPool.instance = null;
         }
     }
 

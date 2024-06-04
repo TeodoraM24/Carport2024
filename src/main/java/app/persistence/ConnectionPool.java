@@ -11,13 +11,7 @@ import java.util.logging.Logger;
 /***
  * Singleton pattern applied to handling a Hikari ConnectionPool
  */
-public class ConnectionPool
-{
-
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "carport";
+public class ConnectionPool {
     public static ConnectionPool instance = null;
     public static HikariDataSource ds = null;
 
@@ -28,7 +22,7 @@ public class ConnectionPool
     private ConnectionPool() {}
 
     public static ConnectionPool getInstance() {
-        return getInstance(USER, PASSWORD, URL, DB);
+        return getInstance("", "", "", "");
     }
 
     /***

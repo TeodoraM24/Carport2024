@@ -1,8 +1,5 @@
-package app;
+package app.validators;
 
-import app.validators.CityValidator;
-import app.validators.EmailValidator;
-import app.validators.PasswordValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

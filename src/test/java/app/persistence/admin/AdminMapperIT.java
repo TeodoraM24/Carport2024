@@ -1,9 +1,10 @@
-package app;
+package app.persistence.admin;
 
 import app.entities.Admin;
 import app.exceptions.DatabaseException;
-import app.persistence.admin.*;
 import app.persistence.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,17 +15,19 @@ import java.sql.Statement;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AdminMapperTest {
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+public class AdminMapperIT {
+    private static ConnectionPool connectionPool;
+
+    @BeforeAll
+    static void setUpDB() {
+        connectionPool = ConnectionPool.getInstance();
+    }
+
     @BeforeEach
     void setUp() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
                 stmt.execute("DELETE FROM customer_invoice");
-                stmt.execute("DELETE FROM admin_customer_request");
-                stmt.execute("DELETE FROM admin_invoice");
-                stmt.execute("DELETE FROM admin_offer");
-                stmt.execute("DELETE FROM admin_parts_list");
                 stmt.execute("DELETE FROM customer");
                 stmt.execute("DELETE FROM invoice");
                 stmt.execute("DELETE FROM offer");
@@ -36,14 +39,34 @@ public class AdminMapperTest {
                 stmt.execute("DELETE FROM price");
                 stmt.execute("DELETE FROM customer_request");
                 stmt.execute("DELETE FROM admin");
-                // Reset the sequence number for customer_id
+
                 stmt.execute("SELECT setval('public.customer_customer_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.invoice_invoice_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.offer_offer_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.parts_list_parts_list_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.parts_list_item_parts_list_item_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.material_material_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.carport_carport_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.price_price_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.admin_admin_id_seq', 1, false)");
+
 
                 stmt.execute("INSERT INTO admin ( email, password, role) VALUES " +
                         "('admin@admin.dk', 'admin', 'admin' )");
+
+                stmt.execute("SELECT setval('public.admin_admin_id_seq', COALESCE((SELECT MAX(admin_id)+1 FROM public.admin), 1), false)");
             }
         } catch (SQLException throwables) {
             fail("Database connection failed");
+        }
+    }
+
+    @AfterAll
+    static void tearDown() {
+        if (connectionPool != null) {
+            connectionPool.close();
+            ConnectionPool.instance = null;
         }
     }
 

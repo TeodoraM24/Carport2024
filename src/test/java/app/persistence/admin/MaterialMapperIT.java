@@ -1,9 +1,11 @@
-package app;
+package app.persistence.admin;
 
 import app.entities.Material;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.admin.MaterialMapper;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,20 +17,39 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MaterialMapperTest {
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+public class MaterialMapperIT {
+    private static ConnectionPool connectionPool;
+
+    @BeforeAll
+    static void setUpDB() {
+        connectionPool = ConnectionPool.getInstance();
+    }
 
     @BeforeEach
     void setUp() {
         try (Connection testConnection = connectionPool.getConnection()) {
             try (Statement stmt = testConnection.createStatement()) {
-                // Remove all rows from relevant tables
+                stmt.execute("DELETE FROM customer_invoice");
+                stmt.execute("DELETE FROM customer");
+                stmt.execute("DELETE FROM invoice");
+                stmt.execute("DELETE FROM offer");
                 stmt.execute("DELETE FROM parts_list_parts_list_item");
+                stmt.execute("DELETE FROM parts_list");
                 stmt.execute("DELETE FROM parts_list_item");
                 stmt.execute("DELETE FROM material");
+                stmt.execute("DELETE FROM carport");
+                stmt.execute("DELETE FROM price");
+                stmt.execute("DELETE FROM customer_request");
 
-                // Reset the sequence number
+                stmt.execute("SELECT setval('public.customer_customer_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.invoice_invoice_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.offer_offer_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.parts_list_parts_list_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.parts_list_item_parts_list_item_id_seq', 1, false)");
                 stmt.execute("SELECT setval('public.material_material_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.carport_carport_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.price_price_id_seq', 1, false)");
+                stmt.execute("SELECT setval('public.customer_request_customer_request_id_seq', 1, false)");
 
                 // Insert rows
                 stmt.execute("INSERT INTO material (material_description, height, width, length, price) VALUES " +
@@ -45,6 +66,14 @@ public class MaterialMapperTest {
             }
         } catch (SQLException throwables) {
             fail("Database connection failed");
+        }
+    }
+
+    @AfterAll
+    static void tearDown() {
+        if (connectionPool != null) {
+            connectionPool.close();
+            ConnectionPool.instance = null;
         }
     }
 
