@@ -28,11 +28,13 @@ public class InvoiceMapperTest {
                 stmt.execute("DELETE FROM public.invoice");
                 stmt.execute("DELETE FROM public.parts_list_parts_list_item");
                 stmt.execute("DELETE FROM public.parts_list_item");
+                //customer - stmt.execute("DELETE FROM public.customer");
+                //offer - stmt.execute("DELETE FROM public.offer");
                 stmt.execute("DELETE FROM public.parts_list");
                 stmt.execute("DELETE FROM public.carport");
                 stmt.execute("DELETE FROM public.price");
                 stmt.execute("DELETE FROM public.material");
-                stmt.execute("DELETE FROM public.customer");
+                stmt.execute("DELETE FROM public.customer"); //fjern
                 stmt.execute("DELETE FROM public.customer_request");
 
 

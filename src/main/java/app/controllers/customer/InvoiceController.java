@@ -36,7 +36,6 @@ public class InvoiceController {
      */
 
     private static void displayCustomerOrderHistory(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-
         Customer customer = ctx.sessionAttribute("currentUser");
         ctx.sessionAttribute("currentCustomer", customer);
         List<Invoice> listOfInvoices = InvoiceMapper.getCustomersOrderHistory(customer.getCustomerId(), connectionPool);

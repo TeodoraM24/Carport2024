@@ -24,16 +24,20 @@
                 <td>Enhed</td>
                 <td>Beskrivelse</td>
             </tr>
+            <tr></tr>
 
             <th:block th:each="partlist :${listOfPartlists}">
-                <td th:text="${partlist.materialDescription}"></td>
-                <td th:text="${partlist.length}"></td>
-                <td th:text="${partlist.amount}"></td>
-                <td th:text="${partlist.unit}"></td>
-                <td th:text="${partlist.instructionDescription}"></td>
+                <tr>
+                    <td th:text="${partlist.materialDescription}"></td>
+                    <td th:text="${partlist.length}"></td>
+                    <td th:text="${partlist.amount}"></td>
+                    <td th:text="${partlist.unit}"></td>
+                    <td th:text="${partlist.instructionDescription}"></td>
+                </tr>
             </th:block>
             </tbody>
-        </table> <br>
+        </table>
+        <br>
 
 
         <div th:utext="${svgSideView}"></div>
